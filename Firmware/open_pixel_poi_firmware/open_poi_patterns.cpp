@@ -1,9 +1,11 @@
 #ifndef _OPEN_PIXEL_POI_PATTERNS
 #define _OPEN_PIXEL_POI_PATTERNS
 
+#include "open_pixel_poi_config.cpp"
+
 #define DEBUG  // Comment this line out to remove printf statements in released version
 #ifdef DEBUG
-#define debugf(...) Serial.print("<<patterns>> ");Serial.printf(__VA_ARGS__);
+#define debugf(...) Serial.print("  <<patterns>> ");Serial.printf(__VA_ARGS__);
 #define debugf_noprefix(...) Serial.printf(__VA_ARGS__);
 #else
 #define debugf(...)
@@ -12,12 +14,11 @@
 
 class OpenPixelPoiPatterns {
 
-// This class will handle the creation of complex patterns using syntax similar to game dev level creation.
+// This class handles the creation of complex patterns using syntax similar to game dev level creation.
 // The pattern will be a character array where each character represents a color.
 
-// Right now this logic is in the open_pixel_poi_ble class.
 // In the future, this logic may be handled by a Flutter app which uses images or character arrays to create and transmit patterns.
-// This class would be an intermediate step to clean up the firmware before the Flutter app is ready.
+// This class is an intermediate step to clean up the firmware before the Flutter app is ready.
 
 // R = 0xff 0x00 0x00     // Red
 // G = 0x00 0xff 0x00     // Green
@@ -32,34 +33,46 @@ class OpenPixelPoiPatterns {
 // g = 0x80 0x80 0x80     // Dark Grey
 // C = 0x00 0xFF 0xFF     // Cyan
 // t = 0x00 0x80 0x80     // Teal
-                                        // 10, 9, 7, 4, 0, -4, -7, -9, -10, -10, -9, -7, -4, 0, 4, 7, 9, 10
-// Pattern #1
-// sin red/purple
-// cos[360] = {  20, 18 grid       |
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R,   // 0 = All Red    +10
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, P,   //                +09
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, P, P, P,   //                +07
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, P, P, P, P, P, P,   //                +04
-//    R, R, R, R, R, R, R, R, R, R, P, P, P, P, P, P, P, P, P, P,   //                 00
-//    R, R, R, R, R, R, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -04
-//    R, R, R, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -07
-//    R, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -09
-//    P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -10
-//    P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -10
-//    R, P, P, P, P, P, p, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -09
-//    R, R, R, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -07
-//    R, R, R, R, R, R, P, P, P, P, P, P, P, P, P, P, P, P, P, P,   //                -04
-//    R, R, R, R, R, R, R, R, R, R, P, P, P, P, P, P, P, P, P, P,   //                 00
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, P, P, P, P, P, P,   //                +04
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, P, P, P,   //                +07
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, P,   //                +09
-//    R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R,   // 0 = All Red    +10
-//};
 
 private:
+  OpenPixelPoiConfig& config;
 
 public:
+  OpenPixelPoiPatterns(OpenPixelPoiConfig& _config): config(_config) {}    
 
+  template<int H, int C>
+  void loadPattern(int height, int count, char (&pattern)[H][C]) {
+    config.frameHeight = height;
+    config.frameCount = count;
+
+    debugf("height = %d\n", height);
+    debugf("count = %d\n", count);
+    config.setFrameHeight(height);
+    config.setFrameCount(count);
+    for(int i=0; i<height*count*3; i++){
+      config.pattern[i] = 0;
+    }
+    for(int i=0; i<count; i++){
+      for(int j=0; j<height; j++){
+        // debugf("i=%d, j=%d\n",i, j);
+        config.pattern[((i*height)+j)*3]=0x0;
+        config.pattern[((i*height)+j)*3+1]=0x0;
+        if(this->BIG_Z[i][j]=='B'){ // replace this with param, pattern
+          config.pattern[((i*height)+j)*3+2]=0xff;
+        } else {
+          config.pattern[((i*height)+j)*3+2]=0x0;              
+        }
+      }
+    }
+    debugf("config.patternLength (before) = %d\n",config.patternLength);
+    config.patternLength = height*count*3;
+    debugf("config.patternLength (after) = %d\n",config.patternLength);
+    debugf("config.frameHeight = %d\n", config.frameHeight);
+    debugf("config.frameCount = %d\n", config.frameCount );
+    debugf("fH*fC*3 = %d", config.frameHeight*config.frameCount*3);
+    config.savePattern();
+
+  }
   // Red/Purple Cosine function
   const int COS_HEIGHT = 20;
   const int COS_COUNT = 18;
@@ -87,7 +100,7 @@ public:
   // Blue "Z"
   const int Z_HEIGHT = 20;
   const int Z_COUNT = 20;
-  const char BIG_Z[20][21] = {
+  char BIG_Z[20][21] = {
     "B.................BB",
     "B................B.B",
     "B...............B..B",
@@ -109,75 +122,6 @@ public:
     "....................",
     "...................."
   };
-
-  void setup() {}
-
-  void loop() {}
-
 };
-
-
-    // int cosFrameHeight = 20;
-    // int cosFrameCount = 18;
-    // char cos_grid[360] = {                                           // 20, 18 grid       |
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   // 0 = All Red    +10
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P',   //                +09
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P',   //                +07
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P',   //                +04
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                 00
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -04
-    //   'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -07
-    //   'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -09
-    //   'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -10
-    //   'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -10
-    //   'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -09
-    //   'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -07
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -04
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                 00
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P',   //                +04
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P',   //                +07
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P',   //                +09
-    //   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   // 0 = All Red    +10
-    // };
-
-
-//    int cosFrameHeight = 20;
-//    int cosFrameCount = 31;
-//    char big_cos_grid[620] = {                        ||
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                 00
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                +02
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P',   //                +04
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P',   //                +06
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P',   //                +07      5
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P',   //                +08
-//      'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                +09
-//      'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                +10
-//      'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                +10
-//      'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                +09     10
-//      'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                +08
-//      'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -07
-//      'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                -05
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',   //                 03
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'P', 'P', 'P',   //                +01     15
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P',   //                -01
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P',   //                -03
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -04
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -06
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -08     20
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -09
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -09
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -10
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -10
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -10     25
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -09
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -08
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -06
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -05
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                -03     30
-//      'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',   //                  0
-//    };
-//
-
-
 
 #endif

@@ -63,7 +63,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
   
   private:
     OpenPixelPoiConfig& config;
-    OpenPixelPoiPatterns patterns;
+    OpenPixelPoiPatterns& patterns;
     
     // Nordic nRF
     BLEUUID pixelPoiServiceUUID = BLEUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
@@ -97,7 +97,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
     }
     
   public:
-    OpenPixelPoiBLE(OpenPixelPoiConfig& _config): config(_config) {}
+    OpenPixelPoiBLE(OpenPixelPoiConfig& _config, OpenPixelPoiPatterns& _patterns): config(_config), patterns(_patterns) {}
 
     long bleLastReceived;
     void setup(){
@@ -167,35 +167,10 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         
         // Process BLE
         if(bleStatus[0] == 0x61 && bleStatus[1] == 0x73 && bleStatus[2] == 0x64 & bleStatus[3] == 0x66){
-          debugf("Got ASDF!\n");
-          debugf("patterns.Z_HEIGHT = %d\n", patterns.Z_HEIGHT);
-          debugf("patterns.Z_COUNT = %d\n", patterns.Z_COUNT);
-          config.setFrameHeight(patterns.Z_HEIGHT);
-          config.setFrameCount(patterns.Z_COUNT);
-          for(int i=0; i<patterns.Z_HEIGHT*patterns.Z_COUNT*3; i++){
-            config.pattern[i] = 0;
-          }
-          for(int i=0; i<patterns.Z_COUNT; i++){
-            for(int j=0; j<patterns.Z_HEIGHT; j++){
-              debugf("i=%d, j=%d\n",i, j);
-              config.pattern[((i*patterns.Z_HEIGHT)+j)*3]=0x0;
-              config.pattern[((i*patterns.Z_HEIGHT)+j)*3+1]=0x0;
-              if(patterns.BIG_Z[i][j]=='B'){
-                config.pattern[((i*patterns.Z_HEIGHT)+j)*3+2]=0xff;
-              } else {
-                config.pattern[((i*patterns.Z_HEIGHT)+j)*3+2]=0x0;              
-              }
-            }
-          }
-          debugf("config.patternLength (before) = %d\n",config.patternLength);
-          config.patternLength = patterns.Z_HEIGHT*patterns.Z_COUNT*3;
-          debugf("config.patternLength (after) = %d\n",config.patternLength);
-          debugf("patterns.Z_HEIGHT = %d\n", patterns.Z_HEIGHT);
-          debugf("patterns.Z_COUNT = %d\n", patterns.Z_COUNT);
-          debugf("fH*fC*3 = %d", patterns.Z_HEIGHT*patterns.Z_COUNT*3);
-          config.savePattern();
+          debugf("Got ASDF! Load BIG_Z\n");
+          patterns.loadPattern(patterns.Z_HEIGHT, patterns.Z_COUNT, patterns.BIG_Z);
         }else if (bleStatus[0] == 0x66 && bleStatus[1] == 0x64 && bleStatus[2] == 0x73 & bleStatus[3] == 0x61){
-          debugf("Got FDSA!\n");
+          debugf("Got FDSA! LOAD COS_STRING\n");
           debugf("patterns.COS_HEIGHT = %d\n", patterns.COS_HEIGHT);
           debugf("patterns.COS_COUNT = %d\n", patterns.COS_COUNT);
           config.setFrameHeight(patterns.COS_HEIGHT);

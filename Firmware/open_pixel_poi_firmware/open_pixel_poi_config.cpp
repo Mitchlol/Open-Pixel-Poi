@@ -24,9 +24,6 @@ class OpenPixelPoiConfig {
     Preferences preferences;
     
   public:
-    // Debug Config
-    bool logToSerial = true;
-
     // Settings (come in from the app)
     uint8_t ledBrightness; 
     uint8_t animationSpeed;
@@ -113,8 +110,6 @@ class OpenPixelPoiConfig {
       debugf_noprefix("\n");
       debugf("Setup complete\n");
     }
-
-    void loop() {}
 };
 
 #endif
