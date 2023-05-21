@@ -171,37 +171,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
           patterns.loadPattern(patterns.Z_HEIGHT, patterns.Z_COUNT, patterns.BIG_Z);
         }else if (bleStatus[0] == 0x66 && bleStatus[1] == 0x64 && bleStatus[2] == 0x73 & bleStatus[3] == 0x61){
           debugf("Got FDSA! LOAD COS_STRING\n");
-          debugf("patterns.COS_HEIGHT = %d\n", patterns.COS_HEIGHT);
-          debugf("patterns.COS_COUNT = %d\n", patterns.COS_COUNT);
-          config.setFrameHeight(patterns.COS_HEIGHT);
-          config.setFrameCount(patterns.COS_COUNT);
-          for(int i=0; i<patterns.COS_HEIGHT*patterns.COS_COUNT*3; i++){
-            config.pattern[i] = 0;
-          }
-          for(int i=0; i<patterns.COS_COUNT; i++){
-            for(int j=0; j<patterns.Z_HEIGHT; j++){
-              debugf("i=%d, j=%d\n",i, j);
-              config.pattern[((i*patterns.COS_HEIGHT)+j)*3]=0x0;
-              config.pattern[((i*patterns.COS_HEIGHT)+j)*3+1]=0x0;
-
-              if(patterns.COS_STRING[i][j]=='R'){
-                config.pattern[((i*patterns.COS_HEIGHT)+j)*3]=0xFF;
-                config.pattern[((i*patterns.COS_HEIGHT)+j)*3+1]=0x0;
-                config.pattern[((i*patterns.COS_HEIGHT)+j)*3+2]=0x0;
-              } else {
-                config.pattern[((i*patterns.COS_HEIGHT)+j)*3]=0x80;
-                config.pattern[((i*patterns.COS_HEIGHT)+j)*3+1]=0x0;
-                config.pattern[((i*patterns.COS_HEIGHT)+j)*3+2]=0x80;              
-              }
-            }
-          }
-          debugf("config.patternLength (before) = %d\n",config.patternLength);
-          config.patternLength = patterns.COS_HEIGHT*patterns.COS_COUNT*3;
-          debugf("config.patternLength (after) = %d\n",config.patternLength);
-          debugf("patterns->cosFrameHeight = %d\n", patterns.COS_HEIGHT);
-          debugf("patterns->cosFrameCount = %d\n", patterns.COS_COUNT);
-          debugf("fH*fC*3 = %d", patterns.COS_HEIGHT*patterns.COS_COUNT*3);
-          config.savePattern();
+          patterns.loadPattern(patterns.COS_HEIGHT, patterns.COS_COUNT, patterns.COS_STRING);
         }else if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1){
           CommCode requestCode = static_cast<CommCode>(bleStatus[1]);
           if(requestCode == CC_SET_BRIGHTNESS){

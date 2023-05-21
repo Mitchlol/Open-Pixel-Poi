@@ -54,13 +54,31 @@ public:
     }
     for(int i=0; i<count; i++){
       for(int j=0; j<height; j++){
-        // debugf("i=%d, j=%d\n",i, j);
-        config.pattern[((i*height)+j)*3]=0x0;
-        config.pattern[((i*height)+j)*3+1]=0x0;
-        if(this->BIG_Z[i][j]=='B'){ // replace this with param, pattern
-          config.pattern[((i*height)+j)*3+2]=0xff;
-        } else {
-          config.pattern[((i*height)+j)*3+2]=0x0;              
+        switch(pattern[i][j]) {
+          case 'B':
+            config.pattern[((i*height)+j)*3]=0x0;
+            config.pattern[((i*height)+j)*3+1]=0x0;
+            config.pattern[((i*height)+j)*3+2]=0xff;
+            break;
+          case 'R':
+            config.pattern[((i*height)+j)*3]=0xFF;
+            config.pattern[((i*height)+j)*3+1]=0x0;
+            config.pattern[((i*height)+j)*3+2]=0x0;
+            break;
+          case '.':
+            config.pattern[((i*height)+j)*3]=0x0;
+            config.pattern[((i*height)+j)*3+1]=0x0;
+            config.pattern[((i*height)+j)*3+2]=0x0;
+            break;
+          case 'P':
+            config.pattern[((i*height)+j)*3]=0x80;
+            config.pattern[((i*height)+j)*3+1]=0x0;
+            config.pattern[((i*height)+j)*3+2]=0x80;
+            break;
+          default:
+            config.pattern[((i*height)+j)*3]=0x0;
+            config.pattern[((i*height)+j)*3+1]=0x0;
+            config.pattern[((i*height)+j)*3+2]=0x0;
         }
       }
     }
@@ -76,7 +94,7 @@ public:
   // Red/Purple Cosine function
   const int COS_HEIGHT = 20;
   const int COS_COUNT = 18;
-  const char COS_STRING[18][21] = {
+  char COS_STRING[18][21] = {
     "RRRRRRRRRRRRRRRRRRRR",   // 0 = All Red    +10
     "RRRRRRRRRRRRRRRRRRRP",   //                +09
     "RRRRRRRRRRRRRRRRRPPP",   //                +07
