@@ -40,6 +40,12 @@ private:
 public:
   OpenPixelPoiPatterns(OpenPixelPoiConfig& _config): config(_config) {}    
 
+  void updatePattern(int index, uint8_t R, uint8_t G, uint8_t B) {
+    config.pattern[index] = R;
+    config.pattern[index+1] = G;
+    config.pattern[index+2] = B;
+  }
+
   template<int H, int C>
   void loadPattern(int height, int count, char (&pattern)[H][C]) {
     config.frameHeight = height;
@@ -54,31 +60,25 @@ public:
     }
     for(int i=0; i<count; i++){
       for(int j=0; j<height; j++){
+        int index = (i*height+j)*3;
         switch(pattern[i][j]) {
-          case 'B':
-            config.pattern[((i*height)+j)*3]=0x0;
-            config.pattern[((i*height)+j)*3+1]=0x0;
-            config.pattern[((i*height)+j)*3+2]=0xff;
+          case 'B':   // Blue
+            updatePattern(index, 0x0, 0x0, 0xff);
             break;
-          case 'R':
-            config.pattern[((i*height)+j)*3]=0xFF;
-            config.pattern[((i*height)+j)*3+1]=0x0;
-            config.pattern[((i*height)+j)*3+2]=0x0;
+          case 'b':   // Navy
+            updatePattern(index, 0x0, 0x0, 0x80);
             break;
-          case '.':
-            config.pattern[((i*height)+j)*3]=0x0;
-            config.pattern[((i*height)+j)*3+1]=0x0;
-            config.pattern[((i*height)+j)*3+2]=0x0;
+          case 'R':   // Red
+            updatePattern(index, 0xff, 0x0, 0x00);
             break;
-          case 'P':
-            config.pattern[((i*height)+j)*3]=0x80;
-            config.pattern[((i*height)+j)*3+1]=0x0;
-            config.pattern[((i*height)+j)*3+2]=0x80;
+          case '.':   // Black
+            updatePattern(index, 0x0, 0x0, 0x0);
             break;
-          default:
-            config.pattern[((i*height)+j)*3]=0x0;
-            config.pattern[((i*height)+j)*3+1]=0x0;
-            config.pattern[((i*height)+j)*3+2]=0x0;
+          case 'P':   // Purple
+            updatePattern(index, 0x80, 0x0, 0x80);
+            break;
+          default:    // Black
+            updatePattern(index, 0x0, 0x0, 0x0);
         }
       }
     }
