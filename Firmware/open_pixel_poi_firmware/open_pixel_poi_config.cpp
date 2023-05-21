@@ -16,6 +16,7 @@
 
 // Seeed Studio XIAO ESP32C3
   // 512 Bytes EEPROM
+  // 400KB SRAM
   // 4MB Flash memory
   
 class OpenPixelPoiConfig {

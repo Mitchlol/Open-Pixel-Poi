@@ -33,6 +33,7 @@
 OpenPixelPoiConfig config;
 OpenPixelPoiBLE ble(config);
 OpenPixelPoiLED led(config);
+OpenPixelPoiPatterns patterns;
 
 //TaskHandle_t Task1;
 
