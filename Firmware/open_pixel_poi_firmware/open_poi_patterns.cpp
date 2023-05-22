@@ -20,20 +20,6 @@ class OpenPixelPoiPatterns {
 // In the future, this logic may be handled by a Flutter app which uses images or character arrays to create and transmit patterns.
 // This class is an intermediate step to clean up the firmware before the Flutter app is ready.
 
-// R = 0xff 0x00 0x00     // Red
-// G = 0x00 0xff 0x00     // Green
-// B = 0x00 0x00 0xff     // Blue
-// b = 0x00 0x00 0x80     // Navy
-// F = 0xff 0x00 0xff     // Fuschia
-// P = 0x80 0x00 0x80     // Purple
-// . = 0x00 0x00 0x00     // Black
-// W = 0xFF 0xFF 0xFF     // White
-// O = 0xFF 0x8C 0x00     // Orange
-// G = 0xC0 0xC0 0xC0     // Light Grey
-// g = 0x80 0x80 0x80     // Dark Grey
-// C = 0x00 0xFF 0xFF     // Cyan
-// t = 0x00 0x80 0x80     // Teal
-
 private:
   OpenPixelPoiConfig& config;
 
@@ -61,21 +47,54 @@ public:
     for(int i=0; i<count; i++){
       for(int j=0; j<height; j++){
         int index = (i*height+j)*3;
+        uint8_t value;
+
         switch(pattern[i][j]) {
+          case 'R':   // Red
+            updatePattern(index, 0xff, 0x0, 0x00);
+            break;
+          case 'G':   // Green
+            updatePattern(index, 0x0, 0xff, 0x00);
+            break;
           case 'B':   // Blue
             updatePattern(index, 0x0, 0x0, 0xff);
             break;
           case 'b':   // Navy
             updatePattern(index, 0x0, 0x0, 0x80);
             break;
-          case 'R':   // Red
-            updatePattern(index, 0xff, 0x0, 0x00);
+          case 'F':   // Fuschia
+            updatePattern(index, 0xff, 0x0, 0xff);
+            break;
+          case 'P':   // Purple
+            updatePattern(index, 0x80, 0x0, 0x80);
             break;
           case '.':   // Black
             updatePattern(index, 0x0, 0x0, 0x0);
             break;
-          case 'P':   // Purple
-            updatePattern(index, 0x80, 0x0, 0x80);
+          case 'W':   // White
+            updatePattern(index, 0xff, 0xff, 0xff);
+            break;
+          case 'O':   // Orange
+            updatePattern(index, 0xff, 0x8c, 0x0);
+            break;
+          case ';':   // Light Grey
+            updatePattern(index, 0xc0, 0xc0, 0xc0);
+            break;
+          case ',':   // Dark Grey
+            updatePattern(index, 0x80, 0x80, 0x80);
+            break;
+          case 'C':   // Cyan
+            updatePattern(index, 0x0, 0xff, 0xff);
+            break;
+          case 't':   // Teal
+            updatePattern(index, 0xff, 0xff, 0xff);
+            break;
+          case '*':   // Full Random
+            updatePattern(index, random(256), random(256), random(256));
+            break;
+          case '#':   // Random White/Grey
+            value = random(256);
+            updatePattern(index, value, value, value);
             break;
           default:    // Black
             updatePattern(index, 0x0, 0x0, 0x0);
@@ -139,6 +158,38 @@ public:
     "BB.................B",
     "....................",
     "...................."
+  };
+
+  // Full random (10 frames)
+  const int FULL_RANDOM_HEIGHT = 20;
+  const int FULL_RANDOM_COUNT = 10;
+  char FULL_RANDOM[10][21] = {
+    "********************",
+    "********************",
+    "********************",
+    "********************",
+    "********************",
+    "********************",
+    "********************",
+    "********************",
+    "********************",
+    "********************"
+  };
+
+  // Grey random (10 frames)
+  const int GREY_RANDOM_HEIGHT = 20;
+  const int GREY_RANDOM_COUNT = 10;
+  char GREY_RANDOM[10][21] = {
+    "####################",
+    "####################",
+    "####################",
+    "####################",
+    "####################",
+    "####################",
+    "####################",
+    "####################",
+    "####################",
+    "####################"
   };
 };
 

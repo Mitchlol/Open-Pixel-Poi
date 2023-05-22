@@ -167,11 +167,17 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         
         // Process BLE
         if(bleStatus[0] == 0x61 && bleStatus[1] == 0x73 && bleStatus[2] == 0x64 & bleStatus[3] == 0x66){
-          debugf("Got ASDF! Load BIG_Z\n");
+          debugf("Got asdf! Load BIG_Z\n");
           patterns.loadPattern(patterns.Z_HEIGHT, patterns.Z_COUNT, patterns.BIG_Z);
         }else if (bleStatus[0] == 0x66 && bleStatus[1] == 0x64 && bleStatus[2] == 0x73 & bleStatus[3] == 0x61){
-          debugf("Got FDSA! LOAD COS_STRING\n");
+          debugf("Got fdsa! LOAD COS_STRING\n");
           patterns.loadPattern(patterns.COS_HEIGHT, patterns.COS_COUNT, patterns.COS_STRING);
+        }else if (bleStatus[0] == 0x72 && bleStatus[1] == 0x61 && bleStatus[2] == 0x6e & bleStatus[3] == 0x64){
+          debugf("Got rand! LOAD FULL_RANDOM\n");
+          patterns.loadPattern(patterns.FULL_RANDOM_HEIGHT, patterns.FULL_RANDOM_COUNT, patterns.FULL_RANDOM);
+        }else if (bleStatus[0] == 0x67 && bleStatus[1] == 0x72 && bleStatus[2] == 0x65 & bleStatus[3] == 0x79){
+          debugf("Got grey! LOAD GREY_RANDOM\n");
+          patterns.loadPattern(patterns.GREY_RANDOM_HEIGHT, patterns.GREY_RANDOM_COUNT, patterns.GREY_RANDOM);
         }else if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1){
           CommCode requestCode = static_cast<CommCode>(bleStatus[1]);
           if(requestCode == CC_SET_BRIGHTNESS){
