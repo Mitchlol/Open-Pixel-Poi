@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:open_pixel_poi/database/dbimage.dart';
 import 'package:rxdart/rxdart.dart';
 
 import './models/comm_code.dart';
@@ -19,6 +20,11 @@ class PoiHardware {
   PoiHardware(this.uart) {
     uart.device.state.listen((event) {
       state.add(event);
+      if(event == BluetoothDeviceState.connected){
+        // Increase MTU, takes 2 seconds to take effect
+        uart.device.requestMtu(512);
+        // await Future.delayed(Duration(milliseconds: 2000)); // For now hope we don't send any data for a bit after connecting
+      }
     });
   }
 
@@ -162,12 +168,21 @@ class PoiHardware {
     List<int> message = [];
     ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
     ParseUtil.putInt8(message, pattern.columnHeight);
-    ParseUtil.putInt8(message, pattern.columnCount);
+    ParseUtil.putInt16(message, pattern.columnCount);
     for(int i = 0; i < pattern.columnHeight * pattern.columnCount; i++){
       ParseUtil.putInt8(message, pattern.leds[i].red);
       ParseUtil.putInt8(message, pattern.leds[i].green);
       ParseUtil.putInt8(message, pattern.leds[i].blue);
     }
+    return _sendIt(message);
+  }
+
+  Future<bool> sendPattern2(DBImage pattern) {
+    List<int> message = [];
+    ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
+    ParseUtil.putInt8(message, pattern.height);
+    ParseUtil.putInt16(message, pattern.count);
+    ParseUtil.putInt8List(message, pattern.bytes);
     return _sendIt(message);
   }
 }

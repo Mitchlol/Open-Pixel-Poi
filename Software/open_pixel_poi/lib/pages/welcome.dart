@@ -241,8 +241,8 @@ class _WelcomeState extends State<WelcomePage> {
         await Provider.of<Model>(context, listen: false).hardware?.uart.disconnect();
         await Future.delayed(Duration(milliseconds: 2000));
       }
-      // TODO: See if commenting this out broke anything
-      // Provider.of<Model>(context, listen: false).hardware = null;
+
+      Provider.of<Model>(context, listen: false).hardware = null;
       setState(() {
         isDisconnecting = false;
       });

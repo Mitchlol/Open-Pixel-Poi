@@ -8,10 +8,13 @@ import 'package:open_pixel_poi/hardware/models/rgb_value.dart';
 import 'package:provider/provider.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:tuple/tuple.dart';
 
+import '../database/dbimage.dart';
 import '../hardware/models/comm_code.dart';
 import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
+import '../widgets/pattern_import_button.dart';
 import '../widgets/remixer_slider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -26,8 +29,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text("(^'.')> Open Pixel Poi <('.'^)"),
-          actions: [ConnectionStateIndicator()]),
+        title: const Text("(^'.')> Open Pixel Poi <('.'^)"),
+        actions: [
+          PatternImportButton(() {
+            setState(() {});
+          }),
+          ConnectionStateIndicator(),
+        ],
+      ),
       body: getButtons(context),
     );
   }
@@ -39,14 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           children: [
             getPrimarySettings(buildContext),
-            getPatternSettings(buildContext)
+            getImagesList(buildContext),
           ],
         ),
       ),
     );
   }
 
-  Widget getPrimarySettings(BuildContext buildContext){
+  Widget getPrimarySettings(BuildContext buildContext) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -61,22 +70,17 @@ class _MyHomePageState extends State<MyHomePage> {
           subtitle: Column(
             children: [
               RemixerSlider(
-                "Brightness: ${Provider.of<Model>(context, listen: false).hardwareState.settings!.brightness ~/ 2.55}%",
+                "Brightness: ${Provider.of<Model>(context, listen: false).hardwareState.settings!.brightness}%",
                 CommCode.CC_SET_BRIGHTNESS,
-                    () => Provider.of<Model>(context, listen: false)
-                    .hardwareState
-                    .settings!
-                    .brightness,
-                    (int newValue) {
+                () => Provider.of<Model>(context, listen: false).hardwareState.settings!.brightness,
+                (int newValue) {
                   setState(() {
-                    Provider.of<Model>(context, listen: false)
-                        .hardwareState
-                        .settings!
-                        .brightness = newValue;
+                    Provider.of<Model>(context, listen: false).hardwareState.settings!.brightness = newValue;
                   });
                 },
                 // minValue: 1,
                 // maxValue: 100,
+                scaler: 1,
               ),
               const Divider(
                 height: 1,
@@ -85,24 +89,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 endIndent: 0,
               ),
               RemixerSlider(
-                "Speed: ${Provider.of<Model>(context, listen: false).hardwareState.settings!.speed}hz",
+                "Speed: ${Provider.of<Model>(context, listen: false).hardwareState.settings!.speed * 2}hz",
                 CommCode.CC_SET_SPEED,
-                    () => Provider.of<Model>(context, listen: false)
-                    .hardwareState
-                    .settings!
-                    .speed,
-                    (int newValue) {
+                () => Provider.of<Model>(context, listen: false).hardwareState.settings!.speed,
+                (int newValue) {
                   setState(() {
-                    Provider.of<Model>(context, listen: false)
-                        .hardwareState
-                        .settings!
-                        .speed = newValue;
+                    Provider.of<Model>(context, listen: false).hardwareState.settings!.speed = newValue;
                   });
                 },
                 minValue: 1,
                 maxValue: 255,
                 scaler: 1,
-                suffixGenerator: (value) => "${value.toInt()}hz",
+                suffixGenerator: (value) => "${value.toInt() * 2}hz",
               ),
             ],
           ),
@@ -111,189 +109,105 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget getPatternSettings(BuildContext buildContext){
+  Widget getImagesList(BuildContext buildContext) {
     return Card(
       elevation: 5,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
-          title: const Text('Pattern Settings',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              )),
-          subtitle: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      LEDPattern pattern = LEDPattern(2,2, [
-                        RGBValue([0x00,0xff,0x00]),RGBValue([0x00,0x00,0xFF]),
-                        RGBValue([0x00,0x00,0xFF]), RGBValue([0x00,0xff,0x00])
-                      ]);
-                      Provider.of<Model>(context, listen: false).hardware!.sendPattern(pattern);
-                    },
-                    child: const Text(
-                      "Send Preset 1",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+          title: const Text(
+            'Patterns',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+            future: Provider.of<Model>(context).getImages(context),
+            builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                List<Tuple2<Widget, DBImage>>? tuples = snapshot.data;
+                tuples ??= List.empty();
+                List<Widget> widgets = List.empty(growable: true);
+                for (var tuple in tuples) {
+                  widgets.add(
+                    InkWell(
+                      onTap: () {
+                        Provider.of<Model>(context, listen: false).hardware!.sendPattern2(tuple.item2);
+                      },
+                      onLongPress: () {
+                        Provider.of<Model>(context, listen: false).deleteImage(tuple.item2.id!);
+                        setState(() {});
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 80,
+                              child: tuple.item1,
+                            ),
+                            const SizedBox(
+                              width: 100,
+                              height: 8,
+                            ),
+                            const Divider(
+                              height: 1,
+                              thickness: 1,
+                              indent: 0,
+                              endIndent: 0,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                  );
+                }
+                children = widgets;
+              } else if (snapshot.hasError) {
+                children = <Widget>[
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
                   ),
-                ),
-              ),
-              const Divider(
-                height: 1,
-                thickness: 1,
-                indent: 0,
-                endIndent: 0,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      LEDPattern pattern = LEDPattern(1,6, [
-                        RGBValue([0xFF,0xFF,0x00]),
-                        RGBValue([0xFF,0xFF,0x00]),
-                        RGBValue([0xFF,0xFF,0x00]),
-                        RGBValue([0xFF,0xFF,0x00]),
-                        RGBValue([0xFF,0xFF,0x00]),
-                        RGBValue([0x00,0x00,0x00]),
-                      ]);
-                      Provider.of<Model>(context, listen: false).hardware!.sendPattern(pattern);
-                    },
-                    child: const Text(
-                      "Send Preset 2",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text('Error Loading Patterns: ${snapshot.error}'),
                   ),
-                ),
-              ),
-              const Divider(
-                height: 1,
-                thickness: 1,
-                indent: 0,
-                endIndent: 0,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      LEDPattern pattern = LEDPattern(6,1, [
-                        RGBValue([0xFF,0x00,0x00]),
-                        RGBValue([0xFF,0xFF,0x00]),
-                        RGBValue([0x00,0xFF,0x00]),
-                        RGBValue([0x00,0xFF,0xFF]),
-                        RGBValue([0x00,0x00,0xFF]),
-                        RGBValue([0xFF,0x00,0xFF]),
-                      ]);
-                      Provider.of<Model>(context, listen: false).hardware!.sendPattern(pattern);
-                    },
-                    child: const Text(
-                      "Send Preset 3",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                ];
+              } else {
+                children = const <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
                   ),
-                ),
-              ),
-              const Divider(
-                height: 1,
-                thickness: 1,
-                indent: 0,
-                endIndent: 0,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      sendIt(context, 'patterns/pattern1.bmp');
-                    },
-                    child: const Text(
-                      "Send Image 1",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Loading patterns...'),
                   ),
+                ];
+              }
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: children,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      sendIt(context, 'patterns/pattern2.bmp');
-                    },
-                    child: const Text(
-                      "Send Image 2",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      sendIt(context, 'patterns/pattern3.bmp');
-                    },
-                    child: const Text(
-                      "Send Image 3",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              );
+
+              // return imagesList(buildContext, images);
+            },
           ),
         ),
       ),
     );
   }
 
-  void sendIt(BuildContext context, String filename) async {
-    // Uint8List bytes = File('patterns/pattern1.bmp').readAsBytesSync();
-    ByteData bytes = await rootBundle.load(filename);
-    Uint8List bytesList = bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    img.Image? image = img.decodeBmp(bytesList);
-
-    List<RGBValue> leds = List.empty(growable: true);
-    for (var w = 0; w < image!.width; w ++){
-      for (var h = 0; h < image!.height; h ++){
-        var pixel = image!.getPixel(w, h);
-        leds.add(RGBValue([pixel.r.toInt(),pixel.g.toInt(),pixel.b.toInt()]));
-      }
-    }
-
-    LEDPattern pattern = LEDPattern(image!.height, image!.width, leds);
-    Provider.of<Model>(context, listen: false).hardware!.sendPattern(pattern);
+  Widget imagesList(BuildContext buildContext, List<DBImage> images) {
+    return Text("");
   }
-
 }

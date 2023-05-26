@@ -1,6 +1,8 @@
 #ifndef _OPEN_PIXEL_POI_CONFIG
 #define _OPEN_PIXEL_POI_CONFIG
 
+#include <FS.h>
+#include <SPIFFS.h>
 #include <Preferences.h>
 
 #define DEBUG  // Comment this line out to remove printf statements in released version
@@ -24,38 +26,99 @@ class OpenPixelPoiConfig {
     Preferences preferences;
     
   public:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 106211e93bff600fb5c737d240ade4092259e730
     // Settings (come in from the app)
     uint8_t ledBrightness; 
     uint8_t animationSpeed;
-    uint8_t frameHeight; // Will come in on the pattern payload
-    uint8_t frameCount;
-    uint8_t *pattern = (uint8_t *) malloc(2000*sizeof(uint8_t));
+    uint8_t patternSlot;
+    // Pattern
+    uint8_t frameHeight; 
+    uint16_t frameCount;
+    uint8_t *pattern = (uint8_t *) malloc(24000*sizeof(uint8_t));
     uint16_t patternLength;
 
     // Variables
     long configLastUpdated;
 
     void setLedBrightness(uint8_t ledBrightness) {
+      debugf("Save Brightness = %d\n", ledBrightness);
       this->ledBrightness = ledBrightness;
       preferences.putChar("brightness", this->ledBrightness);
       this->configLastUpdated = millis();
     }
     
     void setAnimationSpeed(uint8_t animationSpeed) {
+      debugf("Save Speed = %d\n", animationSpeed * 2);
       this->animationSpeed = animationSpeed;
       preferences.putChar("animationSpeed", this->animationSpeed);
+      this->configLastUpdated = millis();
+    }
+
+    void setPatternSlot(uint8_t patternSlot) {
+      debugf("Save Pattern Slot = %d\n", patternSlot);
+      this->patternSlot = patternSlot;
+      preferences.putChar("patternSlot", this->patternSlot);
+
+      loadFrameHeight();
+      loadFrameCount();
+      fillDefaultPattern();
+      loadPattern();
+
+      debugf("- frame\n");
+      debugf("  - height = %d\n", this->frameHeight);
+      debugf("  - count = %d\n", this->frameCount);
+      
       this->configLastUpdated = millis();
     }
     
     void setFrameHeight(uint8_t frameHeight) {
       this->frameHeight = frameHeight;
-      preferences.putChar("frameHeight", this->frameHeight);
+      char * key;
+      switch(this->patternSlot){
+        case 0:
+          key = "p0Height";
+          break;
+        case 1:
+          key = "p1Height";
+          break;
+        case 2:
+          key = "p2Height";
+          break;
+        case 3:
+          key = "p3Height";
+          break;
+        case 4:
+          key = "p4Height";
+          break;
+      }
+      preferences.putChar(key, this->frameHeight);
       this->configLastUpdated = millis();
     }
     
-    void setFrameCount(uint8_t frameCount) {
+    void setFrameCount(uint16_t frameCount) {
       this->frameCount = frameCount;
-      preferences.putChar("frameCount", this->frameCount);
+      char * key;
+      switch(this->patternSlot){
+        case 0:
+          key = "p0FCount";
+          break;
+        case 1:
+          key = "p1FCount";
+          break;
+        case 2:
+          key = "p2FCount";
+          break;
+        case 3:
+          key = "p3FCount";
+          break;
+        case 4:
+          key = "p4FCount";
+          break;
+      }
+      preferences.putUShort(key, this->frameCount);
       this->configLastUpdated = millis();
     }
     
@@ -70,8 +133,91 @@ class OpenPixelPoiConfig {
         debugf_noprefix("0x%02X%02X%02X ", this->pattern[i], this->pattern[i+1], this->pattern[i+2]);
       }
       debugf_noprefix("\n");
-      preferences.putBytes("pattern", this->pattern, this->patternLength);
+
+      File file = SPIFFS.open(String("/pattern") + this->patternSlot + ".oppp", FILE_WRITE);
+      if(!file || file.isDirectory()){
+        debugf("− failed to open file for reading\n");
+      }else{
+        debugf(" - opened file for writing: %d\n");
+        
+        int written = file.write(pattern, patternLength);
+        file.close();
+        debugf(" - this much written: %d\n", written);
+      }
+      
       this->configLastUpdated = millis();
+    }
+
+    void fillDefaultPattern(){
+      for (int i=0; i < this->frameCount; i++) {
+        for (int j=0; j < this->frameHeight; j++) {
+          if(i % 2 == 1){
+            pattern[(i * this->frameHeight * 3) + (j*3) + 0] = 0xFF;
+            pattern[(i * this->frameHeight * 3) + (j*3) + 1] = 0xFF;
+            pattern[(i * this->frameHeight * 3) + (j*3) + 2] = 0x00;
+          }else{
+            pattern[(i * this->frameHeight * 3) + (j*3) + 0] = 0x00;
+            pattern[(i * this->frameHeight * 3) + (j*3) + 1] = 0x00;
+            pattern[(i * this->frameHeight * 3) + (j*3) + 2] = 0x00;
+          }
+        }
+      }
+    }
+
+    void loadPattern(){
+      File file = SPIFFS.open(String("/pattern") + this->patternSlot + ".oppp");
+      if(!file || file.isDirectory()){
+        debugf("− failed to open file for reading\n");
+      }else{
+        debugf(" - this much available: %d\n", file.available());
+        file.read(pattern, file.available());
+        file.close();
+      }
+    }
+
+    void loadFrameHeight(){
+      char * key;
+      switch(this->patternSlot){
+        case 0:
+          key = "p0Height";
+          break;
+        case 1:
+          key = "p1Height";
+          break;
+        case 2:
+          key = "p2Height";
+          break;
+        case 3:
+          key = "p3Height";
+          break;
+        case 4:
+          key = "p4Height";
+          break;
+      }
+      this->frameHeight = preferences.getChar(key, 20);
+    }
+
+    void loadFrameCount(){
+      char * key;
+      switch(this->patternSlot){
+        case 0:
+          key = "p0FCount";
+          break;
+        case 1:
+          key = "p1FCount";
+          break;
+        case 2:
+          key = "p2FCount";
+          break;
+        case 3:
+          key = "p3FCount";
+          break;
+        case 4:
+          key = "p4FCount";
+          break;
+      }
+      debugf("key = %s\n", key);
+      this->frameCount = preferences.getUShort(key, 2);
     }
       
     
@@ -79,28 +225,34 @@ class OpenPixelPoiConfig {
       debugf("Setup begin\n");
       debugf("Load Config (setup)\n");
 
-      preferences.begin("led_pattern", false);
+      if(!SPIFFS.begin(true)){
+        debugf("SPIFFS Mount Failed\n");
+      }
 
-      this->ledBrightness = preferences.getChar("brightness", 0xff);
+      preferences.begin("led_pattern", false);
+      debugf("Preffs free entries: %d\n", preferences.freeEntries());
+
+      this->ledBrightness = preferences.getChar("brightness", 0x0A);
       debugf("- brightness = %d\n", this->ledBrightness);
 
-      this->animationSpeed = preferences.getChar("animationSpeed", 0);
-      debugf("- animation speed = %d frames per sec\n", this->animationSpeed);
+      this->animationSpeed = preferences.getChar("animationSpeed", 0x0A);
+      debugf("- animation speed = %d frames per sec\n", this->animationSpeed * 2);
 
-      this->frameHeight = preferences.getChar("frameHeight", 0);
-      this->frameCount = preferences.getChar("frameCount", 0);
+      this->patternSlot = preferences.getChar("patternSlot", 0x00);
+      debugf("- pattern slot = %d\n", this->patternSlot);
+
+      loadFrameHeight();
+      loadFrameCount();
       debugf("- frame\n");
       debugf("  - height = %d\n", this->frameHeight);
       debugf("  - count = %d\n", this->frameCount);
       
-      for (int i=0; i<sizeof(this->pattern); i++) {
-        this->pattern[i] = 0;
-      }
-      int savedPatternLength = preferences.getBytesLength("pattern");
-      preferences.getBytes( "pattern", pattern, savedPatternLength );
+      fillDefaultPattern();
+
+      loadPattern();
+
       debugf("- pattern\n");
-      debugf("  - length = %d", savedPatternLength);
-      for (int i = 0; i < savedPatternLength; i+=3 ) {
+      for (int i = 0; i < this->frameHeight * this->frameCount; i+=3 ) {
         if (i%this->frameHeight*3 == 0) {
           debugf_noprefix("\n");
           debugf("    ");
@@ -108,6 +260,7 @@ class OpenPixelPoiConfig {
         debugf_noprefix("0x%02X%02X%02X ", this->pattern[i], this->pattern[i+1], this->pattern[i+2]);
       }
       debugf_noprefix("\n");
+      
       debugf("Setup complete\n");
     }
 };
