@@ -26,10 +26,6 @@ class OpenPixelPoiConfig {
     Preferences preferences;
     
   public:
-<<<<<<< HEAD
-=======
-
->>>>>>> 106211e93bff600fb5c737d240ade4092259e730
     // Settings (come in from the app)
     uint8_t ledBrightness; 
     uint8_t animationSpeed;

@@ -41,7 +41,6 @@ class OpenPixelPoiLED {
     }
 
     void loop(){
-<<<<<<< HEAD
       
       static unsigned long current_millis = millis();
       
@@ -66,24 +65,6 @@ class OpenPixelPoiLED {
           frameIndex = 0;
         }
         current_millis = millis();
-=======
-
-      led_strip.clear();
-      for (int j=0; j<20; j++){
-        
-        red = config.pattern[frameIndex*config.frameHeight*3 + j%config.frameHeight*3 + 0];
-        green = config.pattern[frameIndex*config.frameHeight*3 + j%config.frameHeight*3 + 1];
-        blue = config.pattern[frameIndex*config.frameHeight*3 + j%config.frameHeight*3 + 2];
-        led_strip.setPixelColor(j, led_strip.Color(red, green, blue));
-      }
-      led_strip.setBrightness(config.ledBrightness);
-
-      led_strip.show();
-      delay(1000/(config.animationSpeed*2));
-      frameIndex += 1;
-      if(frameIndex >= config.frameCount){
-        frameIndex = 0;
->>>>>>> 106211e93bff600fb5c737d240ade4092259e730
       }
     }
 };

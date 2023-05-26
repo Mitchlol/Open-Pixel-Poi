@@ -63,12 +63,9 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
   
   private:
     OpenPixelPoiConfig& config;
-<<<<<<< HEAD
     OpenPixelPoiPatterns& patterns;
-=======
 
     int multipartPatternOffset = 0;
->>>>>>> 106211e93bff600fb5c737d240ade4092259e730
     
     // Nordic nRF
     BLEUUID pixelPoiServiceUUID = BLEUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
@@ -84,11 +81,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
     BLECharacteristic* pixelPoiRxCharacteristic;
     BLECharacteristic* pixelPoiTxCharacteristic;
     BLECharacteristic* pixelPoiNotifyCharacteristic;
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> 106211e93bff600fb5c737d240ade4092259e730
     void bleSendError(){
       uint8_t response[] = {0x45, 0x46, 0x00, 0x07, CC_ERROR, 0x46, 0x45};
       writeToPixelPoi(response);
@@ -175,7 +168,6 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         debugf("\n");
         
         // Process BLE
-<<<<<<< HEAD
         if(bleStatus[0] == 0x61 && bleStatus[1] == 0x73 && bleStatus[2] == 0x64 & bleStatus[3] == 0x66){
           debugf("Got asdf! Load BIG_Z\n");
           patterns.loadPattern(patterns.Z_HEIGHT, patterns.Z_COUNT, patterns.BIG_Z);
@@ -188,10 +180,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         }else if (bleStatus[0] == 0x67 && bleStatus[1] == 0x72 && bleStatus[2] == 0x65 & bleStatus[3] == 0x79){
           debugf("Got grey! LOAD GREY_RANDOM\n");
           patterns.loadPattern(patterns.GREY_RANDOM_HEIGHT, patterns.GREY_RANDOM_COUNT, patterns.GREY_RANDOM);
-        }else if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1){
-=======
-        if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1 && !flagMultipartPattern){
->>>>>>> 106211e93bff600fb5c737d240ade4092259e730
+        }else if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1 && !flagMultipartPattern){
           CommCode requestCode = static_cast<CommCode>(bleStatus[1]);
           if(requestCode == CC_SET_BRIGHTNESS){
             config.setLedBrightness(bleStatus[2]);

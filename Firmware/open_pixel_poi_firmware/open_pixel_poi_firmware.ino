@@ -36,10 +36,6 @@ void setup() {
 }
 
 void loop() {
-<<<<<<< HEAD
-  ble.loop();
-  led.loop();
-=======
   //config.loop();
   if(!ble.flagMultipartPattern){
     ble.loop();
@@ -48,5 +44,4 @@ void loop() {
   }else{
     delay(250);
   }
->>>>>>> 106211e93bff600fb5c737d240ade4092259e730
 }
