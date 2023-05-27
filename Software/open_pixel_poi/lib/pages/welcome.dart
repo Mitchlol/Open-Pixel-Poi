@@ -249,9 +249,7 @@ class _WelcomeState extends State<WelcomePage> {
     }
     // Scan
     hasScanned = true;
-    print(">>>>> before startScan()");
     Provider.of<FlutterBluePlus>(_key.currentContext!, listen: false).startScan(timeout: Duration(seconds: 5));
-    print(">>>>> after startScan()");
   }
 
   void connect(BluetoothDevice device) async {
