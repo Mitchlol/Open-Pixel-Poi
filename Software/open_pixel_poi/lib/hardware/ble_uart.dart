@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:collection/collection.dart';
 
 class BLEUart {
@@ -63,11 +63,11 @@ class BLEUart {
     return true;
   }
 
-  Future<Null> write(List<int> value, {bool withoutResponse = false}) {
+  Future<void> write(List<int> value, {bool withoutResponse = false}) {
     return rxCharacteristic.write(value, withoutResponse: withoutResponse);
   }
 
-  Future<Null> read(List<int> value, {bool withoutResponse = false}) {
+  Future<void> read(List<int> value, {bool withoutResponse = false}) {
     return rxCharacteristic.write(value, withoutResponse: withoutResponse);
   }
 
