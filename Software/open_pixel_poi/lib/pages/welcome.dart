@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:open_pixel_poi/hardware/poi_hardware.dart';
 import 'package:open_pixel_poi/pages/home.dart';
 import 'package:provider/provider.dart';
@@ -30,14 +30,14 @@ class _WelcomeState extends State<WelcomePage> {
         title: const Text("Open Pixel Poi"),
       ),
       body: StreamBuilder<Object>(
-          stream: Provider.of<FlutterBlue>(context).isScanning,
+          stream: Provider.of<FlutterBluePlus>(context).isScanning,
           builder: (context, snapshot) {
             bool isScanning = false;
             if (snapshot.data != null && snapshot.data == true) {
               isScanning = true;
             }
             return StreamBuilder<List<ScanResult>>(
-                stream: Provider.of<FlutterBlue>(context).scanResults,
+                stream: Provider.of<FlutterBluePlus>(context).scanResults,
                 builder: (context, snapshot) {
                   List<ScanResult>? scanResults = snapshot.data;
                   if (scanResults != null) {
@@ -249,7 +249,9 @@ class _WelcomeState extends State<WelcomePage> {
     }
     // Scan
     hasScanned = true;
-    Provider.of<FlutterBlue>(_key.currentContext!, listen: false).startScan(timeout: Duration(seconds: 5));
+    print(">>>>> before startScan()");
+    Provider.of<FlutterBluePlus>(_key.currentContext!, listen: false).startScan(timeout: Duration(seconds: 5));
+    print(">>>>> after startScan()");
   }
 
   void connect(BluetoothDevice device) async {
