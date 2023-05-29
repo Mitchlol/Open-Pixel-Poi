@@ -2,6 +2,7 @@
 #include <arduino.h>
 #include <Update.h>
 #include "open_pixel_poi_config.cpp"
+#include "open_poi_patterns.cpp"
 
 // BLE
 #include <BLEDevice.h>
@@ -35,11 +36,13 @@
 // D0 02 80 D1 (Medium)
 // D0 03 FF D1 (Very Bright)
 
-// Set Animation Speed (0 to 255 Hz)
+// Set Animation Speed
+// - Payload Data = 0 to 255
+// - Value = 0 to 510 Hz (multiply data by 2)
 //   MessageType = 03
 //   Payload = 1 byte
-// DO 03 01 D1 (1 frame / sec)
-// D0 03 B4 D1 (180 frames / sec; If you swing at 1 rotation per second each frame will be 1 degree)
+// DO 03 01 D1 (2 frame / sec)
+// D0 03 B4 D1 (360 frames / sec; If you swing at 1 rotation per second each frame will be 0.5 degrees)
 
 // Set display pattern
 //   MessageType = 04
@@ -62,6 +65,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
   
   private:
     OpenPixelPoiConfig& config;
+    OpenPixelPoiPatterns& patterns;
 
     int multipartPatternOffset = 0;
     
@@ -97,7 +101,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
     }
     
   public:
-    OpenPixelPoiBLE(OpenPixelPoiConfig& _config): config(_config) {}
+    OpenPixelPoiBLE(OpenPixelPoiConfig& _config, OpenPixelPoiPatterns& _patterns): config(_config), patterns(_patterns) {}
 
     long bleLastReceived;
     bool flagMultipartPattern = false;
@@ -166,7 +170,19 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         debugf("\n");
         
         // Process BLE
-        if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1 && !flagMultipartPattern){
+        if(bleStatus[0] == 0x61 && bleStatus[1] == 0x73 && bleStatus[2] == 0x64 & bleStatus[3] == 0x66){
+          debugf("Got asdf! Load BIG_Z\n");
+          patterns.loadPattern(patterns.Z_HEIGHT, patterns.Z_COUNT, patterns.BIG_Z);
+        }else if (bleStatus[0] == 0x66 && bleStatus[1] == 0x64 && bleStatus[2] == 0x73 & bleStatus[3] == 0x61){
+          debugf("Got fdsa! LOAD COS_STRING\n");
+          patterns.loadPattern(patterns.COS_HEIGHT, patterns.COS_COUNT, patterns.COS_STRING);
+        }else if (bleStatus[0] == 0x72 && bleStatus[1] == 0x61 && bleStatus[2] == 0x6e & bleStatus[3] == 0x64){
+          debugf("Got rand! LOAD FULL_RANDOM\n");
+          patterns.loadPattern(patterns.FULL_RANDOM_HEIGHT, patterns.FULL_RANDOM_COUNT, patterns.FULL_RANDOM);
+        }else if (bleStatus[0] == 0x67 && bleStatus[1] == 0x72 && bleStatus[2] == 0x65 & bleStatus[3] == 0x79){
+          debugf("Got grey! LOAD GREY_RANDOM\n");
+          patterns.loadPattern(patterns.GREY_RANDOM_HEIGHT, patterns.GREY_RANDOM_COUNT, patterns.GREY_RANDOM);
+        }else if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1 && !flagMultipartPattern){
           CommCode requestCode = static_cast<CommCode>(bleStatus[1]);
           if(requestCode == CC_SET_BRIGHTNESS){
             config.setLedBrightness(bleStatus[2]);
@@ -203,7 +219,6 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             config.setFrameCount(bleStatus[3] << 8 | bleStatus[4]);
             config.patternLength = config.frameHeight*config.frameCount*3;// Need exception handling for buffer overruns!!!
             if(config.patternLength > 24000){
-//              config.setPatternSlot(config.patternSlot);
               // set error pattern
               config.setFrameHeight(20);
               config.setFrameCount(2);

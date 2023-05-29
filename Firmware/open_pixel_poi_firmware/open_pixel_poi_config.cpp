@@ -18,14 +18,15 @@
 
 // Seeed Studio XIAO ESP32C3
   // 512 Bytes EEPROM
+  // 400KB SRAM
   // 4MB Flash memory
+  // 1 CPU core
   
 class OpenPixelPoiConfig {
   private:
     Preferences preferences;
     
   public:
-
     // Settings (come in from the app)
     uint8_t ledBrightness; 
     uint8_t animationSpeed;
@@ -259,8 +260,6 @@ class OpenPixelPoiConfig {
       
       debugf("Setup complete\n");
     }
-
-    void loop() {}
 };
 
 #endif

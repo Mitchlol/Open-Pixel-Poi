@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   provider: 6.0.5
-  flutter_blue: 0.8.0
+  flutter_blue_plus: 1.5.2
   rxdart: ^0.26.0
   image: ^4.0.17
   sqflite: ^2.2.8+4
