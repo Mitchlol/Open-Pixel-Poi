@@ -17,8 +17,9 @@ class OpenPixelPoiPatterns {
 // This class handles the creation of complex patterns using syntax similar to game dev level creation.
 // The pattern will be a character array where each character represents a color.
 
-// In the future, this logic may be handled by a Flutter app which uses images or character arrays to create and transmit patterns.
-// This class is an intermediate step to clean up the firmware before the Flutter app is ready.
+// The Flutter app can create patterns using images.
+// The OpenPixelPoiPatterns class can be removed once the Flutter app
+//   and it's pattern loading features are stable and full featured.
 
 private:
   OpenPixelPoiConfig& config;

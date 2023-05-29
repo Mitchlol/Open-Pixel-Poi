@@ -23,7 +23,6 @@ int refreshRate = 30;
 void setup() {
   Serial.begin(19200);
   Serial.setDebugOutput(true);
-  //while(!Serial);  // required for Serial.print* to work correctly
 
   debugf("Open Pixel POI\n");
   debugf("Setup Begin\n");
@@ -36,7 +35,6 @@ void setup() {
 }
 
 void loop() {
-  //config.loop();
   if(!ble.flagMultipartPattern){
     ble.loop();
     led.loop();

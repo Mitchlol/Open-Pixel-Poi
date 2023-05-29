@@ -36,11 +36,13 @@
 // D0 02 80 D1 (Medium)
 // D0 03 FF D1 (Very Bright)
 
-// Set Animation Speed (0 to 255 Hz)
+// Set Animation Speed
+// - Payload Data = 0 to 255
+// - Value = 0 to 510 Hz (multiply data by 2)
 //   MessageType = 03
 //   Payload = 1 byte
-// DO 03 01 D1 (1 frame / sec)
-// D0 03 B4 D1 (180 frames / sec; If you swing at 1 rotation per second each frame will be 1 degree)
+// DO 03 01 D1 (2 frame / sec)
+// D0 03 B4 D1 (360 frames / sec; If you swing at 1 rotation per second each frame will be 0.5 degrees)
 
 // Set display pattern
 //   MessageType = 04
@@ -217,7 +219,6 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             config.setFrameCount(bleStatus[3] << 8 | bleStatus[4]);
             config.patternLength = config.frameHeight*config.frameCount*3;// Need exception handling for buffer overruns!!!
             if(config.patternLength > 24000){
-//              config.setPatternSlot(config.patternSlot);
               // set error pattern
               config.setFrameHeight(20);
               config.setFrameCount(2);

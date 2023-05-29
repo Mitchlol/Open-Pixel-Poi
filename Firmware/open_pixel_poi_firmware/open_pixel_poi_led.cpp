@@ -32,7 +32,6 @@ class OpenPixelPoiLED {
     void setup(){
       debugf("Setup begin\n");
 
-
       // LED Setup:
       led_strip.begin();
       frameIndex = 0;
@@ -41,7 +40,6 @@ class OpenPixelPoiLED {
     }
 
     void loop(){
-      
       static unsigned long current_millis = millis();
       
       uint8_t red;

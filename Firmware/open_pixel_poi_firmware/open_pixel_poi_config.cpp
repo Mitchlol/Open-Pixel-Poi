@@ -20,6 +20,7 @@
   // 512 Bytes EEPROM
   // 400KB SRAM
   // 4MB Flash memory
+  // 1 CPU core
   
 class OpenPixelPoiConfig {
   private:
