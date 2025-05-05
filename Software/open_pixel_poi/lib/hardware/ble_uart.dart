@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:collection/collection.dart';
+// import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 
 class BLEUart {
   // Nordic nRF
@@ -23,7 +23,8 @@ class BLEUart {
   }
 
   Future<bool> init() async {
-    if (await device.connectionState.first == BluetoothConnectionState.connected) {
+
+    if (await device.connectionState.first.timeout(Duration(seconds: 1), onTimeout: () => BluetoothConnectionState.disconnected) == BluetoothConnectionState.connected) {
       await device.disconnect();
     }
 
@@ -38,7 +39,7 @@ class BLEUart {
           .timeout(Duration(milliseconds: 5250), onTimeout: () => throw Exception("Connection Timeout"));
     }
 
-    List<BluetoothService> services = await device.discoverServices();
+    List<BluetoothService> services = await device.discoverServices(timeout: 5);
     if (services == null) {
       throw Exception("Cant discover bluetooth services");
     }

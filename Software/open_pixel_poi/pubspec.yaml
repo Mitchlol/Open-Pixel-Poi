@@ -36,11 +36,14 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   provider: ^6.1.2
-  flutter_blue_plus: ^1.35.3
+  flutter_blue_plus: ^1.35.5
+#  flutter_blue_plus_windows: ^1.26.1
   rxdart: ^0.28.0
   image: ^4.0.17
   path: ^1.8.2
   sqflite: ^2.2.8+4
+  sqflite_common_ffi: ^2.3.5
+  sqflite_common_ffi_web: ^1.0.0
   tuple: ^2.0.1
   image_picker: ^1.1.2
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -479,11 +480,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         loading.value = true;
                       });
                       for (var poi in Provider.of<Model>(context, listen: false).connectedPoi!.where((poi) => poi.isConncted)) {
-                        // Calling connect seems to bring device to the front of a magic queue and operate faster, and properly
-                        await poi.uart.device
-                            .connect(timeout: Duration(seconds: 5), autoConnect: false)
-                            .timeout(Duration(milliseconds: 5250));
-                        await poi.uart.device.clearGattCache(); // Boosts speed too
+                        if (!kIsWeb) {
+                          // Calling connect seems to bring device to the front of a magic queue and operate faster, and properly
+                          await poi.uart.device
+                              .connect(timeout: Duration(seconds: 5), autoConnect: false)
+                              .timeout(Duration(milliseconds: 5250));
+                          await poi.uart.device.clearGattCache(); // Boosts speed too
+                        }
                         await poi.sendPattern2(tuple.item2).timeout(const Duration(seconds: 5), onTimeout: () {return false;});
                       }
                       setState(() {

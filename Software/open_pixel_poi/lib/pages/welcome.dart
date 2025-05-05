@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+// import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:open_pixel_poi/hardware/poi_hardware.dart';
 import 'package:open_pixel_poi/pages/home.dart';
 import 'package:provider/provider.dart';
@@ -317,11 +318,11 @@ class _WelcomeState extends State<WelcomePage> {
     }
     // Scan
     hasScanned = true;
-    FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
+    FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], webOptionalServices: [Guid(BLEUart.SERVICE_UUID)], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
+    // FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
   }
 
   void connect(List<BluetoothDevice> devices) async {
-    print("Connecting");
     // Clear stale state
     var connectedPoi = Provider.of<Model>(context, listen: false).connectedPoi;
     Provider.of<Model>(context, listen: false).connectedPoi = null;

@@ -1,5 +1,10 @@
-import 'database/dbimage.dart';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dbimage.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:image/image.dart' as img;
@@ -11,11 +16,17 @@ class PatternDB {
   late Future<Database> databaseFuture;
   List<Tuple2<Widget, DBImage>>? inMemoryCache;
 
-  PatternDB() {
-    getDB();
+  PatternDB(){
+    getDB(); // Loads async without await, but user needs to scan for bluetooth so we have time.
   }
 
-  void getDB() async {
+  Future<void> getDB() async {
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    } else if (!Platform.isAndroid) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
     databaseFuture = openDatabase(
       join(await getDatabasesPath(), 'images.db'),
       onCreate: (db, version) {
