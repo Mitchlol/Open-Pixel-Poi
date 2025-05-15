@@ -64,7 +64,7 @@ A single press and hold will show the battery level as a color.
 Green is full, red is empty, shades of yellow inbetween.
 If you hold too long, it will go into the shutdown sequence.
 
-Pressing the button 4 times which will show the green->red dot 
+Pressing the button 5 times which will show the green->red dot 
 animation and enter the voltage display mode. In this mode the 
 blue leds represent the integer value of the cell voltage, and
 remanining leds represent the tenths of a volt fraction. The 
