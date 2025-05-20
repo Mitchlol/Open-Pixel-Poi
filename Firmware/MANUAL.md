@@ -12,15 +12,14 @@ Open pixel poi have a single button menu which gives access to
 1. Voltage display
 
 Note: a freshly flashed firmware will have no pattens and display
-a yellow strobe for all 5 of the pattern slots, untill they are 
-filled via the app.
+a yellow strobe for all 5 of the pattern slots, until they are 
+filled via the [app](/Software/README.md).
 
 Also Note: The lowest brightness level can only display primary 
 colors, this means patterns and color based battery level will 
-have very low fidelity. Because the LEDs are powered on at the 
-lowest possible level, it is not possible for it to do partial 
-brightness to blend colors. The second to lowest level can also
-struggle a little.
+have very low fidelity. The second to lowest level can also
+struggle a little. This concept is known as 
+[color depth](https://en.wikipedia.org/wiki/Color_depth).
 
 ## Power On/Off
 When off, a single button press will turn the poi on.
