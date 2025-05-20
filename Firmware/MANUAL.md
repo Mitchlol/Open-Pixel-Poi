@@ -12,7 +12,7 @@ Open pixel poi have a single button menu which gives access to
 1. Voltage display
 
 Note: a freshly flashed firmware will have no pattens and display
-a yellow strobe for all 5 of the pattern slots, until they are 
+a yellow strobe for all of the pattern slots, until they are 
 filled via the [app](/Software/README.md).
 
 Also Note: The lowest brightness level can only display primary 
@@ -79,3 +79,10 @@ only display 2 red pixels at either end, at the miniumum level.
 
 When the battery level gets even lower (3.25v) the poi will
 automatically shut down.
+
+## Charging
+The poi charge via the USB-C port. When charging, a blue led will
+light up on the pcb, to indicate charging status. The led's
+illumination is visible through the wire holes at the top, and
+through the reset hole on the side. The blue led will turn off
+when charging is complete. The poi charge at a rate of 500ma.
