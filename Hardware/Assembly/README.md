@@ -23,10 +23,10 @@ For a single poi you will need:
 
 ## Step 2
 ###### Solder wires to the LED strips
-While any color will work, using the right color keeps things neat!
-Black = ground
-Red = power
-Any other color =  data
+While any color will work, using the right color keeps things neat!  
+Black = ground  
+Red = power  
+Any other color =  data  
 ![wiring](./assembly_step_2.jpg)
 
 ## Step 3
