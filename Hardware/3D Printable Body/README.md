@@ -10,7 +10,7 @@ Print all the main body parts in **PLA** or any other rigid material. Slicer pro
 ## Outer Shell
 The outer shell must be printed in **Clear / Transparent TPU**. Ive included 2 shell variants. For the original hex shell, I like how it looks with 10% gyroid infill. The round shell should be mostly unaffected by infill, as it has thin walls and internal cavities to control diffusion. Both files are preoriented and do not require any supports/brims/rafts/etc, see the section on orientation below to confirm your orientation. You need 1 shell per poi, so that means 2 shells for a pair. If you're undecided which shell you want, go with the round one.
 
-Update: I've started dumping more shell designs in the optional parts folder, including one with holes for the LEDs allowing it to be printed in any color TPU. However, the 2 options here are the best.
+Update: I've started dumping more shell designs in the [Extras](./Extras/README.md) folder, including one with holes for the LEDs allowing it to be printed in any color TPU. However, the 2 options here are the best.
 ###### Shells are:
 1. **Option 1:** [Open Pixel Poi - Shell - Hex](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Open%20Pixel%20Poi%20-%20Shell%20-%20Hex.3mf>)
 1. **Option 2:** [Open Pixel Poi - Shell - Round Diffused](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Open%20Pixel%20Poi%20-%20Shell%20-%20Round%20Diffused.3mf>)
@@ -21,3 +21,6 @@ The parts all print without supports when oriented like this. Take special note 
 
 ## All in one file
 Alternatively [Open Pixel Poi - All Parts In One File](<Open Pixel Poi - All Parts In One File.3mf>) contains all the parts of a single poi body. You will need to split the object to seperate out the parts, and orient them on your own.
+
+## Extras
+The [Extras](./Extras/README.md) folder contains more shell variants, shell caps, poi knobs, and whatever else seems relevant to upload. Nothing in this folder is required to have a functional poi, but it is worth having a look.
