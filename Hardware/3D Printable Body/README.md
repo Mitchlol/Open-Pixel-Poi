@@ -9,7 +9,9 @@ Print all the main body parts in **PLA** or any other rigid material. Slicer pro
 
 ## Outer Shell
 The outer shell must be printed in **Clear / Transparent TPU**. Ive included 2 shell variants. For the original hex shell, I like how it looks with 10% gyroid infill. The round shell should be mostly unaffected by infill, as it has thin walls and internal cavities to control diffusion. Both files are preoriented and do not require any supports/brims/rafts/etc, see the section on orientation below to confirm your orientation. You need 1 shell per poi, so that means 2 shells for a pair. If you're undecided which shell you want, go with the round one.
-###### main body parts are:
+
+Update: I've started dumping more shell designs in the optional parts folder, including one with holes for the LEDs allowing it to be printed in any color TPU. However, the 2 options here are the best.
+###### Shells are:
 1. **Option 1:** [Open Pixel Poi - Shell - Hex](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Open%20Pixel%20Poi%20-%20Shell%20-%20Hex.3mf>)
 1. **Option 2:** [Open Pixel Poi - Shell - Round Diffused](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Open%20Pixel%20Poi%20-%20Shell%20-%20Round%20Diffused.3mf>)
 
