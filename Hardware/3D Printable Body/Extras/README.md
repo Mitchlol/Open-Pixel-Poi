@@ -23,6 +23,7 @@ This shell is the same as the standard hex shell, but has chamfered holes around
         * Darker shells look cool, and are less visible in motion
     * **cons**
         * Poor visibility at angles due to lack of difusion
+        * LEDs are exposed to dirt and moisture (solvable with clear tape)
         * Slight gaps in pattern if the poi antispin roll while spinning at certain speeds
 1. **Option 2:** [Open Pixel Poi - Shell - Round Superdiffuser](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Extras/Open%20Pixel%20Poi%20-%20Shell%20-%20Round%20SuperDiffuser.3mf>) 
 This shell is designed to try and maximize diffusion.
