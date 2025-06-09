@@ -13,8 +13,10 @@ Little hats for your poi! Annoying to put on, but they look great!
 
 1. **Option 1:** [Open Pixel Poi - Shell - Hex Holes](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Extras/Open%20Pixel%20Poi%20-%20Shell%20-%20Hex%20Holes.3mf>)
 This shell is the same as the standard hex shell, but has chamfered holes around the LEDs allowing the shell to be printed in any color of TPU.
-<img src="hex_holes.jpg" alt="drawing" width="150"/>
- 
+    <div>
+        <img src="hex_holes.jpg" alt="drawing" width="150"/>
+    </div>
+
     * **Pros** 
         * Can be printed with any color TPU
         * Crisp patten display due to lack of diffusion
