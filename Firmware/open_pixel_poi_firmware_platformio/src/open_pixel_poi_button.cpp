@@ -156,8 +156,20 @@ public:
           config.setPatternBank(2, true);
           config.displayState = DS_PATTERN;
           config.displayStateLastUpdated = millis();
-        }else{
+        }else if(millis() - downTime < 2500){
           config.displayState = DS_PATTERN_ALL_ALL;
+          config.displayStateLastUpdated = millis();
+        }else if(millis() - downTime < 3000){
+          config.setPatternBank(0, true);
+          config.displayState = DS_PATTERN_ALL;
+          config.displayStateLastUpdated = millis();
+        }else if(millis() - downTime < 3500){
+          config.setPatternBank(1, true);
+          config.displayState = DS_PATTERN_ALL;
+          config.displayStateLastUpdated = millis();
+        }else{
+          config.setPatternBank(2, true);
+          config.displayState = DS_PATTERN_ALL;
           config.displayStateLastUpdated = millis();
         }
         buttonState = BS_INITIAL;
@@ -178,19 +190,19 @@ public:
         config.displayStateLastUpdated = millis();
       }else if(buttonState == BS_CLICK4_HOLD){
         if(millis() - downTime < 1000){
-          config.setAnimationSpeed(0);
-        }else if(millis() - downTime < 1500){
           config.setAnimationSpeed(1);
-        }else if(millis() - downTime < 2000){
+        }else if(millis() - downTime < 1500){
           config.setAnimationSpeed(2);
-        }else if(millis() - downTime < 2500){
+        }else if(millis() - downTime < 2000){
           config.setAnimationSpeed(5);
-        }else if(millis() - downTime < 3000){
+        }else if(millis() - downTime < 2500){
           config.setAnimationSpeed(10);
-        }else if(millis() - downTime < 3500){
+        }else if(millis() - downTime < 3000){
           config.setAnimationSpeed(20);
+        }else if(millis() - downTime < 3500){
+          config.setAnimationSpeed(35);
         }else if(millis() - downTime < 4000){
-          config.setAnimationSpeed(50);
+          config.setAnimationSpeed(60);
         }else if(millis() - downTime < 4500){
           config.setAnimationSpeed(100);
         }else if(millis() - downTime < 5000){
@@ -215,9 +227,9 @@ public:
       config.displayStateLastUpdated = millis();
       buttonState = BS_INITIAL;
     }
-    // Double press detected after timeout, loop patterns
+    // Double press detected after timeout, do nothing
     if(buttonState == BS_CLICK2_UP && millis() - downTime >= 500){
-      config.displayState = DS_PATTERN_ALL;
+      config.displayState = DS_PATTERN;
       config.displayStateLastUpdated = millis();
       buttonState = BS_INITIAL;
     }

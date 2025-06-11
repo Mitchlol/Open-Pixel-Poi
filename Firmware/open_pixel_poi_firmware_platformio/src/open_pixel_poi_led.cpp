@@ -131,22 +131,45 @@ class OpenPixelPoiLED {
           }
         }
       }else if(config.displayState == DS_SHUTDOWN){
-        // 2000ms
-        // Crappy but simple shutdown animation for now
-        red = /*strobe*/((millis() - config.displayStateLastUpdated) % 200 > 100) * /*color*/0xFF * /*fade out*/((2000-(millis() - config.displayStateLastUpdated))/2000.0);
-        for(int j=0; j<20; j++){
-          led_strip.setPixelColor(j, led_strip.Color(red, 0x00, 0x00));
+        if(config.batteryVoltage >= 4.00){
+          green = 255;
+        }else if(config.batteryVoltage <= 3.50){
+          green = 0;
+        }else{
+          green = (((config.batteryVoltage - 3.50) * 2) * 255);
+        } 
+        red = (0xff - green);
+        blue = 0x00;
+        // 2000ms Blink & Pixel Crush
+        if (millis() - config.displayStateLastUpdated > 200) {
+          for(int j=9; j>=((millis() - config.displayStateLastUpdated)/200); j--){
+            led_strip.setPixelColor(j, led_strip.Color(red, green, blue));
+            led_strip.setPixelColor(9+(10-j), led_strip.Color(red, green, blue));
+          }
         }
       }else if(config.displayState == DS_BANK){
         if (millis() - config.displayStateLastUpdated < 1500){
           for (int j=0; j <= (millis() - config.displayStateLastUpdated)/125; j+=4){
             led_strip.setPixelColor(j, led_strip.Color(0xFF, 0x00, 0xFF));
-            led_strip.setPixelColor(j+1, led_strip.Color(0x00, 0x00, 0xFF));
+            led_strip.setPixelColor(j+1, led_strip.Color(0xFF, 0x00, 0xFF));
             led_strip.setPixelColor(j+2, led_strip.Color(0xFF, 0x00, 0xFF));
           }
-        }else{
-          for (int j=0; j < 20; j++){
-            led_strip.setPixelColor(j, led_strip.Color(red, green, blue));
+        }else {
+          for (int j=0; j < 12; j+=4){
+            led_strip.setPixelColor(j, led_strip.Color(0xFF, 0x00, 0xFF));
+            led_strip.setPixelColor(j+1, led_strip.Color(0xFF, 0x00, 0xFF));
+            led_strip.setPixelColor(j+2, led_strip.Color(0xFF, 0x00, 0xFF));
+          }
+          if (millis() - config.displayStateLastUpdated < 2000){
+            led_strip.setPixelColor(1, led_strip.Color(0x00, 0x00, 0xFF));
+            led_strip.setPixelColor(5, led_strip.Color(0x00, 0x00, 0xFF));
+            led_strip.setPixelColor(9, led_strip.Color(0x00, 0x00, 0xFF));
+          }else if (millis() - config.displayStateLastUpdated < 2500){
+            led_strip.setPixelColor(1, led_strip.Color(0x00, 0x00, 0xFF));
+          }else if (millis() - config.displayStateLastUpdated < 3000){
+            led_strip.setPixelColor(5, led_strip.Color(0x00, 0x00, 0xFF));
+          }else{
+            led_strip.setPixelColor(9, led_strip.Color(0x00, 0x00, 0xFF));
           }
         }
       }else if(config.displayState == DS_BRIGHTNESS){
@@ -185,6 +208,14 @@ class OpenPixelPoiLED {
         led_strip.setBrightness(1);
       }else{
         led_strip.setBrightness(config.ledBrightness);
+      }
+      // Shutdown fadeout
+      if(config.displayState == DS_SHUTDOWN){
+        uint8_t fadedBrightness = led_strip.getBrightness() * ((2000-(millis() - config.displayStateLastUpdated))/2000.0);
+        if (fadedBrightness == 0){
+          fadedBrightness = 1;
+        }
+        led_strip.setBrightness(fadedBrightness);
       }
 
       // Super low voltage, only display red
