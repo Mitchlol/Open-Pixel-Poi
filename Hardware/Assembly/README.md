@@ -2,9 +2,11 @@
 
 ## intro
 
-This is basic assembly guide, and while assembly should be intuitive, this guide includes a few tips, tricks, and order of operations optimizations. It does not include any soldering specific info, as that is out of scope.
+This is basic assembly guide, and while assembly should be intuitive, this guide includes a few tips, tricks, and order of operations optimizations. It does not include any soldering specific info.
 
-For a realtime assembly video with soldering click [here](https://youtu.be/lT4Q7nI5Dq8?si=qJWZAIUzumP1a3XG)
+For a detailed soldering video click [here](https://www.youtube.com/watch?v=ispkQVDGiHQ).
+
+For a realtime assembly video with soldering click [here](https://youtu.be/lT4Q7nI5Dq8?si=qJWZAIUzumP1a3XG).
 
 ## Step 1: 
 ###### Gather your parts
