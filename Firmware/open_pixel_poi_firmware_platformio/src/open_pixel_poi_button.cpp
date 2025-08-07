@@ -102,7 +102,7 @@ public:
         // Trigger voltage display
         config.displayState = DS_VOLTAGE;
         config.displayStateLastUpdated = millis();
-      }else if(buttonState == BS_CLICK_HOLD && millis() - downTime >= 3000){ // Click Long Hold
+      }else if(buttonState == BS_CLICK_HOLD && millis() - downTime >= 2000){ // Click Long Hold
         buttonState = BS_CLICK_HOLD_LONG;
         config.displayState = DS_SHUTDOWN;
         config.displayStateLastUpdated = millis();
