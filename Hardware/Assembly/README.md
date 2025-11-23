@@ -72,8 +72,13 @@ You can turn the poi off with the switch see the [user manual]()
 ## Step 8
 ###### Snap the button into body
 Push the button into the body, it is a snap fit.
-**Take extra care to avoid contact with the switch on bottom of the board!**
-**It can break easy.**
+> [!CAUTION]
+> **Take extra care to avoid contact with the switch on bottom of the board!**
+> **It can break easy.**
+
+> [!TIP]
+> After writing this guide, I came across a potentialy safer alternative assembly method. Place the button in before putting the PCB in, then hold the body vertically such that gravity lets the button fall to the down position. Then snap the board in without fear of tearing the switch off the pcb, as gravity holds the button away. Maybe this will be useful if someone is assembling many kits.
+
 ![wiring](./assembly_step_8.jpg)
 
 ## Step 9
