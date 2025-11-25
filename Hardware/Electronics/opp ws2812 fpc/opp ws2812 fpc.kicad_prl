@@ -19,7 +19,7 @@
       "footprints": true,
       "graphics": true,
       "keepouts": true,
-      "lockedItems": true,
+      "lockedItems": false,
       "otherItems": true,
       "pads": true,
       "text": true,
@@ -67,14 +67,8 @@
     "visible_layers": "fffffff_ffffffff",
     "zone_display_mode": 0
   },
-  "git": {
-    "repo_password": "",
-    "repo_type": "",
-    "repo_username": "",
-    "ssh_key": ""
-  },
   "meta": {
-    "filename": "kicad.kicad_prl",
+    "filename": "opp ws2812 fpc.kicad_prl",
     "version": 3
   },
   "project": {
