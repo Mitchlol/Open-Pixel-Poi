@@ -582,7 +582,7 @@
       (stroke (width 0.06) (type solid)) (fill none) (layer "F.Fab") (tstamp 2d87b1d9-87af-44a9-85a0-91081c1fa8c7))
     (pad "1" smd rect (at 0 0 270) (size 4 3.8) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 1 "+BATT") (pinfunction "1") (pintype "unspecified") (tstamp 08f448ea-83da-4898-99c3-504cab852960))
-    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/kicad/easyeda2kicad/easyeda2kicad.3dshapes/SMD_MY-ZJ-110.wrl"
+    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/OpenPixelPoi/easyeda2kicad/easyeda2kicad.3dshapes/SMD_MY-ZJ-110.wrl"
       (offset (xyz 0.78 -0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -632,7 +632,7 @@
       (net 39 "Net-(U5-SW)") (pinfunction "SW") (pintype "unspecified") (tstamp 9472f834-e339-4722-995f-e754536cfeaa))
     (pad "6" smd rect (at -0.75 0.5 90) (size 0.3 0.6) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 3 "+5V") (pinfunction "VOUT") (pintype "unspecified") (tstamp 37e48422-f6f8-4783-a2c4-c1fbb934b4d0))
-    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/kicad/easyeda2kicad/easyeda2kicad.3dshapes/SOT-563-6P_L1.6-W1.2-H0.6-LS1.6-P0.50.wrl"
+    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/OpenPixelPoi/easyeda2kicad/easyeda2kicad.3dshapes/SOT-563-6P_L1.6-W1.2-H0.6-LS1.6-P0.50.wrl"
       (offset (xyz -0 0.03 -0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 180))
@@ -755,7 +755,7 @@
       (net 36 "-BATT") (pinfunction "9") (pintype "unspecified") (tstamp 474627e3-4273-468f-8b03-304e74d49e86))
     (pad "10" smd rect (at -2.75 1.25 180) (size 0.4 0.8) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 36 "-BATT") (pinfunction "10") (pintype "unspecified") (tstamp 30aa3078-34fd-4bdd-bc06-fc78429ef612))
-    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/kicad/easyeda2kicad/easyeda2kicad.3dshapes/FPC-SMD_8P-P0.50_XUNPU_FPC-0.5HF-8PWBH10.wrl"
+    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/OpenPixelPoi/easyeda2kicad/easyeda2kicad.3dshapes/FPC-SMD_8P-P0.50_XUNPU_FPC-0.5HF-8PWBH10.wrl"
       (offset (xyz 0.13 0.16 -0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -1744,7 +1744,7 @@
       (net 36 "-BATT") (pinfunction "9") (pintype "unspecified") (tstamp 760bbdfb-5a61-4ad7-9d96-5a4c87eb514c))
     (pad "10" smd rect (at -2.75 1.25 180) (size 0.4 0.8) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 36 "-BATT") (pinfunction "10") (pintype "unspecified") (tstamp d4422488-2c01-4545-973e-eef6fb3e566d))
-    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/kicad/easyeda2kicad/easyeda2kicad.3dshapes/FPC-SMD_8P-P0.50_XUNPU_FPC-0.5HF-8PWBH10.wrl"
+    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/OpenPixelPoi/easyeda2kicad/easyeda2kicad.3dshapes/FPC-SMD_8P-P0.50_XUNPU_FPC-0.5HF-8PWBH10.wrl"
       (offset (xyz 0.13 0.16 -0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -1965,7 +1965,7 @@
       (stroke (width 0.06) (type solid)) (fill none) (layer "F.Fab") (tstamp fd25e8c2-733b-4678-a6ea-82ffe4126033))
     (pad "1" smd rect (at 0 0 90) (size 4 3.8) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 36 "-BATT") (pinfunction "1") (pintype "unspecified") (tstamp ff1480fe-4ecb-423c-9f0a-ee0ab064ae1d))
-    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/kicad/easyeda2kicad/easyeda2kicad.3dshapes/SMD_MY-ZJ-110.wrl"
+    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/OpenPixelPoi/easyeda2kicad/easyeda2kicad.3dshapes/SMD_MY-ZJ-110.wrl"
       (offset (xyz 0.78 -0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -2910,7 +2910,7 @@
       (net 36 "-BATT") (pinfunction "9") (pintype "unspecified") (tstamp 587d6381-8b17-47cb-b0d5-c70f1c5a3251))
     (pad "10" smd rect (at -2.75 1.25 180) (size 0.4 0.8) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 36 "-BATT") (pinfunction "10") (pintype "unspecified") (tstamp 34a96988-bf70-4017-b03b-aadd1ace9bbc))
-    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/kicad/easyeda2kicad/easyeda2kicad.3dshapes/FPC-SMD_8P-P0.50_XUNPU_FPC-0.5HF-8PWBH10.wrl"
+    (model "C:/Users/moesk/code/Open-Pixel-Poi/Hardware/Electronics/OpenPixelPoi/easyeda2kicad/easyeda2kicad.3dshapes/FPC-SMD_8P-P0.50_XUNPU_FPC-0.5HF-8PWBH10.wrl"
       (offset (xyz 0.13 0.16 -0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
