@@ -1,7 +1,7 @@
 {
   "board": {
-    "active_layer": 37,
-    "active_layer_preset": "Front Layers",
+    "active_layer": 0,
+    "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
     "hidden_nets": [],
@@ -64,11 +64,11 @@
       39,
       40
     ],
-    "visible_layers": "00290aa_00000001",
+    "visible_layers": "00490aa_80000001",
     "zone_display_mode": 0
   },
   "meta": {
-    "filename": "opp ws2812 fpc.kicad_prl",
+    "filename": "opp apa102 2020 fpc.kicad_prl",
     "version": 3
   },
   "project": {
