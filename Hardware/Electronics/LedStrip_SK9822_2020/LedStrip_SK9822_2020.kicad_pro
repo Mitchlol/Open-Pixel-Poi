@@ -55,16 +55,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "copper_edge_clearance|225250000|24400000|f0d02813-95c9-4683-8357-87f4bbd67cf4|e536eab8-a7a5-4615-8fb1-addbff8db219",
-        "copper_edge_clearance|225250000|24900000|f0d02813-95c9-4683-8357-87f4bbd67cf4|a9b8ca60-663d-405d-a91c-23d83f594d69",
-        "copper_edge_clearance|225250000|25400000|f0d02813-95c9-4683-8357-87f4bbd67cf4|6b707eb7-6709-47e4-8116-830bd54e0b1f",
-        "copper_edge_clearance|225250000|25900000|f0d02813-95c9-4683-8357-87f4bbd67cf4|af9bb5c9-b5fb-4c6f-b0b5-39b296b17027",
-        "copper_edge_clearance|225250000|26400000|f0d02813-95c9-4683-8357-87f4bbd67cf4|307bbc7b-7602-496a-a1dc-2882353118b0",
-        "copper_edge_clearance|225250000|26900000|f0d02813-95c9-4683-8357-87f4bbd67cf4|971e6593-208e-4963-877b-1eba95d010a9",
-        "copper_edge_clearance|225250000|27400000|f0d02813-95c9-4683-8357-87f4bbd67cf4|4e178ab2-0ea3-4417-ad46-722baefef152",
-        "copper_edge_clearance|225250000|27900000|f0d02813-95c9-4683-8357-87f4bbd67cf4|f2ea83ff-c5c6-4ba9-a1c3-cd29a9cbcf09"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -416,7 +407,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "opp apa102 2020 fpc.kicad_pro",
+    "filename": "LedStrip_SK9822_2020.kicad_pro",
     "version": 1
   },
   "net_settings": {
