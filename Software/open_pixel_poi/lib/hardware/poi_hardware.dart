@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:open_pixel_poi/database/dbimage.dart';
+import 'package:open_pixel_poi/hardware/models/fw_version.dart';
 import 'package:rxdart/rxdart.dart';
 
 import './models/comm_code.dart';
@@ -116,14 +117,14 @@ class PoiHardware {
     }
 
     // Check packet length
-    // int packetLength = (_buffer[2] << 8) + _buffer[3];
-    // if (_buffer.length != packetLength) {
-    //   print("onRecievePacket: Invalid packet length, discarding");
-    //   _buffer = null;
-    //   return;
-    // }
+    int packetLength = (_buffer[1] << 8) + _buffer[2];
+    if (_buffer.length != packetLength) {
+      print("onRecievePacket: Invalid packet length ($packetLength), discarding");
+      _buffer = List.empty();
+      return;
+    }
 
-    List<int> message = _buffer.sublist(1, _buffer.length -1);
+    List<int> message = _buffer.sublist(3, _buffer.length -1);
     print("onRecievePacket: Found message: " + message.toString());
     _buffer = List.empty();
     return onRecieveMessage(message);
@@ -131,11 +132,14 @@ class PoiHardware {
 
   dynamic onRecieveMessage(List<int> message) {
     CommCode commCode = CommCode.values[message.removeAt(0)];
+    print("Message recieved: code = $commCode, message = $message");
     switch (commCode) {
       case CommCode.CC_SUCCESS:
         return Confirmation(true);
       case CommCode.CC_ERROR:
         return Confirmation(false);
+      case CommCode.CC_GET_FW_VERSION:
+        return FWVersion(message[0]);
      default:
         print("Unhandled message recieved: code = $commCode, message = $message");
         return null;
@@ -165,6 +169,12 @@ class PoiHardware {
     ParseUtil.putInt8(message, code.index);
     ParseUtil.putInt8s(message, value);
     message.insert(0, code.index);
+    return _sendIt(message, confirmation);
+  }
+  Future<bool> sendInt16(int value, CommCode code, [bool confirmation = true]) {
+    List<int> message = [];
+    ParseUtil.putInt8(message, code.index);
+    ParseUtil.putInt16(message, value);
     return _sendIt(message, confirmation);
   }
   Future<bool> sendPattern(LEDPattern pattern) {

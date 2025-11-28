@@ -198,19 +198,19 @@ public:
         }else if(millis() - downTime < 2500){
           config.setAnimationSpeed(10);
         }else if(millis() - downTime < 3000){
-          config.setAnimationSpeed(20);
+          config.setAnimationSpeed(25);
         }else if(millis() - downTime < 3500){
-          config.setAnimationSpeed(35);
+          config.setAnimationSpeed(50);
         }else if(millis() - downTime < 4000){
-          config.setAnimationSpeed(60);
-        }else if(millis() - downTime < 4500){
           config.setAnimationSpeed(100);
-        }else if(millis() - downTime < 5000){
-          config.setAnimationSpeed(150);
-        }else if(millis() - downTime < 5500){
+        }else if(millis() - downTime < 4500){
           config.setAnimationSpeed(200);
+        }else if(millis() - downTime < 5000){
+          config.setAnimationSpeed(400);
+        }else if(millis() - downTime < 5500){
+          config.setAnimationSpeed(600);
         }else{
-          config.setAnimationSpeed(250);
+          config.setAnimationSpeed(800);
         }
         buttonState = BS_INITIAL;
         config.displayState = DS_PATTERN;
@@ -253,7 +253,13 @@ public:
     }
 
     // Read battery voltage
-    config.batteryVoltage = (config.batteryVoltage * 0.999) + ((analogReadMilliVolts(A0)/500.0) * .001);
+    if(BATTERY_VOLTAGE_SENSOR){
+      config.batteryVoltage = (config.batteryVoltage * 0.999) + ((analogReadMilliVolts(A0)/500.0) * .001);
+    }else{
+      config.batteryVoltage = 4.2;
+    }
+
+    
 
     // Super low voltage, emergency shutdown (uses data from previous read, this is ok). 
     if (config.batteryState == BAT_SHUTDOWN && config.displayState != DS_SHUTDOWN){

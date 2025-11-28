@@ -4,6 +4,7 @@
 #include <FS.h>
 #include <SPIFFS.h>
 #include <Preferences.h>
+#include "config.h"
 
 //#define DEBUG  // Comment this line out to remove printf statements in released version
 #ifdef DEBUG
@@ -31,14 +32,6 @@ enum DisplayState {
   DS_SHUTDOWN
 };
 
-#define BATTERY_LATCH 0.05
-#define BATTERY_VOLTAGE_LOW 3.45
-#define BATTERY_VOLTAGE_CRITICAL 3.33
-#define BATTERY_VOLTAGE_SHUTDOWN 3.25
-
-#define PATTERN_BANK_SIZE 5
-#define PATTERN_BANK_COUNT 3 
-
 enum BatteryState {
   BAT_OK,
   BAT_LOW,
@@ -56,9 +49,13 @@ class OpenPixelPoiConfig {
     BatteryState batteryState = BAT_OK;
     DisplayState displayState = DS_PATTERN;
     long displayStateLastUpdated = 0;
-    // Settings (come in from the app)
+    // Hardware Settings (Defaults from config.h but can be overriden using the app) 
+    uint8_t pinoutVariant = DEFAULT_PINOUT_VARIANT;
+    uint8_t ledType = DEFAULT_LED_TYPE;
+    uint8_t ledCount = DEFAULT_LED_COUNT;
+    // Display Settings (come in from the app or changed via button)
     uint8_t ledBrightness; 
-    uint8_t animationSpeed;
+    uint16_t animationSpeed;
     uint8_t patternSlot;
     uint8_t patternBank;
     // Pattern
@@ -77,10 +74,10 @@ class OpenPixelPoiConfig {
       this->configLastUpdated = millis();
     }
     
-    void setAnimationSpeed(uint8_t animationSpeed) {
-      debugf("Save Speed = %d\n", animationSpeed * 2);
+    void setAnimationSpeed(uint16_t animationSpeed) {
+      debugf("Save Speed = %d\n", animationSpeed);
       this->animationSpeed = animationSpeed;
-      preferences.putChar("animationSpeed", this->animationSpeed);
+      preferences.putUShort("animationSpeed", this->animationSpeed);
       this->configLastUpdated = millis();
     }
 
@@ -217,8 +214,8 @@ class OpenPixelPoiConfig {
       this->ledBrightness = preferences.getChar("brightness", 0x0A);
       debugf("- brightness = %d\n", this->ledBrightness);
 
-      this->animationSpeed = preferences.getChar("animationSpeed", 0x0A);
-      debugf("- animation speed = %d frames per sec\n", this->animationSpeed * 2);
+      this->animationSpeed = preferences.getUShort("animationSpeed", 0x0258);
+      debugf("- animation speed = %d frames per sec\n", this->animationSpeed);
 
       this->patternSlot = preferences.getChar("patternSlot", 0x00);
       debugf("- pattern slot = %d\n", this->patternSlot);

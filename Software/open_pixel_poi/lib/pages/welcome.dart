@@ -6,6 +6,8 @@ import 'package:open_pixel_poi/pages/home.dart';
 import 'package:provider/provider.dart';
 
 import '../hardware/ble_uart.dart';
+import '../hardware/models/comm_code.dart';
+import '../hardware/models/fw_version.dart';
 import '../model.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -354,8 +356,24 @@ class _WelcomeState extends State<WelcomePage> {
         print("error = $error");
         const snackBar = SnackBar(content: Text('Unable to connect, please make sure selected device is a Open Pixel Poi.'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
       });
     }
+    // Check the firmware version of each connected device
+    print("Check firmware version");
+    for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
+      await poi.sendInt8(0, CommCode.CC_GET_FW_VERSION, true);
+      FWVersion? version = await poi.readResponse();
+      if((version?.version??0) != 2){
+        setState(() {
+          isConnecting = false;
+        });
+        const snackBar = SnackBar(content: Text('Outdated firmware on you Open Pixel Poi, please update your firmware. (Or use an old version of the app.)'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
+    }
+    // Start app
     if (Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi!.isNotEmpty) {
       Navigator.push(
         _key.currentContext!,

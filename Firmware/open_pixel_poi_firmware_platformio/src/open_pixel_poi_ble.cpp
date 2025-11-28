@@ -1,6 +1,7 @@
 // Some things need to be included here, seems files are loaded alphabetically
 #include <arduino.h>
 #include <Update.h>
+#include "config.h"
 #include "open_pixel_poi_config.cpp"
 
 // BLE
@@ -86,17 +87,17 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
     BLECharacteristic* pixelPoiNotifyCharacteristic;
 
     void bleSendError(){
-      uint8_t response[] = {0x45, 0x46, 0x00, 0x07, CC_ERROR, 0x46, 0x45};
+      uint8_t response[] = {0xD0, 0x00, 0x05, CC_ERROR, 0xD1};
       writeToPixelPoi(response);
     }
     
     void bleSendSuccess(){
-      uint8_t response[] = {0x45, 0x46, 0x00, 0x07, CC_SUCCESS, 0x46, 0x45};
+      uint8_t response[] = {0xD0, 0x00, 0x05, CC_SUCCESS, 0xD1};
       writeToPixelPoi(response);
     }
 
     void bleSendFWVersion(){
-      uint8_t response[] = {0x45, 0x46, 0x00, 0x08, CC_GET_FW_VERSION, 0x01, 0x46, 0x45};
+      uint8_t response[] = {0xD0, 0x00, 0x06, CC_GET_FW_VERSION, 0x02, 0xD1};
       writeToPixelPoi(response);
     }
     
@@ -149,7 +150,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
 
     void writeToPixelPoi(uint8_t* data){
       if (deviceConnected) {
-        pixelPoiTxCharacteristic->setValue(data, data[2] << 8 | data[3]);
+        pixelPoiTxCharacteristic->setValue(data, data[1] << 8 | data[2]);
         pixelPoiNotifyCharacteristic->notify();
       }
     }
@@ -177,7 +178,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             config.setLedBrightness(bleStatus[2]);
             bleSendSuccess();
           }else if(requestCode == CC_SET_SPEED){
-            config.setAnimationSpeed(bleStatus[2]);
+            config.setAnimationSpeed(bleStatus[2] << 8 | bleStatus[3]);
             bleSendSuccess();
           }else if(requestCode == CC_SET_PATTERN){
             for (int i=0; i<sizeof(config.pattern); i++){
@@ -228,11 +229,10 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             config.setFrameCount(bleStatus[3] << 8 | bleStatus[4]);
             config.patternLength = config.frameHeight*config.frameCount*3;// Need exception handling for buffer overruns!!!
             if(config.patternLength > 24000){
-//              config.setPatternSlot(config.patternSlot);
               // set error pattern
-              config.setFrameHeight(20);
+              config.setFrameHeight(1);
               config.setFrameCount(2);
-              config.patternLength = 120;
+              config.patternLength = 6;
               config.fillDefaultPattern();
               config.savePattern();
               flagMultipartPattern = false;
