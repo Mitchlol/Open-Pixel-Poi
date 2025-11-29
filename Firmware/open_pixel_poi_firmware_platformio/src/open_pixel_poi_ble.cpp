@@ -65,6 +65,7 @@ enum CommCode {
   CC_SET_HARDWARE_VERSION,// 10
   CC_SET_LED_TYPE,        // 11
   CC_SET_LED_COUNT,       // 12
+  CC_SET_DEVICE_NAME,     // 13
 };
 
 class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallbacks{
@@ -112,7 +113,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
     void setup(){
       debugf("Setup begin\n");
       // Create the BLE Device
-      BLEDevice::init("Open Pixel Poi");
+      BLEDevice::init(config.deviceName.c_str());
 
       // Create the BLE Server
       server = BLEDevice::createServer();
@@ -225,6 +226,14 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
           }else if(requestCode == CC_SET_LED_COUNT){
             config.setLedCount(bleStatus[2]);
             bleSendSuccess();
+          }else if(requestCode == CC_SET_DEVICE_NAME){
+            if(bleLength > 3 && bleLength <= 18){
+              config.setDeviceName(String((char*)bleStatus).substring(2, bleLength -1) + " Pixel Poi");
+              bleSendSuccess();
+            }else{
+              bleSendError();
+            }
+            
           }else{
             debugf("Recieved message with unknown code!\n");
             bleSendError();

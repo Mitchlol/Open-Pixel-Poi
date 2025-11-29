@@ -180,6 +180,12 @@ class PoiHardware {
     ParseUtil.putInt16(message, value);
     return _sendIt(message, confirmation);
   }
+  Future<bool> sendString(String value, CommCode code, [bool confirmation = true]) {
+    List<int> message = [];
+    ParseUtil.putInt8(message, code.index);
+    ParseUtil.putString(message, value);
+    return _sendIt(message, confirmation);
+  }
   Future<bool> sendPattern(LEDPattern pattern) {
     List<int> message = [];
     ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);

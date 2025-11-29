@@ -15,5 +15,6 @@
 // 0 = Neo Pixel, 1 = Dot Star
 #define DEFAULT_LED_TYPE 1
 #define DEFAULT_LED_COUNT 20
+#define DEFAULT_DEVICE_NAME "Open Pixel Poi"
 
 #endif // _CONFIG_H

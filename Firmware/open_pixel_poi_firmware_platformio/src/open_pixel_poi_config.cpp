@@ -53,6 +53,7 @@ class OpenPixelPoiConfig {
     uint8_t hardwareVersion;
     uint8_t ledType;
     uint8_t ledCount;
+    String deviceName;
     // Display Settings (come in from the app or changed via button)
     uint8_t ledBrightness; 
     uint16_t animationSpeed;
@@ -80,6 +81,11 @@ class OpenPixelPoiConfig {
     void setLedCount(uint8_t ledCount) {
       debugf("Save LED Count = %d\n", ledCount);
       preferences.putChar("ledCount", ledCount);
+    }
+
+    void setDeviceName(String deviceName) {
+      debugf("Save Device Name = %s\n", deviceName);
+      preferences.putString("deviceName", deviceName);
     }
 
     void setLedBrightness(uint8_t ledBrightness) {
@@ -231,6 +237,7 @@ class OpenPixelPoiConfig {
       this->hardwareVersion = preferences.getChar("hardwareVersion", DEFAULT_HARDWARE_VERSION);
       this->ledType = preferences.getChar("ledType", DEFAULT_LED_TYPE);
       this->ledCount = preferences.getChar("ledCount", DEFAULT_LED_COUNT);
+      this->deviceName = preferences.getString("deviceName", DEFAULT_DEVICE_NAME);
 
       // Load Display settings
       this->ledBrightness = preferences.getChar("brightness", 0x0A);

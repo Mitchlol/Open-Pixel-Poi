@@ -78,6 +78,10 @@ class ParseUtil {
     return data.removeAt(0) == 1;
   }
 
+  static putString(List<int> buffer, String data) {
+    buffer.addAll(utf8.encode(data));
+  }
+
   static putInt8(List<int> buffer, int data) {
     buffer.add(data & 0xff);
   }

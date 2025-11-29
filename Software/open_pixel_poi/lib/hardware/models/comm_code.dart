@@ -12,4 +12,5 @@ enum CommCode {
   CC_SET_HARDWARE_VERSION,// 10
   CC_SET_LED_TYPE,        // 11
   CC_SET_LED_COUNT,       // 12
+  CC_SET_DEVICE_NAME,     // 13
 }

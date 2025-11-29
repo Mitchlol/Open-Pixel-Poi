@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_pixel_poi/hardware/models/confirmtation.dart';
 import 'package:provider/provider.dart';
 
@@ -21,10 +23,28 @@ class HardwareSettingsPage extends StatefulWidget {
   _HardwareSettingsState createState() => _HardwareSettingsState();
 }
 
+class Utf8TextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    try {
+      // Try encoding to UTF-8
+      utf8.encode(newValue.text);
+      return newValue; // valid UTF-8
+    } catch (e) {
+      return oldValue; // invalid UTF-8, reject change
+    }
+  }
+}
+
+
 class _HardwareSettingsState extends State<HardwareSettingsPage> {
   int ledCount = -1;
   int ledType = -1;
   int hardwareVersion = -1;
+  String deviceName = "";
   bool saving = false;
 
   @override
@@ -73,10 +93,75 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
             ),
           )
         ),
+        getDeviceName(),
         getLedCount(),
         getLedType(),
         getHardwareVersion(),
       ],
+    );
+  }
+
+  Widget getDeviceName(){
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Device Name:",
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.blue,
+                ),
+              ),
+              TextField(
+                decoration: InputDecoration(border: OutlineInputBorder(), labelText: '--------------- Pixel Poi'),
+                onChanged: (newValue) => setState(() {
+                  deviceName = newValue;
+                }),
+                textCapitalization: TextCapitalization.words,
+                inputFormatters: [
+                  Utf8TextInputFormatter()
+                ],
+                maxLength: 15,
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: deviceName == ""? null : () async {
+                    setState(() {
+                      saving = true;
+                    });
+                    for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
+                      await poi.sendString(deviceName, CommCode.CC_SET_DEVICE_NAME, true).timeout(Duration(seconds: 5));
+                      Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                      if((confirmation?.success??0) != true){
+                        const snackBar = SnackBar(content: Text('Error setting device name.'));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    }
+                    const snackBar = SnackBar(content: Text('Device name updated!'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    setState(() {
+                      deviceName = "";
+                      saving = false;
+                    });
+                  },
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ]
+        ),
+      ),
     );
   }
 
