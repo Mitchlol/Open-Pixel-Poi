@@ -10,8 +10,10 @@
 #define PATTERN_BANK_SIZE 5
 #define PATTERN_BANK_COUNT 3
 
-#define DEFAULT_PINOUT_VARIANT 1
+ // 0 = no output, 1 = v2.2.1, 2 = v3.0.0
+#define DEFAULT_HARDWARE_VERSION 1
+// 0 = Neo Pixel, 1 = Dot Star
 #define DEFAULT_LED_TYPE 1
-#define DEFAULT_LED_COUNT 15
+#define DEFAULT_LED_COUNT 20
 
 #endif // _CONFIG_H

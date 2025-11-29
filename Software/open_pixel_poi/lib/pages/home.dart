@@ -9,6 +9,7 @@ import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
 import '../widgets/pattern_import_button.dart';
 import './create.dart';
+import 'hardware_settings.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -26,7 +27,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Open Pixel Poi"),
+        title: GestureDetector(
+          onLongPress: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return HardwareSettingsPage();
+              }),
+            );
+          },
+          child:Text("Open Pixel Poi"),
+        ),
         actions: [
           ...Provider.of<Model>(context)
               .connectedPoi!

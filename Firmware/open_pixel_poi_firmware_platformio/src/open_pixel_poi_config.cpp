@@ -50,9 +50,9 @@ class OpenPixelPoiConfig {
     DisplayState displayState = DS_PATTERN;
     long displayStateLastUpdated = 0;
     // Hardware Settings (Defaults from config.h but can be overriden using the app) 
-    uint8_t pinoutVariant = DEFAULT_PINOUT_VARIANT;
-    uint8_t ledType = DEFAULT_LED_TYPE;
-    uint8_t ledCount = DEFAULT_LED_COUNT;
+    uint8_t hardwareVersion;
+    uint8_t ledType;
+    uint8_t ledCount;
     // Display Settings (come in from the app or changed via button)
     uint8_t ledBrightness; 
     uint16_t animationSpeed;
@@ -66,6 +66,21 @@ class OpenPixelPoiConfig {
 
     // Variables
     long configLastUpdated;
+
+    void setHardwareVersion(uint8_t hardwareVersion) {
+      debugf("Save Hardware Version = %d\n", hardwareVersion);
+      preferences.putChar("hardwareVersion", hardwareVersion);
+    }
+
+    void setLedType(uint8_t ledType) {
+      debugf("Save LED Type = %d\n", ledBrightness);
+      preferences.putChar("ledType", ledType);
+    }
+
+    void setLedCount(uint8_t ledCount) {
+      debugf("Save LED Count = %d\n", ledCount);
+      preferences.putChar("ledCount", ledCount);
+    }
 
     void setLedBrightness(uint8_t ledBrightness) {
       debugf("Save Brightness = %d\n", ledBrightness);
@@ -204,6 +219,7 @@ class OpenPixelPoiConfig {
       debugf("Setup begin\n");
       debugf("Load Config (setup)\n");
 
+      // Initialize storage access
       if(!SPIFFS.begin(true)){
         debugf("SPIFFS Mount Failed\n");
       }
@@ -211,6 +227,12 @@ class OpenPixelPoiConfig {
       preferences.begin("led_pattern", false);
       debugf("Preffs free entries: %d\n", preferences.freeEntries());
 
+      // Load hardware settings
+      this->hardwareVersion = preferences.getChar("hardwareVersion", DEFAULT_HARDWARE_VERSION);
+      this->ledType = preferences.getChar("ledType", DEFAULT_LED_TYPE);
+      this->ledCount = preferences.getChar("ledCount", DEFAULT_LED_COUNT);
+
+      // Load Display settings
       this->ledBrightness = preferences.getChar("brightness", 0x0A);
       debugf("- brightness = %d\n", this->ledBrightness);
 

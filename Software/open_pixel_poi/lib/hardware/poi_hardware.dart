@@ -101,8 +101,11 @@ class PoiHardware {
   }
 
   Future<dynamic> readResponse() async {
-
-    await uart.txCharacteristic.read();
+    try{
+      await uart.txCharacteristic.read();
+    }catch(e){
+      Confirmation(false);
+    }
 
     _buffer = List<int>.empty(growable: true);
     _buffer.addAll(uart.txCharacteristic.lastValue);

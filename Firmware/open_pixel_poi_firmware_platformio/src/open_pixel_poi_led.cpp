@@ -24,6 +24,18 @@ public:
     virtual ~ILedStrip() = default;
 };
 
+class NoStrip : public ILedStrip {
+public:
+    NoStrip(){}
+
+    void Begin() override {}
+    void Show() override {}
+    void SetPixelColor(uint16_t i, RgbColor color) override {}
+    void ClearTo(RgbColor color) override {}
+    void SetLuminance(uint8_t i) override {}
+    uint8_t GetLuminance() override { return 0;}
+};
+
 class NeoPixelStrip : public ILedStrip {
 public:
     NeoPixelStrip(uint16_t count, uint8_t dataPin) : strip(count, dataPin) {}
@@ -68,19 +80,25 @@ class OpenPixelPoiLED {
     // NeoPixelBusLg<NeoGrbFeature, NeoWs2812xMethod, NeoGammaNullMethod> led_strip{20, D8};
     // NeoPixelBusLg<NeoGrbFeature, NeoWs2812xMethod, NeoGammaNullMethod> led_strip;
     //, led_strip(_config.ledCount, _config.pinoutVariant == 1? 8 : 6)
-    ILedStrip* ledStrip;
+    ILedStrip* ledStrip = new NoStrip();
 
   public:
-    OpenPixelPoiLED(OpenPixelPoiConfig& _config): config(_config), ledStrip(nullptr) {
-      if(config.ledType == 1){
-        ledStrip = new NeoPixelStrip(config.ledCount, config.pinoutVariant == 1 ? 8 : 6);
-      }else{
-        ledStrip = new DotStarStrip(config.ledCount, 6, 7);
-      }
-    }    
+    OpenPixelPoiLED(OpenPixelPoiConfig& _config): config(_config){}    
     int frameIndex;
     void setup(){
       debugf("Setup begin\n");
+      // Create Led Strip objects based on config, all unhandled cases fall through with NoStrip
+      if(config.hardwareVersion == 1){
+        if(config.ledType == 1){
+          ledStrip = new NeoPixelStrip(config.ledCount, 8);
+        }
+      }else if(config.hardwareVersion == 2){
+        if(config.ledType == 1){
+          ledStrip = new NeoPixelStrip(config.ledCount, 6);
+        }else if(config.ledType == 2){  
+          ledStrip = new DotStarStrip(config.ledCount, 6, 7);
+        }
+      }
 
       // LED Setup:
       ledStrip->Begin();

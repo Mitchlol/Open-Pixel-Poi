@@ -22,8 +22,8 @@ void setup() {
   #ifdef DEBUG
     Serial.begin(19200);
     Serial.setDebugOutput(true);
+    // while(!Serial);  // required for Serial.print* to work correctly
   #endif
-  //while(!Serial);  // required for Serial.print* to work correctly
 
   debugf("Open Pixel POI\n");
   debugf("Setup Begin\n");

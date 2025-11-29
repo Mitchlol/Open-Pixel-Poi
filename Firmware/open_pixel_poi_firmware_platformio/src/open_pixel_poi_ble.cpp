@@ -52,16 +52,19 @@
 // D0 04 03 03 00 00 FF 00 00 00 00 00 FF 00 00 00 00 00 FF 00 00 00 00 00 FF 00 00 00 00 00 FF D1 (solid blue x)
 
 enum CommCode {
-  CC_SUCCESS,           // 0
-  CC_ERROR,             // 1
-  CC_SET_BRIGHTNESS,    // 2
-  CC_SET_SPEED,         // 3
-  CC_SET_PATTERN,       // 4
-  CC_SET_PATTERN_SLOT,  // 5
-  CC_SET_PATTERN_ALL,   // 6
-  CC_SET_BANK,          // 7
-  CC_SET_BANK_ALL,      // 8
-  CC_GET_FW_VERSION,    // 9
+  CC_SUCCESS,             // 0
+  CC_ERROR,               // 1
+  CC_SET_BRIGHTNESS,      // 2
+  CC_SET_SPEED,           // 3
+  CC_SET_PATTERN,         // 4
+  CC_SET_PATTERN_SLOT,    // 5
+  CC_SET_PATTERN_ALL,     // 6
+  CC_SET_BANK,            // 7
+  CC_SET_BANK_ALL,        // 8
+  CC_GET_FW_VERSION,      // 9
+  CC_SET_HARDWARE_VERSION,// 10
+  CC_SET_LED_TYPE,        // 11
+  CC_SET_LED_COUNT,       // 12
 };
 
 class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallbacks{
@@ -213,6 +216,15 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             bleSendSuccess();
           }else if(requestCode == CC_GET_FW_VERSION){
             bleSendFWVersion();
+          }else if(requestCode == CC_SET_HARDWARE_VERSION){
+            config.setHardwareVersion(bleStatus[2]);
+            bleSendSuccess();
+          }else if(requestCode == CC_SET_LED_TYPE){
+            config.setLedType(bleStatus[2]);
+            bleSendSuccess();
+          }else if(requestCode == CC_SET_LED_COUNT){
+            config.setLedCount(bleStatus[2]);
+            bleSendSuccess();
           }else{
             debugf("Recieved message with unknown code!\n");
             bleSendError();
