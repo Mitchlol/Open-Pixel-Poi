@@ -75,11 +75,7 @@ class OpenPixelPoiLED {
     uint8_t blue;
     long lastFrameIndex = 0;
 
-    // Declare our NeoPixel strip object:
-    // Adafruit_NeoPixel led_strip{20, D8, NEO_GRB + NEO_KHZ800};
-    // NeoPixelBusLg<NeoGrbFeature, NeoWs2812xMethod, NeoGammaNullMethod> led_strip{20, D8};
-    // NeoPixelBusLg<NeoGrbFeature, NeoWs2812xMethod, NeoGammaNullMethod> led_strip;
-    //, led_strip(_config.ledCount, _config.pinoutVariant == 1? 8 : 6)
+    // Declare our LED strip object:
     ILedStrip* ledStrip = new NoStrip();
 
   public:
@@ -155,8 +151,8 @@ class OpenPixelPoiLED {
           green = 0xFF - red;
           blue = 0x00;
         }
-        for(int j=0; j<20; j++){
-          if(j == (millis() - config.displayStateLastUpdated)/50 || 20 - j == (millis() - config.displayStateLastUpdated)/50){
+        for(int j=0; j<config.ledCount; j++){
+          if(j == (millis() - config.displayStateLastUpdated)/(int)(500/(config.ledCount/2.0)) || config.ledCount - j - 1 == (millis() - config.displayStateLastUpdated)/(int)(500/(config.ledCount/2.0))){
             ledStrip->SetPixelColor(j, RgbColor(red, green, blue));
           }else{
             ledStrip->SetPixelColor(j, RgbColor(0x00, 0x00, 0x00));
@@ -172,7 +168,7 @@ class OpenPixelPoiLED {
         } 
         red = 0xff - green;
         blue = 0x00;
-        for (int j=0; j<20; j++){
+        for (int j=0; j<config.ledCount; j++){
           ledStrip->SetPixelColor(j, RgbColor(red, green, blue));
         }
       }else if(config.displayState == DS_VOLTAGE2){
@@ -214,34 +210,44 @@ class OpenPixelPoiLED {
         blue = 0x00;
         // 2000ms Blink & Pixel Crush
         if (millis() - config.displayStateLastUpdated > 200) {
-          for(int j=9; j>=((millis() - config.displayStateLastUpdated)/200); j--){
-            ledStrip->SetPixelColor(j, RgbColor(red, green, blue));
-            ledStrip->SetPixelColor(9+(10-j), RgbColor(red, green, blue));
+          for(int j = 0; j < config.ledCount; j++){
+            int threshold = (int)(((millis() - config.displayStateLastUpdated) / 2000.0) * ((config.ledCount/2) + config.ledCount % 2)) -1;
+            if(j > threshold && j < config.ledCount - threshold - 1){
+              ledStrip->SetPixelColor(j, RgbColor(red, green, blue));
+            }
           }
         }
       }else if(config.displayState == DS_BANK){
-        if (millis() - config.displayStateLastUpdated < 1500){
-          for (int j=0; j <= (millis() - config.displayStateLastUpdated)/125; j+=4){
-            ledStrip->SetPixelColor(j, RgbColor(0xFF, 0x00, 0xFF));
-            ledStrip->SetPixelColor(j+1, RgbColor(0xFF, 0x00, 0xFF));
-            ledStrip->SetPixelColor(j+2, RgbColor(0xFF, 0x00, 0xFF));
+        int chunkSize = max(2, (config.ledCount - 2)/3);
+        int pressTime = (millis() - config.displayStateLastUpdated) % 3500;
+        if (pressTime < 1500){
+          for (int j=1; j-1 <= pressTime/500; j+=1){
+            for(int k=(j-1) * chunkSize; k < j*chunkSize -1; k++){
+              ledStrip->SetPixelColor(k, RgbColor(0xFF, 0x00, 0xFF));
+            }
           }
-        }else {
-          for (int j=0; j < 12; j+=4){
-            ledStrip->SetPixelColor(j, RgbColor(0xFF, 0x00, 0xFF));
-            ledStrip->SetPixelColor(j+1, RgbColor(0xFF, 0x00, 0xFF));
-            ledStrip->SetPixelColor(j+2, RgbColor(0xFF, 0x00, 0xFF));
-          }
-          if (millis() - config.displayStateLastUpdated < 2000){
-            ledStrip->SetPixelColor(1, RgbColor(0x00, 0x00, 0xFF));
-            ledStrip->SetPixelColor(5, RgbColor(0x00, 0x00, 0xFF));
-            ledStrip->SetPixelColor(9, RgbColor(0x00, 0x00, 0xFF));
-          }else if (millis() - config.displayStateLastUpdated < 2500){
-            ledStrip->SetPixelColor(1, RgbColor(0x00, 0x00, 0xFF));
-          }else if (millis() - config.displayStateLastUpdated < 3000){
-            ledStrip->SetPixelColor(5, RgbColor(0x00, 0x00, 0xFF));
-          }else{
-            ledStrip->SetPixelColor(9, RgbColor(0x00, 0x00, 0xFF));
+        }else{
+          for (int j=0; j < 3; j+=1){
+            for(int k=j * chunkSize; k < ((j + 1) * chunkSize) -1; k++){
+                ledStrip->SetPixelColor(k, RgbColor(0xFF, 0x00, 0xFF));
+                if (pressTime < 2000){
+                  if(chunkSize <= 4 || (k - (j* chunkSize) > 0 && k - (j* chunkSize) < chunkSize - 2)){
+                    ledStrip->SetPixelColor(k, RgbColor(0x00, 0x00, 0xFF));
+                  }
+                }else if (pressTime < 2500){
+                  if(j == 0 && (chunkSize <= 4 || (k - (j* chunkSize) > 0 && k - (j* chunkSize) < chunkSize - 2))){
+                    ledStrip->SetPixelColor(k, RgbColor(0x00, 0x00, 0xFF));
+                  }
+                }else if (pressTime < 3000){
+                  if(j == 1 && (chunkSize <= 4 || (k - (j* chunkSize) > 0 && k - (j* chunkSize) < chunkSize - 2))){
+                    ledStrip->SetPixelColor(k, RgbColor(0x00, 0x00, 0xFF));
+                  }
+                }else if (pressTime < 3500){
+                  if(j == 2 && (chunkSize <= 4 || (k - (j* chunkSize) > 0 && k - (j* chunkSize) < chunkSize - 2))){
+                    ledStrip->SetPixelColor(k, RgbColor(0x00, 0x00, 0xFF));
+                  }
+                }
+            }
           }
         }
       }else if(config.displayState == DS_BRIGHTNESS){
@@ -260,16 +266,21 @@ class OpenPixelPoiLED {
         red = 0xFF;
         green = 0xFF;
         blue = 0xFF;
-        for (int j=0; j< 20; j++){
-          if (j % 4 == 1 || j % 4 == 2){
+        for (int j=0; j< config.ledCount; j++){
+          if (j % 4 == 1 || j % 4 == 2 || config.ledCount < 8){
             ledStrip->SetPixelColor(j, RgbColor(red, green, blue));
           }
         }
       }else if(config.displayState == DS_SPEED){
         red = 0xFF;
-        for (int j=0; j < (millis() - config.displayStateLastUpdated)/250; j+=2){
-          ledStrip->SetPixelColor(j, RgbColor(red, 0, 0));
-          ledStrip->SetPixelColor(j+1, RgbColor(red, 0, 0));
+        if(config.ledCount < 10 && (millis() - config.displayStateLastUpdated) % 500 < 25 && (millis() - config.displayStateLastUpdated) < 5500){
+          for (int j=0; j< config.ledCount; j++){
+            ledStrip->SetPixelColor(j, RgbColor(red, 0, 0));
+          }
+        }else{
+           for (int j=0; j < min(int((millis() - config.displayStateLastUpdated)/500), 10) * int(config.ledCount/10); j++){
+            ledStrip->SetPixelColor(j, RgbColor(red, 0, 0));
+          }
         }
       }
 
@@ -294,7 +305,7 @@ class OpenPixelPoiLED {
       if(config.batteryState == BAT_CRITICAL && (config.displayState == DS_PATTERN || config.displayState == DS_PATTERN_ALL)){
         ledStrip->ClearTo(RgbColor(0,0,0));
         ledStrip->SetPixelColor(0, RgbColor(255, 0x00, 0x00));
-        ledStrip->SetPixelColor(19, RgbColor(255, 0x00, 0x00));
+        ledStrip->SetPixelColor(config.ledCount - 1, RgbColor(255, 0x00, 0x00));
       }
 
       // Output

@@ -144,26 +144,27 @@ public:
         config.displayState = DS_PATTERN;
         config.displayStateLastUpdated = millis();
       }else if(buttonState == BS_CLICK2_HOLD){
-        if(millis() - downTime < 1000){
+        int selection = ((millis() - downTime - 500) % 3500) / 500;
+        if(selection == 0){
           config.setPatternBank(0, true);
           config.displayState = DS_PATTERN;
           config.displayStateLastUpdated = millis();
-        }else if(millis() - downTime < 1500){
+        }else if(selection == 1){
           config.setPatternBank(1, true);
           config.displayState = DS_PATTERN;
           config.displayStateLastUpdated = millis();
-        }else if(millis() - downTime < 2000){
+        }else if(selection == 2){
           config.setPatternBank(2, true);
           config.displayState = DS_PATTERN;
           config.displayStateLastUpdated = millis();
-        }else if(millis() - downTime < 2500){
+        }else if(selection == 3){
           config.displayState = DS_PATTERN_ALL_ALL;
           config.displayStateLastUpdated = millis();
-        }else if(millis() - downTime < 3000){
+        }else if(selection == 4){
           config.setPatternBank(0, true);
           config.displayState = DS_PATTERN_ALL;
           config.displayStateLastUpdated = millis();
-        }else if(millis() - downTime < 3500){
+        }else if(selection == 5){
           config.setPatternBank(1, true);
           config.displayState = DS_PATTERN_ALL;
           config.displayStateLastUpdated = millis();
