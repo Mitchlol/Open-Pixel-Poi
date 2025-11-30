@@ -62,8 +62,8 @@ class OpenPixelPoiConfig {
     // Pattern
     uint8_t frameHeight; 
     uint16_t frameCount;
-    uint8_t *pattern = (uint8_t *) malloc(24000*sizeof(uint8_t));
-    uint16_t patternLength;
+    uint8_t *pattern = (uint8_t *) malloc(120000*sizeof(uint8_t));
+    uint32_t patternLength;
 
     // Variables
     long configLastUpdated;

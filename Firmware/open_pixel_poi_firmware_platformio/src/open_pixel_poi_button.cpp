@@ -144,6 +144,7 @@ public:
         config.displayState = DS_PATTERN;
         config.displayStateLastUpdated = millis();
       }else if(buttonState == BS_CLICK2_HOLD){
+        // 7 options, 500ms each, 0-3500ms, offset by 500 for initial press animation
         int selection = ((millis() - downTime - 500) % 3500) / 500;
         if(selection == 0){
           config.setPatternBank(0, true);

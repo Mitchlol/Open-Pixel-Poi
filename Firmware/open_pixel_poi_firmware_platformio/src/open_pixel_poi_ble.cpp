@@ -249,7 +249,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             config.setFrameHeight(bleStatus[2]);
             config.setFrameCount(bleStatus[3] << 8 | bleStatus[4]);
             config.patternLength = config.frameHeight*config.frameCount*3;// Need exception handling for buffer overruns!!!
-            if(config.patternLength > 24000){
+            if(config.patternLength > 120000){
               // set error pattern
               config.setFrameHeight(1);
               config.setFrameCount(2);

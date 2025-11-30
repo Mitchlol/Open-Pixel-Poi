@@ -16,8 +16,17 @@ class PatternImportButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {
-        importPattern(context);
+      onPressed: () async {
+        try {
+          SnackBar snackBar = SnackBar(content: Text("Importing..."));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          await importPattern(context);
+          SnackBar snackBar2 = SnackBar(content: Text("Import succeeded!"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar2);
+        } on Exception catch(error){
+          SnackBar snackBar = SnackBar(content: Text("$error"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       },
       icon: const Icon(
         Icons.add_photo_alternate_outlined,
@@ -26,7 +35,7 @@ class PatternImportButton extends StatelessWidget {
     );
   }
 
-  void importPattern(BuildContext context) async {
+  Future<void> importPattern(BuildContext context) async {
     var model = Provider.of<Model>(context, listen: false);
 
     final ImagePicker picker = ImagePicker();
@@ -51,8 +60,8 @@ class PatternImportButton extends StatelessWidget {
         throw Exception("Unacceptable image format.");
       }
 
-      if(image.width > 400 || image.height > 20){
-        throw Exception("Imported image is too large.");
+      if(image.width * image.height > 40000){
+        throw Exception("Imported image is too large, max size is 40,000 pixels (200x200/100x400/25x1600 etc..).");
       }
       List<int> imageBytes = List.empty(growable: true);
       for (var w = 0; w < image.width; w++) {
