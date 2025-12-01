@@ -6,6 +6,7 @@ import 'package:open_pixel_poi/database/dbimage.dart';
 import 'package:open_pixel_poi/hardware/models/fw_version.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../pages/pattern_creators/create_sequence.dart';
 import './models/comm_code.dart';
 import 'ble_uart.dart';
 import 'models/confirmtation.dart';
@@ -205,6 +206,20 @@ class PoiHardware {
     ParseUtil.putInt8(message, pattern.height);
     ParseUtil.putInt16(message, pattern.count);
     ParseUtil.putInt8List(message, pattern.bytes);
+    return _sendIt(message);
+  }
+
+  Future<bool> sendSequence(List<SegmentValues> segments) {
+    List<int> message = [];
+    ParseUtil.putInt8(message, CommCode.CC_SET_SEQUENCER.index);
+    ParseUtil.putInt16(message, segments.length * 7);
+    for(SegmentValues segment in segments){
+      ParseUtil.putInt8(message, segment.pattern - 1);
+      ParseUtil.putInt8(message, segment.bank - 1);
+      ParseUtil.putInt8(message, segment.brightness);
+      ParseUtil.putInt16(message, segment.speed);
+      ParseUtil.putInt16(message, segment.duration);
+    }
     return _sendIt(message);
   }
 }

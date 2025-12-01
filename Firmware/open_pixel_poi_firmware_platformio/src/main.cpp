@@ -36,7 +36,7 @@ void setup() {
 }
 
 void loop() {
-  if(!ble.flagMultipartPattern){
+  if(ble.multipartPattern == 0){
     ble.loop();
     config.loop();
     led.loop();
@@ -45,7 +45,7 @@ void loop() {
     delay(250);
     // jammed
     if(millis() - ble.bleLastReceived > 5000){
-      ble.flagMultipartPattern = false;
+      ble.multipartPattern = 0;
     }
   }
 }

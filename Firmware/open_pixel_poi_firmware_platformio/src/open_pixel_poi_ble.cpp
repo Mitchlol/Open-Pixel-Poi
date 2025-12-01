@@ -66,6 +66,8 @@ enum CommCode {
   CC_SET_LED_TYPE,        // 11
   CC_SET_LED_COUNT,       // 12
   CC_SET_DEVICE_NAME,     // 13
+  CC_SET_SEQUENCER,       // 14
+  CC_START_SEQUENCER,     // 15
 };
 
 class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallbacks{
@@ -109,7 +111,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
     OpenPixelPoiBLE(OpenPixelPoiConfig& _config): config(_config) {}
 
     long bleLastReceived;
-    bool flagMultipartPattern = false;
+    uint8_t multipartPattern = 0;
     void setup(){
       debugf("Setup begin\n");
       // Create the BLE Device
@@ -176,7 +178,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         debugf("\n");
         
         // Process BLE
-        if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1 && !flagMultipartPattern){
+        if(bleStatus[0] == 0xD0 && bleStatus[bleLength - 1] == 0xD1 && multipartPattern == 0){
           CommCode requestCode = static_cast<CommCode>(bleStatus[1]);
           if(requestCode == CC_SET_BRIGHTNESS){
             config.setLedBrightness(bleStatus[2]);
@@ -233,15 +235,28 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             }else{
               bleSendError();
             }
-            
+          }else if(requestCode == CC_SET_SEQUENCER){
+            for (int i=0; i<sizeof(config.sequencer); i++){
+              config.sequencer[i]=0;
+            }
+            config.sequencerLength = bleStatus[2] << 8 | bleStatus[3];
+            config.sequencerStep = config.sequencerLength/7; // Dont trigger
+            for (int i=0; i < config.sequencerLength; i++){
+              config.sequencer[i]=bleStatus[i+4];
+            }
+            config.saveSequencer();
+            bleSendSuccess();
+          }else if(requestCode == CC_START_SEQUENCER){
+            config.sequencerStep = -1;
+            bleSendSuccess();
           }else{
             debugf("Recieved message with unknown code!\n");
             bleSendError();
           }
         }else{
-          if(!flagMultipartPattern && bleStatus[0] == 0xD0 && static_cast<CommCode>(bleStatus[1]) == CC_SET_PATTERN){
+          if(multipartPattern == 0 && bleStatus[0] == 0xD0 && static_cast<CommCode>(bleStatus[1]) == CC_SET_PATTERN){
             debugf("Start multipart pattern! %d bits\n", bleStatus[2] * (bleStatus[3] << 8 | bleStatus[4]));
-            flagMultipartPattern = true;
+            multipartPattern = 1;
             multipartPatternOffset = 0;
             for (int i=0; i<sizeof(config.pattern); i++){
               config.pattern[i]=0;
@@ -256,7 +271,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
               config.patternLength = 6;
               config.fillDefaultPattern();
               config.savePattern();
-              flagMultipartPattern = false;
+              multipartPattern = 0;
               return;
             }
             
@@ -264,9 +279,9 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
               config.pattern[multipartPatternOffset] = bleStatus[i];
               multipartPatternOffset++;
             }
-          }else if(flagMultipartPattern && bleLength < 509){
+          }else if(multipartPattern == 1 && bleLength < 509){
             debugf("End multipart message!\n");
-            flagMultipartPattern = false;
+            multipartPattern = 0;
 
             for (int i= 0; i < bleLength - 1; i++){
               config.pattern[multipartPatternOffset] = bleStatus[i];
@@ -274,7 +289,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             }
             
             config.savePattern();
-          }else if(flagMultipartPattern){
+          }else if(multipartPattern == 1){
             debugf("Middle of multipart message! Offset = %d\n", multipartPatternOffset);
             for (int i= 0; i < bleLength; i++){
               config.pattern[multipartPatternOffset] = bleStatus[i];

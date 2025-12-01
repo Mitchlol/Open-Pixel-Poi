@@ -62,8 +62,12 @@ class OpenPixelPoiConfig {
     // Pattern
     uint8_t frameHeight; 
     uint16_t frameCount;
-    uint8_t *pattern = (uint8_t *) malloc(120000*sizeof(uint8_t));
+    uint8_t *pattern = (uint8_t *) malloc(120000*sizeof(uint8_t)); // 40k pixel max
     uint32_t patternLength;
+    // Sequencer
+    uint8_t *sequencer = (uint8_t *) malloc(1785*sizeof(uint8_t)); // 255 Instruction max (7 bits per instruction)
+    uint16_t sequencerLength;
+    int sequencerStep;
 
     // Variables
     long configLastUpdated;
@@ -219,6 +223,36 @@ class OpenPixelPoiConfig {
       debugf("key = %s\n", key);
       this->frameCount = preferences.getUShort(key.c_str(), 2);
     }
+
+    void saveSequencer() {
+      debugf("Save Sequencer\n");
+      debugf("- length = %d\n", this->sequencerLength);
+
+      preferences.putUShort("sequencerLength", this->sequencerLength);
+
+      File file = SPIFFS.open("/sequencer.opps", FILE_WRITE);
+      if(!file || file.isDirectory()){
+        debugf("− failed to open file for writing\n");
+      }else{
+        debugf(" - opened file for writing: %d\n");
+        
+        int written = file.write(this->sequencer, this->sequencerLength);
+        file.close();
+        debugf(" - this much written: %d\n", written);
+      }
+    }
+
+    void loadSequencer(){
+      this->sequencerLength = preferences.getUShort("sequencerLength", 0x00);
+      File file = SPIFFS.open("/sequencer.opps");
+      if(!file || file.isDirectory()){
+        debugf("− failed to open file for reading\n");
+      }else{
+        file.read(this->sequencer, file.available());
+        file.close();
+      }
+      this->sequencerStep = -1;
+    }
       
     
     void setup() {
@@ -262,6 +296,8 @@ class OpenPixelPoiConfig {
 
       loadPattern();
 
+      loadSequencer();
+
       debugf("- pattern\n");
       for (int i = 0; i < this->frameHeight * this->frameCount; i+=3 ) {
         if (i%this->frameHeight*3 == 0) {
@@ -283,6 +319,36 @@ class OpenPixelPoiConfig {
           this->setPatternBank((this->patternBank + 1) % PATTERN_BANK_COUNT, false);
         }
         this->displayStateLastUpdated = millis();
+      }
+
+      // Sequencer (pattern slot, battern bank, brightness, speedx2, durationx2)
+      if(this->displayState == DS_PATTERN && this->sequencerStep < (this ->sequencerLength / 7) - 1){
+        uint16_t offset; 
+        uint16_t previousTargetDuration;
+        if(sequencerStep == -1){
+          this->displayStateLastUpdated = millis();
+          previousTargetDuration = 0;
+        }else{
+          offset = this->sequencerStep * 7; 
+          previousTargetDuration = this->sequencer[offset+ 5] << 8 | this->sequencer[offset + 6];
+        }
+        if(millis() - this->displayStateLastUpdated >= previousTargetDuration){
+          this->sequencerStep++;
+          offset = this->sequencerStep * 7; 
+          this->patternSlot = this->sequencer[offset + 0];
+          this->patternBank = this->sequencer[offset + 1];
+          this->ledBrightness = this->sequencer[offset + 2];
+          this->animationSpeed = this->sequencer[offset+ 3] << 8 | this->sequencer[offset + 4];
+          loadFrameHeight();
+          loadFrameCount();
+          fillDefaultPattern();
+          loadPattern();
+          // Roll over time from previous update to keep real time regardless of pattern load times
+          this->displayStateLastUpdated += previousTargetDuration;
+        }
+      }else{
+        // Abort sequencer on button press
+        this->sequencerStep = this->sequencerLength / 7;
       }
 
       // Battery latching state

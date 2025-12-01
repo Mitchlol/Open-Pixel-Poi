@@ -13,4 +13,6 @@ enum CommCode {
   CC_SET_LED_TYPE,        // 11
   CC_SET_LED_COUNT,       // 12
   CC_SET_DEVICE_NAME,     // 13
+  CC_SET_SEQUENCER,       // 14
+  CC_START_SEQUENCER,     // 15
 }
