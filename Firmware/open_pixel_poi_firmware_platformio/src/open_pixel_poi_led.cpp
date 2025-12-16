@@ -53,9 +53,14 @@ private:
 
 class DotStarStrip  : public ILedStrip {
 public:
-    DotStarStrip(uint16_t count, uint8_t dataPin, uint8_t clockPin) : strip(count, clockPin, dataPin) {}
+    DotStarStrip(uint16_t count, int8_t dataPin, int8_t clockPin) : 
+    strip(count, clockPin, dataPin),
+    dataPin_(dataPin),
+    clockPin_(clockPin) {}
 
-    void Begin() override { strip.Begin(); }
+    void Begin() override { 
+      strip.Begin(clockPin_, -1, dataPin_, -1); 
+    }
     void Show() override { strip.Show(); }
     void SetPixelColor(uint16_t i, RgbColor color) override { strip.SetPixelColor(i, color); }
     void ClearTo(RgbColor color) override { strip.ClearTo(color); }
@@ -63,7 +68,9 @@ public:
     uint8_t GetLuminance() override { return strip.GetLuminance(); }
 
 private:
-    NeoPixelBusLg<DotStarBgrFeature, DotStarMethod, NeoGammaNullMethod> strip;
+    uint8_t dataPin_;
+    uint8_t clockPin_;
+    NeoPixelBusLg<DotStarBgrFeature, DotStarSpi20MhzMethod, NeoGammaNullMethod> strip;
 };
 
 
