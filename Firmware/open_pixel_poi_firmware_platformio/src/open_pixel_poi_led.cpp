@@ -19,9 +19,16 @@ public:
     virtual void Show() = 0;
     virtual void SetPixelColor(uint16_t i, RgbColor color) = 0;
     virtual void ClearTo(RgbColor color) = 0;
-    virtual void SetLuminance(uint8_t luminance) = 0;
+    virtual void SetBrightness(uint8_t luminance) = 0;
     virtual uint8_t GetLuminance() = 0;
     virtual ~ILedStrip() = default;
+    uint8_t CalculateLuminance(uint8_t brightnessSetting, uint8_t ledCount, double consumption){
+      if(brightnessSetting <= 1){
+        return brightnessSetting;
+      }
+      double consumptionScale = min(1.0, OUTPUT_CURRENT_LIMIT/(consumption * ledCount * OUTPUT_CHANNELS));
+      return ceil(brightnessSetting * 2.55 * consumptionScale);
+    }
 };
 
 class NoStrip : public ILedStrip {
@@ -32,7 +39,7 @@ public:
     void Show() override {}
     void SetPixelColor(uint16_t i, RgbColor color) override {}
     void ClearTo(RgbColor color) override {}
-    void SetLuminance(uint8_t i) override {}
+    void SetBrightness(uint8_t i) override {}
     uint8_t GetLuminance() override { return 0;}
 };
 
@@ -44,7 +51,7 @@ public:
     void Show() override { strip.Show(); }
     void SetPixelColor(uint16_t i, RgbColor color) override { strip.SetPixelColor(i, color); }
     void ClearTo(RgbColor color) override { strip.ClearTo(color); }
-    void SetLuminance(uint8_t i) override { strip.SetLuminance(i); }
+    void SetBrightness(uint8_t i) override { strip.SetLuminance(CalculateLuminance(i, strip.PixelCount(), OUTPUT_WS2812B_5050_DRAW)); }
     uint8_t GetLuminance() override { return strip.GetLuminance(); }
 
 private:
@@ -64,7 +71,7 @@ public:
     void Show() override { strip.Show(); }
     void SetPixelColor(uint16_t i, RgbColor color) override { strip.SetPixelColor(i, color); }
     void ClearTo(RgbColor color) override { strip.ClearTo(color); }
-    void SetLuminance(uint8_t i) override { strip.SetLuminance(i); }
+    void SetBrightness(uint8_t i) override { strip.SetLuminance(CalculateLuminance(i, strip.PixelCount(), OUTPUT_SK9822_2020_DRAW)); }
     uint8_t GetLuminance() override { return strip.GetLuminance(); }
 
 private:
@@ -107,16 +114,32 @@ class OpenPixelPoiLED {
       ledStrip->Begin();
       frameIndex = 0;
 
-      // Neopixelbus is weird for the first frame so render it blank
-      ledStrip->ClearTo(RgbColor(0,0,0));
-      ledStrip->SetLuminance(0);
-      ledStrip->Show();
-
       debugf("LED setup complete\n");
     }
 
     void loop(){
+      // Set Brightness. 
+      // Low voltage = force low brightness
+      if(config.batteryState == BAT_LOW && config.ledBrightness > 10){
+        ledStrip->SetBrightness(10);
+      }else if(config.batteryState == BAT_CRITICAL || config.batteryState == BAT_SHUTDOWN){
+        ledStrip->SetBrightness(1);
+      }else{ // Normal operation
+        ledStrip->SetBrightness(config.ledBrightness);
+      }
+      // Shutdown fadeout
+      if(config.displayState == DS_SHUTDOWN){
+        uint8_t fadedBrightness = ledStrip->GetLuminance() * ((2000-(millis() - config.displayStateLastUpdated))/2000.0);
+        if (fadedBrightness == 0){
+          fadedBrightness = 1;
+        }
+        ledStrip->SetBrightness(fadedBrightness);
+      }
+
+      // Clear previous data
       ledStrip->ClearTo(RgbColor(0,0,0));
+
+      // Render output
       if(config.displayState == DS_PATTERN || config.displayState == DS_PATTERN_ALL  || config.displayState == DS_PATTERN_ALL_ALL){
         frameIndex = ((micros() - (config.displayStateLastUpdated * 1000)) / (1000000/(config.animationSpeed))) % config.frameCount;
         if(lastFrameIndex == frameIndex){
@@ -270,6 +293,7 @@ class OpenPixelPoiLED {
         }else{
           config.ledBrightness = 100;
         }
+        ledStrip->SetBrightness(config.ledBrightness);
         red = 0xFF;
         green = 0xFF;
         blue = 0xFF;
@@ -289,23 +313,6 @@ class OpenPixelPoiLED {
             ledStrip->SetPixelColor(j, RgbColor(red, 0, 0));
           }
         }
-      }
-
-      // Set Brightness. Low voltage = force low brightness
-      if(config.batteryState == BAT_LOW && config.ledBrightness > 10){
-        ledStrip->SetLuminance(10);
-      }else if(config.batteryState == BAT_CRITICAL || config.batteryState == BAT_SHUTDOWN){
-        ledStrip->SetLuminance(1);
-      }else{ // Normal operation
-        ledStrip->SetLuminance(config.ledBrightness);
-      }
-      // Shutdown fadeout
-      if(config.displayState == DS_SHUTDOWN){
-        uint8_t fadedBrightness = ledStrip->GetLuminance() * ((2000-(millis() - config.displayStateLastUpdated))/2000.0);
-        if (fadedBrightness == 0){
-          fadedBrightness = 1;
-        }
-        ledStrip->SetLuminance(fadedBrightness);
       }
 
       // Super low voltage, only display red
