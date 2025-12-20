@@ -3968,8 +3968,8 @@
     )
 
     (stroke (width 0.15) (type solid)) (fill solid) (layer "User.1") (tstamp 8dddb0fc-bfe1-4398-8427-3bd1fa38a9f1))
-  (gr_text_box "3M Tape Stiffener"
-    (start 71.25 17) (end 86.75 19.75) (layer "User.1") (tstamp 822992a1-a738-4182-9616-371e626aba4c)
+  (gr_text_box "Tape Stiffener (tesa8854) On Bottom Layer"
+    (start 71.25 17) (end 106.5 19.75) (layer "User.1") (tstamp 822992a1-a738-4182-9616-371e626aba4c)
       (effects (font (size 1 1) (thickness 0.15)) (justify left top))
     (stroke (width 0.15) (type solid))  )
 

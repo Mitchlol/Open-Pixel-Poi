@@ -3400,7 +3400,7 @@
     )
     (pin "1" (uuid 9c9702d0-b3a0-4c8a-bc38-ecbb679c0ccf))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR033") (unit 1)
         )
@@ -3425,7 +3425,7 @@
     )
     (pin "1" (uuid 4d5421e6-d2a9-4749-bcaa-127d7051a4ac))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR019") (unit 1)
         )
@@ -3513,7 +3513,7 @@
     (pin "47" (uuid 81054a30-0fc7-478c-9644-9e5b138bc351))
     (pin "6" (uuid b76e27b8-6897-4e19-8816-99bab3481aea))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U3") (unit 1)
         )
@@ -3542,7 +3542,7 @@
     (pin "2" (uuid 4497e0c0-2216-45df-b7c1-f5f4302db126))
     (pin "1" (uuid bf551929-1a60-4f6e-9427-cf838275acf4))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "D2") (unit 1)
         )
@@ -3567,7 +3567,7 @@
     )
     (pin "1" (uuid 240a5ed4-b04b-4164-8bda-bf1113fc1c3e))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR025") (unit 1)
         )
@@ -3596,7 +3596,7 @@
     (pin "2" (uuid b1cd89a3-a295-46fa-a2db-5761b67f02be))
     (pin "1" (uuid d9f1da31-8086-4d65-bba8-7d79f1b8abc3))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "D1") (unit 1)
         )
@@ -3621,7 +3621,7 @@
     )
     (pin "1" (uuid a5d2967e-7e31-467e-8a04-c910f965b7c1))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "H2") (unit 1)
         )
@@ -3649,7 +3649,7 @@
     (pin "1" (uuid b017ccbe-0645-4f79-90c9-2c0b06544ac2))
     (pin "2" (uuid 032d7ad4-17b5-48c8-a461-0f4a13bbb3ef))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "J7") (unit 1)
         )
@@ -3678,7 +3678,7 @@
     (pin "1" (uuid a458bdcc-8472-4f74-becb-0aec449c0fff))
     (pin "2" (uuid 6923b3cc-5ae5-46d6-ae9a-a2d6ef7e6e7d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R10") (unit 1)
         )
@@ -3707,7 +3707,7 @@
     (pin "2" (uuid 1eebbc78-402f-4001-b638-f9c7516b0e1c))
     (pin "1" (uuid 7be3088c-4a82-4897-af46-e640d6c101d3))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C10") (unit 1)
         )
@@ -3736,7 +3736,7 @@
     (pin "2" (uuid 3959e54d-8a13-45db-ac7c-f7fde44e3f8d))
     (pin "1" (uuid 3cb17748-c46b-48e9-b9b4-84d7911cea0e))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C11") (unit 1)
         )
@@ -3761,7 +3761,7 @@
     )
     (pin "1" (uuid 5063890c-ba09-48b3-980f-2b3570ba2957))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR015") (unit 1)
         )
@@ -3786,7 +3786,7 @@
     )
     (pin "1" (uuid 68b3574f-a25e-40da-bae4-3170b420857e))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR07") (unit 1)
         )
@@ -3811,7 +3811,7 @@
     )
     (pin "1" (uuid 6d5aeed4-9054-4a4e-9b2b-2f50a18fe08c))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR051") (unit 1)
         )
@@ -3836,7 +3836,7 @@
     )
     (pin "1" (uuid 02586ade-9ad4-4226-8813-7e3e409f82d5))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR06") (unit 1)
         )
@@ -3868,7 +3868,7 @@
     (pin "1" (uuid 95a47fce-97e1-4dd3-a100-0d0e6c66adfa))
     (pin "2" (uuid 4941a3f5-9486-44be-84e9-ea7e8e0441ca))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "L1") (unit 1)
         )
@@ -3897,7 +3897,7 @@
     (pin "1" (uuid 180e4520-f822-4472-b319-fa3ae44a4445))
     (pin "2" (uuid 684a1681-525e-4025-bc46-f9ff3938ef98))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R1") (unit 1)
         )
@@ -3926,7 +3926,7 @@
     (pin "1" (uuid d494aa63-e67e-44c1-83c3-5707e7ec49b6))
     (pin "2" (uuid 0d7f9aa1-2a48-427f-97e9-7b416e47c266))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R7") (unit 1)
         )
@@ -3955,7 +3955,7 @@
     (pin "2" (uuid c7dc80aa-19a3-4928-adf5-908923d43192))
     (pin "1" (uuid 69e4dd25-0540-4d07-9475-4325cb9cc5ac))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C12") (unit 1)
         )
@@ -3980,7 +3980,7 @@
     )
     (pin "1" (uuid e9cceffe-a5b5-4f1a-bf4a-cd67e9f382c0))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR016") (unit 1)
         )
@@ -4005,7 +4005,7 @@
     )
     (pin "1" (uuid b98ed821-d663-4eb7-8ed1-2c1d4e3ff3e8))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR048") (unit 1)
         )
@@ -4030,7 +4030,7 @@
     )
     (pin "1" (uuid 05ec262e-f459-41a3-9376-06b322cffad7))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR017") (unit 1)
         )
@@ -4059,7 +4059,7 @@
     (pin "1" (uuid 76306066-07db-4c00-94ff-2738dc7b2fef))
     (pin "2" (uuid c6eccb84-de81-41b9-ad7d-77a8b2bd60f1))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R2") (unit 1)
         )
@@ -4088,7 +4088,7 @@
     (pin "2" (uuid d70e2a95-0bbc-470d-a8ec-9a1bc51dc559))
     (pin "1" (uuid 759d12a7-10f4-47e5-8767-3db58a1deb65))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C9") (unit 1)
         )
@@ -4128,7 +4128,7 @@
     (pin "6" (uuid 28fe9187-0458-4167-950f-1f3e63012f88))
     (pin "8" (uuid 63d7c3b8-8916-4a20-a8df-abd0dea1a5fe))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U8") (unit 1)
         )
@@ -4153,7 +4153,7 @@
     )
     (pin "1" (uuid f98b9692-9723-4313-a3ae-b04218b1e059))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "H4") (unit 1)
         )
@@ -4178,7 +4178,7 @@
     )
     (pin "1" (uuid 29cff000-9543-4140-93ba-d1e86a1f7b56))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR010") (unit 1)
         )
@@ -4203,7 +4203,7 @@
     )
     (pin "1" (uuid 517f7f75-3b74-4983-92fa-b709105921be))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "H1") (unit 1)
         )
@@ -4232,7 +4232,7 @@
     (pin "1" (uuid 3bf4a647-d345-4ae1-a11c-138f485803bd))
     (pin "2" (uuid d82d62e6-1c3b-4821-a3e8-4460cb51ee7e))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R13") (unit 1)
         )
@@ -4257,7 +4257,7 @@
     )
     (pin "1" (uuid 471b8ee1-0e89-4f97-8322-a8e00a6d6228))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR08") (unit 1)
         )
@@ -4282,7 +4282,7 @@
     )
     (pin "1" (uuid f0ed24cc-32fc-4461-a79f-4fe49c6f8ebc))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR018") (unit 1)
         )
@@ -4311,7 +4311,7 @@
     (pin "1" (uuid e3661ce2-928c-49f2-b697-7d822fd0dbcb))
     (pin "2" (uuid c47d3316-10e5-42c1-95f2-d6322001c228))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R5") (unit 1)
         )
@@ -4336,7 +4336,7 @@
     )
     (pin "1" (uuid b28c3f75-ba94-46dd-9780-109bf3281d2d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR023") (unit 1)
         )
@@ -4365,7 +4365,7 @@
     (pin "2" (uuid a9bfbb51-f0a9-4773-884f-02d9377aed37))
     (pin "1" (uuid 011571ed-7327-4851-bcfb-a7aa0b34bb32))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C13") (unit 1)
         )
@@ -4390,7 +4390,7 @@
     )
     (pin "1" (uuid bea62d7e-80ba-4815-a36b-b55c11ccd84d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR032") (unit 1)
         )
@@ -4419,7 +4419,7 @@
     (pin "2" (uuid 8496be99-94b3-4783-968d-46b11705da92))
     (pin "1" (uuid ab2a0b1b-0d6a-4c93-8c74-e07c138d591f))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C6") (unit 1)
         )
@@ -4439,16 +4439,16 @@
     (property "Footprint" "Button_Switch_SMD:SW_SPST_B3U-1000P" (at 24.13 139.7 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 24.13 139.7 0)
+    (property "Datasheet" "Backup part # C19270949/C19270948 (OG: C231329)" (at 24.13 139.7 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "LCSC" "C231329" (at 24.13 144.78 0)
+    (property "LCSC" "C19270949" (at 24.13 144.78 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "2" (uuid b58ab8ed-f948-4114-b42d-d16a3a2814a1))
     (pin "1" (uuid 523f65d8-895b-4540-bed6-2698bb30d3e0))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "SW2") (unit 1)
         )
@@ -4477,7 +4477,7 @@
     (pin "1" (uuid ef81c5e6-da0a-4b2f-8133-386a588c313c))
     (pin "2" (uuid 86b7fd09-ef35-4bb8-ac24-73546188eaf8))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R6") (unit 1)
         )
@@ -4502,7 +4502,7 @@
     )
     (pin "1" (uuid 09f59964-a6a9-48ad-859f-da3578b46689))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR03") (unit 1)
         )
@@ -4531,7 +4531,7 @@
     (pin "2" (uuid 264c1e93-122a-4376-946c-335f4af97fb5))
     (pin "1" (uuid e1d8afa8-02eb-4360-99d0-54baa2b827f1))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C3") (unit 1)
         )
@@ -4556,7 +4556,7 @@
     )
     (pin "1" (uuid 43832237-58d9-434c-b8f1-e9a550fee0d0))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR034") (unit 1)
         )
@@ -4584,7 +4584,7 @@
     (pin "1" (uuid 0eebd63e-62e7-496a-a186-9ab43dda59e4))
     (pin "2" (uuid abed5a67-4c28-46f1-9508-3a5cbc40927d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "J5") (unit 1)
         )
@@ -4613,7 +4613,7 @@
     (pin "2" (uuid 3ce38c51-cf7e-4f50-abb5-4d33e51179a7))
     (pin "1" (uuid d0072745-955e-4e41-9ead-7fb79aeca59f))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "F1") (unit 1)
         )
@@ -4645,7 +4645,7 @@
     (pin "1" (uuid eeda437a-915b-4e0c-9f85-4156d05d859d))
     (pin "2" (uuid 42f84983-f05d-4e27-b054-4bedd3ee49cf))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U10") (unit 1)
         )
@@ -4670,7 +4670,7 @@
     )
     (pin "1" (uuid c1477826-2eaa-4162-b083-7903a3ed7d71))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR014") (unit 1)
         )
@@ -4695,7 +4695,7 @@
     )
     (pin "1" (uuid 9e502a0f-d031-496a-9f94-ae3f299ad59d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR026") (unit 1)
         )
@@ -4724,7 +4724,7 @@
     (pin "2" (uuid defe12c0-8d7a-4d9f-a09b-7b9db3910565))
     (pin "1" (uuid 0d9c2883-42d7-4f07-b94c-9b89b0a863ef))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C4") (unit 1)
         )
@@ -4749,7 +4749,7 @@
     )
     (pin "1" (uuid b6c8fe74-eaac-472f-88ed-472ece6a67f1))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR035") (unit 1)
         )
@@ -4774,7 +4774,7 @@
     )
     (pin "1" (uuid 040f8f2e-74e3-4f9d-9f70-ecbc11f0b9b5))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR022") (unit 1)
         )
@@ -4803,7 +4803,7 @@
     (pin "1" (uuid f387667c-c7d6-4138-abbb-5dddfd1e51a4))
     (pin "2" (uuid fb1ab5bb-7736-45ab-9cc8-edd756d8303c))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R11") (unit 1)
         )
@@ -4835,7 +4835,7 @@
     (pin "2" (uuid 4ff18c2c-4aae-4f3a-8e0d-6c9381264af0))
     (pin "3" (uuid a5457cc0-81a8-4ae8-b8e5-67be679f664f))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U2") (unit 1)
         )
@@ -4860,7 +4860,7 @@
     )
     (pin "1" (uuid aceebc25-42b5-4fb7-8fec-c091e396d704))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR050") (unit 1)
         )
@@ -4885,7 +4885,7 @@
     )
     (pin "1" (uuid 42812a21-d829-4286-ae70-c18987febd78))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR013") (unit 1)
         )
@@ -4910,7 +4910,7 @@
     )
     (pin "1" (uuid 952b8d8b-68b5-47f3-8188-c423e5f3885f))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR09") (unit 1)
         )
@@ -4939,7 +4939,7 @@
     (pin "2" (uuid c514448a-3d6e-4773-a4a1-71a1311e9820))
     (pin "1" (uuid 0fb8244b-6450-4c88-a9a4-190c721040d3))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C2") (unit 1)
         )
@@ -4968,7 +4968,7 @@
     (pin "2" (uuid feb07e35-af29-4092-a8ce-098a02efa0fb))
     (pin "1" (uuid 75fe7153-c195-4789-b7f1-a4b8a61cf990))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C1") (unit 1)
         )
@@ -4997,7 +4997,7 @@
     (pin "1" (uuid ad5cb949-5a23-473b-82b2-6060bfd44df6))
     (pin "2" (uuid 47a360dc-931e-467d-ab8d-c5e94549d365))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R9") (unit 1)
         )
@@ -5026,7 +5026,7 @@
     (pin "1" (uuid e578d537-4787-478b-8b33-438a6805b842))
     (pin "2" (uuid 18a30cde-51a6-4454-a7f0-6b943c826f4c))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R14") (unit 1)
         )
@@ -5055,7 +5055,7 @@
     (pin "1" (uuid 37692b0d-eeb1-4d30-9912-f095ae3239c7))
     (pin "2" (uuid dbd3696a-d110-44af-8860-67598969040f))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R3") (unit 1)
         )
@@ -5084,7 +5084,7 @@
     (pin "2" (uuid 33b933a4-83a1-4309-851a-d0e92e073c07))
     (pin "1" (uuid 27806b3b-1c87-48cb-b3c1-76e37e2ae228))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C5") (unit 1)
         )
@@ -5109,7 +5109,7 @@
     )
     (pin "1" (uuid ed63883d-fa74-4a48-8cd9-ae1fd2dd21ae))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR049") (unit 1)
         )
@@ -5134,7 +5134,7 @@
     )
     (pin "1" (uuid f49fa12c-4bc8-4e13-ba51-6e2b3eb1d748))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR030") (unit 1)
         )
@@ -5159,7 +5159,7 @@
     )
     (pin "1" (uuid 881aaba4-336d-4362-9891-3ee4a8ed08aa))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR031") (unit 1)
         )
@@ -5190,7 +5190,7 @@
     )
     (pin "1" (uuid 998cb557-e354-4650-8fa3-75e8e4cc9d0b))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "BT3") (unit 1)
         )
@@ -5215,7 +5215,7 @@
     )
     (pin "1" (uuid 23cc5fd3-9078-4d6e-9916-f7b67c5d106f))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR04") (unit 1)
         )
@@ -5244,7 +5244,7 @@
     (pin "1" (uuid 5446f0f5-0f8a-4a38-ba9c-1369c964e969))
     (pin "2" (uuid 2d95011c-3945-4653-ba68-bc62d84a7040))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R8") (unit 1)
         )
@@ -5273,7 +5273,7 @@
     (pin "2" (uuid 60a36473-f481-4727-8ee1-5a359ea360a2))
     (pin "1" (uuid 8977e7ec-12c3-4cbb-9c37-7046344279fe))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C7") (unit 1)
         )
@@ -5302,7 +5302,7 @@
     (pin "1" (uuid ba48bced-509e-46cb-b5ff-065a3a42ec83))
     (pin "2" (uuid e5dfef08-7a9a-4d58-866e-d9fb361ada42))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R4") (unit 1)
         )
@@ -5327,7 +5327,7 @@
     )
     (pin "1" (uuid 6fcf8bc8-f488-48c4-ba1d-b091673ff86c))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR05") (unit 1)
         )
@@ -5359,7 +5359,7 @@
     (pin "1" (uuid 221e4ce8-7ac6-49a6-8c03-9dd480f380a8))
     (pin "2" (uuid b0856218-2013-467a-b85b-50dd632a72b3))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U6") (unit 1)
         )
@@ -5384,7 +5384,7 @@
     )
     (pin "1" (uuid 1538e001-4371-4780-bbe5-27bf04e7fabb))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR038") (unit 1)
         )
@@ -5413,7 +5413,7 @@
     (pin "2" (uuid 60b06ce5-50a3-400c-9c3d-b5c1acf81fe6))
     (pin "1" (uuid 10fb3e90-6185-4ed1-b7e6-a1336f5743c4))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "SW3") (unit 1)
         )
@@ -5446,7 +5446,7 @@
     (pin "5" (uuid ac8fca93-94e5-40fa-a115-fa25595846ef))
     (pin "3" (uuid 10d35dd7-1b71-4b42-b1f7-5d1a63ccbe71))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U1") (unit 1)
         )
@@ -5471,7 +5471,7 @@
     )
     (pin "1" (uuid 6164ffd5-5db4-4b5b-8d6a-b93c30c26b65))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR024") (unit 1)
         )
@@ -5511,7 +5511,7 @@
     (pin "10" (uuid cc21a70e-1150-4e76-90f8-626a999d4887))
     (pin "3" (uuid 64effac6-e6c8-4357-bc88-0d104db15553))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U7") (unit 1)
         )
@@ -5536,7 +5536,7 @@
     )
     (pin "1" (uuid 8253db6d-014c-4af4-bfbe-d08f34469fbe))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR029") (unit 1)
         )
@@ -5561,7 +5561,7 @@
     )
     (pin "1" (uuid 1acbe8f7-d8d3-44a6-ab28-24970b955d7b))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR036") (unit 1)
         )
@@ -5581,16 +5581,16 @@
     (property "Footprint" "Button_Switch_SMD:SW_SPST_B3U-1000P" (at 24.13 118.11 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 24.13 118.11 0)
+    (property "Datasheet" "Backup part # C19270949/C19270948 (OG: C231329)" (at 24.13 118.11 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "LCSC" "C231329" (at 24.13 123.19 0)
+    (property "LCSC" "C19270949" (at 24.13 123.19 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "2" (uuid 418211a2-af9d-42d1-b4b8-a7ffa63f4f79))
     (pin "1" (uuid 3e879c9f-bdd5-491b-a052-6b10ac822ee3))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "SW1") (unit 1)
         )
@@ -5615,7 +5615,7 @@
     )
     (pin "1" (uuid ca3642f1-dde5-40dd-a8f8-a2edbd830ebb))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR020") (unit 1)
         )
@@ -5646,7 +5646,7 @@
     )
     (pin "1" (uuid 5f6db691-d839-4a9c-9562-168e90bf0682))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "BT4") (unit 1)
         )
@@ -5674,7 +5674,7 @@
     (pin "1" (uuid 8dec3c5a-873f-44e4-82cb-466c1f1dbdfe))
     (pin "2" (uuid 46944277-94fe-4ee8-ad13-ddfe6508020d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "J4") (unit 1)
         )
@@ -5718,7 +5718,7 @@
     (pin "B7" (uuid 9dda2999-b7b9-46f9-bf4e-cf145c8dded6))
     (pin "B12" (uuid 63d60ae3-4111-43e3-8b47-cb5a3861e1b4))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "J6") (unit 1)
         )
@@ -5743,7 +5743,7 @@
     )
     (pin "1" (uuid 4060f46b-3eed-4c3d-bb17-f32e9fec98c2))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR012") (unit 1)
         )
@@ -5768,7 +5768,7 @@
     )
     (pin "1" (uuid a5fb7d41-90eb-4be4-9633-fa45908e587e))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR037") (unit 1)
         )
@@ -5797,7 +5797,7 @@
     (pin "2" (uuid e75e2c64-ac8a-4a88-846f-9b5224d0dc87))
     (pin "1" (uuid 89b3b800-a13e-4855-83f6-47861bfe0e13))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "C8") (unit 1)
         )
@@ -5826,7 +5826,7 @@
     (pin "1" (uuid 0f3a271e-3e85-4cdc-8b9a-244336a3533a))
     (pin "2" (uuid 635071e7-44cc-4c2e-b42a-69b0e856a472))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "R12") (unit 1)
         )
@@ -5858,7 +5858,7 @@
     (pin "3" (uuid 72855823-f944-4b56-bc35-bfee0677d00d))
     (pin "1" (uuid 589727a1-5ecf-420d-9133-e1a30d5e2dd5))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U4") (unit 1)
         )
@@ -5883,7 +5883,7 @@
     )
     (pin "1" (uuid 19d96190-b035-4978-ad7a-95a1d0ef1400))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR011") (unit 1)
         )
@@ -5923,7 +5923,7 @@
     (pin "5" (uuid eb4b7087-e2a4-4703-aca8-bcb70709b2bd))
     (pin "7" (uuid 3210011e-34e3-4327-a68b-98a7b9a8b9e3))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U9") (unit 1)
         )
@@ -5948,7 +5948,7 @@
     )
     (pin "1" (uuid 8ef684d4-d014-4d9b-aa80-bfc962625462))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "H3") (unit 1)
         )
@@ -5973,7 +5973,7 @@
     )
     (pin "1" (uuid f8010a43-b6cd-4e96-932d-ac83a823f8c9))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR01") (unit 1)
         )
@@ -5998,7 +5998,7 @@
     )
     (pin "1" (uuid d7bdaded-85d2-4128-be1f-c15f12c7b27d))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR02") (unit 1)
         )
@@ -6023,7 +6023,7 @@
     )
     (pin "1" (uuid 530e1713-1f4b-4961-8556-be00e3fd3a55))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR028") (unit 1)
         )
@@ -6048,7 +6048,7 @@
     )
     (pin "1" (uuid 348705e1-438e-4b1b-a22b-e75820e83b58))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR027") (unit 1)
         )
@@ -6073,7 +6073,7 @@
     )
     (pin "1" (uuid 8e1c64ff-1f86-4da3-86eb-3e77884b8067))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "#PWR021") (unit 1)
         )
@@ -6109,7 +6109,7 @@
     (pin "6" (uuid 625dae95-674a-4eb3-959e-a20f5747a973))
     (pin "4" (uuid 9e12c3ef-266b-4294-89bb-901fefbd8133))
     (instances
-      (project "kicad"
+      (project "OpenPixelPoi"
         (path "/55a1363e-3506-4b1f-a7a5-0f5495c7c793"
           (reference "U5") (unit 1)
         )
