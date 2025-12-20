@@ -27,6 +27,10 @@ class SegmentValues{
   int brightness = 25;
   int speed = 500;
   int duration = 1000;
+  @override
+  String toString() {
+    return "Segment{bank: $bank, pattern: $pattern, brightness: $brightness, speed: $speed, duration: $duration}";
+  }
 }
 
 class _CreateSequenceState extends State<CreateSequencePage> {
@@ -96,7 +100,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       1,
                       5,
                       1,
-                          (int value) => setState(() {
+                      (int value) => setState(() {
                         segments[index].pattern = value;
                       }),
                       segments[index].pattern,
@@ -116,7 +120,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       1,
                       2000,
                       1,
-                          (int value) => setState(() {
+                      (int value) => setState(() {
                         segments[index].speed = value;
                       }),
                       segments[index].speed,
@@ -126,7 +130,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       1,
                       20000,
                       1,
-                          (int value) => setState(() {
+                      (int value) => setState(() {
                         segments[index].duration = value;
                       }),
                       segments[index].duration,
@@ -168,7 +172,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                     child: const Text(
                       "Add Seg",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -183,7 +187,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                     child: const Text(
                       "Trigger",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -195,7 +199,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                     child: const Text(
                       "Save",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -245,7 +249,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
 
   void addSegment(){
     segments.add(SegmentValues());
-    if(segments.length > 1){
+    if(segments.length > 1) {
       var last = segments[segments.length - 2];
       segments.last.bank = last.bank;
       segments.last.pattern = last.pattern;
@@ -253,7 +257,6 @@ class _CreateSequenceState extends State<CreateSequencePage> {
       segments.last.speed = last.speed;
       segments.last.duration = last.duration;
     }
-
   }
 
   Future<void> triggerSequence(BuildContext context) async {

@@ -53,7 +53,7 @@ class _CreateCheckState extends State<CreateCheckPage> {
         LabeledSlider(
             "Check size",
             1,
-            50,
+            55,
             1,
                 (int value) => setState(() {
                   gridSize = value;

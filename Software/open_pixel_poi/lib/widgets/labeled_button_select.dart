@@ -63,6 +63,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.max(min, value - 1000);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -83,6 +84,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.max(min, value - 100);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -103,6 +105,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.max(min, value - 10);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -123,6 +126,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.max(min, value - 1);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -143,6 +147,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.min(max, value + 1);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -163,6 +168,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.min(max, value + 10);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -183,6 +189,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.min(max, value + 100);
+                      onValueChanged(value);
                     });
                   },
                 ),
@@ -203,6 +210,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                   onPressed: () async {
                     setState(() {
                       value = Math.min(max, value + 1000);
+                      onValueChanged(value);
                     });
                   },
                 ),
