@@ -36,16 +36,20 @@ void setup() {
 }
 
 void loop() {
-  if(ble.multipartPattern == 0){
-    ble.loop();
-    config.loop();
-    led.loop();
-    button.loop();
-  }else{
-    delay(250);
-    // jammed
-    if(millis() - ble.bleLastReceived > 5000){
-      ble.multipartPattern = 0;
+  // Redundent loop to avoid a lag every 2 seconds caused by 
+  // https://github.com/espressif/arduino-esp32/blob/50ef6f4369fb85139f000f7bbc5a9f9d5bc02b9f/cores/esp32/main.cpp#L68
+  while(true){
+    if(ble.multipartPattern == 0){
+      ble.loop();
+      config.loop();
+      led.loop();
+      button.loop();
+    }else{
+      delay(250);
+      // jammed
+      if(millis() - ble.bleLastReceived > 5000){
+        ble.multipartPattern = 0;
+      }
     }
   }
 }
