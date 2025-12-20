@@ -834,7 +834,7 @@
     )
     (pin "1" (uuid 36194b92-d5d9-47d1-9461-fa111e39b0f2))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR035") (unit 1)
         )
@@ -859,7 +859,7 @@
     )
     (pin "1" (uuid 1bd01025-d369-44df-93ea-93aa5a1e4c4e))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR040") (unit 1)
         )
@@ -884,7 +884,7 @@
     )
     (pin "1" (uuid a6b7f62c-92d2-4c4c-a1de-2ec9abc5c059))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR031") (unit 1)
         )
@@ -909,7 +909,7 @@
     )
     (pin "1" (uuid f3f777d8-f70b-4164-ad97-75f30af31e99))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR030") (unit 1)
         )
@@ -938,7 +938,7 @@
     (pin "2" (uuid cefee127-4d0b-40e9-96a5-617ee6eb5ecc))
     (pin "1" (uuid dd35f490-8793-462f-8599-911453713f23))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C23") (unit 1)
         )
@@ -963,7 +963,7 @@
     )
     (pin "1" (uuid b9a19f64-9e99-4420-b45d-48145d9b4eb0))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR06") (unit 1)
         )
@@ -994,7 +994,7 @@
     (pin "3" (uuid ebc793b2-b336-4771-a29e-325d44381c94))
     (pin "4" (uuid 97e2d2ee-be29-4acf-9f0b-c709313facd9))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D18") (unit 1)
         )
@@ -1019,7 +1019,7 @@
     )
     (pin "1" (uuid 37a96790-5dbe-41b6-a847-34bc5c86aa80))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR04") (unit 1)
         )
@@ -1044,7 +1044,7 @@
     )
     (pin "1" (uuid ae23e613-1c3f-4315-aa84-b48286518e7f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR027") (unit 1)
         )
@@ -1069,7 +1069,7 @@
     )
     (pin "1" (uuid 2970fbf4-9bae-4b34-bc2e-fcc2114ea88c))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR049") (unit 1)
         )
@@ -1094,7 +1094,7 @@
     )
     (pin "1" (uuid ef8b4c30-278d-4cb3-9ff7-5abfd0d16ca7))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR014") (unit 1)
         )
@@ -1119,7 +1119,7 @@
     )
     (pin "1" (uuid 29e37185-1acb-42c5-a709-ad6b0fda988a))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR024") (unit 1)
         )
@@ -1144,7 +1144,7 @@
     )
     (pin "1" (uuid f5ec0565-2a9f-4e60-9651-d0e2be81712a))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR036") (unit 1)
         )
@@ -1173,7 +1173,7 @@
     (pin "2" (uuid 21199f5d-dc69-4076-b574-2e98a85e5b00))
     (pin "1" (uuid 221cb008-af45-4294-b7c0-87ac589d0666))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C20") (unit 1)
         )
@@ -1198,7 +1198,7 @@
     )
     (pin "1" (uuid 25dfdf80-a970-4e99-9f0c-ef171e527c96))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR018") (unit 1)
         )
@@ -1229,7 +1229,7 @@
     (pin "3" (uuid 780d6da6-76e3-4ada-baeb-9bfbfcebdbc5))
     (pin "4" (uuid eaf9fbe1-6c18-40de-bacd-33a82a6b4d8c))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D10") (unit 1)
         )
@@ -1254,7 +1254,7 @@
     )
     (pin "1" (uuid 6f2669df-84f4-4a7c-b6d3-079019b8515d))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR07") (unit 1)
         )
@@ -1279,7 +1279,7 @@
     )
     (pin "1" (uuid 70915dbc-6653-445d-b4a9-7d370c8d9752))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR033") (unit 1)
         )
@@ -1308,7 +1308,7 @@
     (pin "2" (uuid 5b43e2f0-5b10-4dcd-aad9-e9f856b8e08b))
     (pin "1" (uuid 0c417968-352b-4cf1-8566-fa2ae24ecb2d))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C14") (unit 1)
         )
@@ -1337,7 +1337,7 @@
     (pin "2" (uuid 708c9fb1-f453-4467-ae83-c27bb050f243))
     (pin "1" (uuid 553dd140-cc23-4954-b061-0867c3c01d47))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C17") (unit 1)
         )
@@ -1362,7 +1362,7 @@
     )
     (pin "1" (uuid 5a6964bf-5dfa-4855-8696-8ec36faed9df))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR052") (unit 1)
         )
@@ -1387,7 +1387,7 @@
     )
     (pin "1" (uuid 217a6f66-54c2-4669-b9a4-d3c7770b9d87))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR032") (unit 1)
         )
@@ -1416,7 +1416,7 @@
     (pin "2" (uuid 98d165b9-c109-4ca7-8c18-40a9af09f51f))
     (pin "1" (uuid bcefa70c-7144-4929-bc81-0e8d0efb470a))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C5") (unit 1)
         )
@@ -1441,7 +1441,7 @@
     )
     (pin "1" (uuid 3819bdcd-2c8b-4ac7-b35e-ebac78915f8f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR053") (unit 1)
         )
@@ -1470,7 +1470,7 @@
     (pin "2" (uuid 9a36c8ad-5bc6-4d39-943c-a4cac7bc2eb6))
     (pin "1" (uuid f7bbb251-41fa-4fbe-91a8-f1fda8247c55))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C21") (unit 1)
         )
@@ -1501,7 +1501,7 @@
     (pin "3" (uuid c04f781d-71ba-4743-95b4-c9a250a49985))
     (pin "4" (uuid f61c6610-148b-4ffa-b2f2-e3cbd0db2f6e))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D7") (unit 1)
         )
@@ -1526,7 +1526,7 @@
     )
     (pin "1" (uuid d4d7ce4a-472c-46c6-ac76-61ec6dcb7aae))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR01") (unit 1)
         )
@@ -1557,7 +1557,7 @@
     (pin "3" (uuid f8ea8311-e86d-4960-8314-d29c5b20ab3c))
     (pin "4" (uuid a3c63a7e-0e02-47a2-93d9-417e93722d61))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D22") (unit 1)
         )
@@ -1582,7 +1582,7 @@
     )
     (pin "1" (uuid 43b7d852-c446-44a6-a7cd-31ff45be9f4e))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR02") (unit 1)
         )
@@ -1613,7 +1613,7 @@
     (pin "3" (uuid c5e89c0d-bfec-4c8d-b8e2-8ba41550d760))
     (pin "4" (uuid c08ce262-3e1d-4812-99d4-44cd500742ea))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D3") (unit 1)
         )
@@ -1642,7 +1642,7 @@
     (pin "2" (uuid fe34893c-6dea-4e9a-b3fb-5fd610078bbc))
     (pin "1" (uuid 6dc24d6a-c0d6-4be6-a652-3c1ed1645ba6))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C6") (unit 1)
         )
@@ -1667,7 +1667,7 @@
     )
     (pin "1" (uuid d69e4876-e783-4459-8a10-e9082e079726))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR042") (unit 1)
         )
@@ -1698,7 +1698,7 @@
     (pin "3" (uuid 545b42c3-6649-4145-a9ef-6b709cb016b2))
     (pin "4" (uuid 8e46d6aa-6b29-4030-8307-c22c617715a3))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D9") (unit 1)
         )
@@ -1723,7 +1723,7 @@
     )
     (pin "1" (uuid d9b134eb-bff3-42a8-a726-7775a753b020))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR05") (unit 1)
         )
@@ -1748,7 +1748,7 @@
     )
     (pin "1" (uuid cc06533c-eee0-4be7-b4c2-4a70ef42c582))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR041") (unit 1)
         )
@@ -1779,7 +1779,7 @@
     (pin "3" (uuid 5dd778d2-5da0-4384-a216-2bf3051c9f37))
     (pin "4" (uuid 42dcd18c-0f59-4cdb-8db2-7ffb66955430))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D21") (unit 1)
         )
@@ -1814,7 +1814,7 @@
     (pin "2" (uuid 9b955768-8724-450f-a016-cde631e7feec))
     (pin "8" (uuid 05b2db43-3312-4a59-9287-2d05424992fb))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "J1") (unit 1)
         )
@@ -1845,7 +1845,7 @@
     (pin "3" (uuid 54aa191f-25bd-4ae0-a52d-c3de1ee4f1a6))
     (pin "4" (uuid 5e20f798-bc4d-4b16-8417-10978d2186d0))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D1") (unit 1)
         )
@@ -1874,7 +1874,7 @@
     (pin "2" (uuid 3e59e505-b563-49f6-811b-af23c0b9c7da))
     (pin "1" (uuid df8b5a14-0e5e-4a21-bb2c-edc4b8dc9471))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C13") (unit 1)
         )
@@ -1903,7 +1903,7 @@
     (pin "2" (uuid 7f75f827-a906-4e9b-8788-9cb19220c1f5))
     (pin "1" (uuid 99a5586d-9915-4f27-a53e-67c9bb56d826))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C3") (unit 1)
         )
@@ -1934,7 +1934,7 @@
     (pin "3" (uuid cd28d1dd-09d4-4e06-927c-2eb78e8eb5b6))
     (pin "4" (uuid ffeff8e3-ad87-4c2e-a9b7-0e24cfb7ed73))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D23") (unit 1)
         )
@@ -1959,7 +1959,7 @@
     )
     (pin "1" (uuid 5eec92ac-660e-4e36-8ad8-afe75841d5fb))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR054") (unit 1)
         )
@@ -1984,7 +1984,7 @@
     )
     (pin "1" (uuid 9f8f8eb7-b841-42c4-abb5-21a15197fa9f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR08") (unit 1)
         )
@@ -2009,7 +2009,7 @@
     )
     (pin "1" (uuid c4574b5f-89b6-490b-90bd-e2a27f39a17b))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR039") (unit 1)
         )
@@ -2038,7 +2038,7 @@
     (pin "2" (uuid 3cb48be3-79ad-4f98-bcfe-ab8d22b895e8))
     (pin "1" (uuid 920cb8de-b170-4ade-9307-56e804db3cf4))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C12") (unit 1)
         )
@@ -2067,7 +2067,7 @@
     (pin "2" (uuid a06ac695-0c02-4647-adea-afc75058f08e))
     (pin "1" (uuid 14ddda5a-ce9a-4a00-a8c1-3e622dbcca03))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C18") (unit 1)
         )
@@ -2096,7 +2096,7 @@
     (pin "2" (uuid a6394c13-5b78-45bc-b951-08c05746b1a2))
     (pin "1" (uuid d04b8efd-e7f6-4ce5-857d-f7bd296d7956))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C11") (unit 1)
         )
@@ -2127,7 +2127,7 @@
     (pin "3" (uuid e4773d80-57d8-4864-a884-cdf5e03f3bc9))
     (pin "4" (uuid 60a41bf9-4f3c-4b4e-9bf2-cc8c5e1587c3))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D15") (unit 1)
         )
@@ -2156,7 +2156,7 @@
     (pin "2" (uuid 56d59460-465e-49a0-a264-924fe4fa0a07))
     (pin "1" (uuid ff2d726b-0af2-4c10-a39d-10cf411e5951))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C9") (unit 1)
         )
@@ -2187,7 +2187,7 @@
     (pin "3" (uuid 9dbec54a-d779-44e9-8446-d965910ad4d5))
     (pin "4" (uuid b5cc3dfa-d31b-4283-aad7-02246f0f5c4b))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D17") (unit 1)
         )
@@ -2218,7 +2218,7 @@
     (pin "3" (uuid fa2540de-9c4e-4cad-985b-41efbb2a9c8a))
     (pin "4" (uuid 98d0a525-6289-4734-b484-0d03ac45bfb9))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D12") (unit 1)
         )
@@ -2247,7 +2247,7 @@
     (pin "2" (uuid 6499c769-2d82-4aba-ae10-d14ab403a55e))
     (pin "1" (uuid 5d974eb5-5a75-49f9-aefd-1cde0979652f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C22") (unit 1)
         )
@@ -2276,7 +2276,7 @@
     (pin "2" (uuid 4e2d26ef-7a59-4061-b1bc-b2dd5b63d5ae))
     (pin "1" (uuid 39acb96e-ef36-46cb-9562-f2833dd96556))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C16") (unit 1)
         )
@@ -2307,7 +2307,7 @@
     (pin "3" (uuid f7ffee8d-21fa-471f-aa79-2c7d984f09b9))
     (pin "4" (uuid 6d469cd0-f7d1-4ff6-b2b0-fdef3b38480e))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D6") (unit 1)
         )
@@ -2332,7 +2332,7 @@
     )
     (pin "1" (uuid 7050a88c-d0a0-472e-bdb3-4493ee0d5fdb))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR029") (unit 1)
         )
@@ -2357,7 +2357,7 @@
     )
     (pin "1" (uuid dd1883ca-0a2b-46c3-a1ea-f90d2841917e))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR016") (unit 1)
         )
@@ -2382,7 +2382,7 @@
     )
     (pin "1" (uuid 72955994-8776-47ad-a011-4d60b72d3f4d))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR051") (unit 1)
         )
@@ -2413,7 +2413,7 @@
     (pin "3" (uuid 8e3a1b8d-ea81-4efa-8051-e61861cee4ee))
     (pin "4" (uuid 3cb692b0-8700-4ef9-8e5a-98e4c7bab140))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D19") (unit 1)
         )
@@ -2438,7 +2438,7 @@
     )
     (pin "1" (uuid d774ae0b-2269-4206-ae51-742e50a0c208))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR011") (unit 1)
         )
@@ -2463,7 +2463,7 @@
     )
     (pin "1" (uuid 680705dd-bf4f-4858-ab0a-b2fa1bd43e2f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR012") (unit 1)
         )
@@ -2492,7 +2492,7 @@
     (pin "2" (uuid 7d24ad12-3259-4c25-ab14-ae0f0ab1d175))
     (pin "1" (uuid 02be549c-0f73-4853-95d7-1837e1aad81e))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C15") (unit 1)
         )
@@ -2517,7 +2517,7 @@
     )
     (pin "1" (uuid e9cc44a1-93f5-480d-999f-f90b4accbe3b))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR028") (unit 1)
         )
@@ -2546,7 +2546,7 @@
     (pin "2" (uuid b2948179-a382-4197-ac7f-f2db55d2f4d8))
     (pin "1" (uuid 225247ae-5333-48cd-85f3-389926c1b5fd))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C8") (unit 1)
         )
@@ -2571,7 +2571,7 @@
     )
     (pin "1" (uuid 4a2887bc-2b61-499c-b63f-0097839fae88))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR023") (unit 1)
         )
@@ -2600,7 +2600,7 @@
     (pin "2" (uuid dea99536-3139-4110-bd5d-24ba37a9d39c))
     (pin "1" (uuid f6103f4e-632d-4b86-89a7-97abb9d2f847))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C19") (unit 1)
         )
@@ -2625,7 +2625,7 @@
     )
     (pin "1" (uuid 48f72261-7df5-4235-acac-8fb5fe5845a0))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR037") (unit 1)
         )
@@ -2650,7 +2650,7 @@
     )
     (pin "1" (uuid 249a895d-36af-4f80-807e-430f66fabc5f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR020") (unit 1)
         )
@@ -2681,7 +2681,7 @@
     (pin "3" (uuid 9fe64670-0d66-4d80-b96a-236e4e22743f))
     (pin "4" (uuid d374a5a9-d1bc-488d-9047-9abdddf7f319))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D4") (unit 1)
         )
@@ -2706,7 +2706,7 @@
     )
     (pin "1" (uuid 1a500899-03d3-4b00-badf-138f4a00dd96))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR010") (unit 1)
         )
@@ -2737,7 +2737,7 @@
     (pin "3" (uuid b69278d9-6ec4-4ce1-bbe0-33101a8130d5))
     (pin "4" (uuid d4601c74-e5be-4e0c-b037-2e2136d43475))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D2") (unit 1)
         )
@@ -2766,7 +2766,7 @@
     (pin "2" (uuid 7024b388-d495-492f-9105-a7eeda80ac62))
     (pin "1" (uuid 02597da7-b16b-47eb-9e4a-abdeed690d18))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C2") (unit 1)
         )
@@ -2795,7 +2795,7 @@
     (pin "2" (uuid d369bfbb-0df2-4fa0-aafb-c61777402c43))
     (pin "1" (uuid bc80db4d-2aa1-4da2-ad15-625ec50f0f43))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C7") (unit 1)
         )
@@ -2820,7 +2820,7 @@
     )
     (pin "1" (uuid 0c6add7d-9fa9-44c8-8e80-d20a318310f5))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR025") (unit 1)
         )
@@ -2845,7 +2845,7 @@
     )
     (pin "1" (uuid c324a4a4-5563-49f0-933c-a8f7731460a1))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR03") (unit 1)
         )
@@ -2870,7 +2870,7 @@
     )
     (pin "1" (uuid bb9584e6-73f8-402b-8545-6951020f93cf))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR017") (unit 1)
         )
@@ -2895,7 +2895,7 @@
     )
     (pin "1" (uuid 5ee19c0e-ff50-41cf-8789-40a2293a620a))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR09") (unit 1)
         )
@@ -2926,7 +2926,7 @@
     (pin "3" (uuid c091e7e0-fe3d-433c-ac02-dbee919e0e8d))
     (pin "4" (uuid 6b2111dc-e3a6-4a5b-8af5-cee596afb815))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D24") (unit 1)
         )
@@ -2951,7 +2951,7 @@
     )
     (pin "1" (uuid 78381b0f-2fa2-4d7c-9bbf-3370602f481f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR043") (unit 1)
         )
@@ -2976,7 +2976,7 @@
     )
     (pin "1" (uuid 06bcb2dd-7109-43fc-a76a-c8f9b416b97c))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR046") (unit 1)
         )
@@ -3001,7 +3001,7 @@
     )
     (pin "1" (uuid 8c9bedad-4b09-46c5-ae8b-d5a84004b6b5))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR045") (unit 1)
         )
@@ -3026,7 +3026,7 @@
     )
     (pin "1" (uuid 86ccc041-d5c6-40e9-ba8c-cc274c2908aa))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR034") (unit 1)
         )
@@ -3055,7 +3055,7 @@
     (pin "2" (uuid 6127df6d-60f0-4ff1-b9fe-bbdde3d1d79a))
     (pin "1" (uuid f3c96a6e-d1f4-48bc-9a17-a583b91c5b45))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C24") (unit 1)
         )
@@ -3080,7 +3080,7 @@
     )
     (pin "1" (uuid a9ed769b-3fb5-495d-bbd0-cfc2c6d5d3a9))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR013") (unit 1)
         )
@@ -3109,7 +3109,7 @@
     (pin "2" (uuid 770be5f0-7366-40cf-bdec-19ca22006fc7))
     (pin "1" (uuid 9752c520-9782-4225-b168-9b3b06e0dd25))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C10") (unit 1)
         )
@@ -3138,7 +3138,7 @@
     (pin "2" (uuid 07c39d04-a1e5-4e31-a0f6-f615a5e69876))
     (pin "1" (uuid ea8416d7-c296-489a-a8da-6fb8e3453e85))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C1") (unit 1)
         )
@@ -3163,7 +3163,7 @@
     )
     (pin "1" (uuid 7f3c3ba5-cce0-4753-9cf3-2bcc6e10fe66))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR026") (unit 1)
         )
@@ -3194,7 +3194,7 @@
     (pin "3" (uuid 3529a438-9066-40d4-b22d-183405db6518))
     (pin "4" (uuid 190dfb65-bb89-4590-9b32-21d0905861f2))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D11") (unit 1)
         )
@@ -3219,7 +3219,7 @@
     )
     (pin "1" (uuid 7cfb2944-ccb0-47d6-8be9-d2b999a105a6))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR015") (unit 1)
         )
@@ -3250,7 +3250,7 @@
     (pin "3" (uuid 5d440136-d0aa-4e15-bb9e-8a143770df3f))
     (pin "4" (uuid 9a7b3f16-8a67-4334-ac92-38b1ee00a950))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D8") (unit 1)
         )
@@ -3275,7 +3275,7 @@
     )
     (pin "1" (uuid 03a283d8-b7ec-4b16-b7a7-892fee0229c4))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR038") (unit 1)
         )
@@ -3300,7 +3300,7 @@
     )
     (pin "1" (uuid 4f8019bc-fde2-47a3-a211-aa9fb5f90600))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR048") (unit 1)
         )
@@ -3325,7 +3325,7 @@
     )
     (pin "1" (uuid d13fe659-003f-4968-987b-eca61b3c1f34))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR047") (unit 1)
         )
@@ -3350,7 +3350,7 @@
     )
     (pin "1" (uuid d0a24b09-e143-4a75-bbf0-bacc6404a408))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR044") (unit 1)
         )
@@ -3381,7 +3381,7 @@
     (pin "3" (uuid d799acbf-9c37-4843-9d91-10bc60c6486b))
     (pin "4" (uuid 8e7fb3e2-03da-4d08-860f-eccb61fccc87))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D5") (unit 1)
         )
@@ -3412,7 +3412,7 @@
     (pin "3" (uuid 0ba0118f-29d1-44b4-9d81-49a0d81f65e0))
     (pin "4" (uuid 997aa0d9-4090-426a-81f4-ece5854f1dfa))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D16") (unit 1)
         )
@@ -3443,7 +3443,7 @@
     (pin "3" (uuid a606cbdf-cbb1-4c37-b646-aa06f597bf78))
     (pin "4" (uuid 185a7554-0527-41f1-9a97-937358ff57c5))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D14") (unit 1)
         )
@@ -3474,7 +3474,7 @@
     (pin "3" (uuid e98811dc-6fe9-4a78-b797-53ba172a53ca))
     (pin "4" (uuid 90b3e1ea-5b75-4b09-a46b-87a187053387))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D13") (unit 1)
         )
@@ -3505,7 +3505,7 @@
     (pin "3" (uuid 3a419511-8f0a-4380-b544-6f43cbe0c905))
     (pin "4" (uuid f7d54c1a-144b-494b-b362-bb83a8655c09))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D20") (unit 1)
         )
@@ -3530,7 +3530,7 @@
     )
     (pin "1" (uuid afb27240-12b0-47f6-9184-72c27539e346))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR019") (unit 1)
         )
@@ -3555,7 +3555,7 @@
     )
     (pin "1" (uuid 0a2ca46d-beb2-4870-9ac9-e19e29bd17ee))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR021") (unit 1)
         )
@@ -3580,7 +3580,7 @@
     )
     (pin "1" (uuid d5a43207-dc73-4764-83c0-81f944c65006))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR050") (unit 1)
         )
@@ -3609,7 +3609,7 @@
     (pin "2" (uuid 2e646804-f271-423a-a134-bb4def9273ce))
     (pin "1" (uuid ecadc3e6-468d-4afb-9458-996913c1dc79))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C25") (unit 1)
         )
@@ -3634,7 +3634,7 @@
     )
     (pin "1" (uuid 83f85eb5-a451-4ab5-a50e-0112fb422f88))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "#PWR022") (unit 1)
         )
@@ -3663,7 +3663,7 @@
     (pin "2" (uuid 852207df-768c-446f-ba29-7615473f2bd8))
     (pin "1" (uuid 4cbbf684-cea7-416c-bc4e-603e8ccc6670))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "C4") (unit 1)
         )
@@ -3694,7 +3694,7 @@
     (pin "3" (uuid ead51e5c-adbb-422f-b305-4edaf5d6c645))
     (pin "4" (uuid f86eb9c9-5c1a-49de-8c16-044d872c637f))
     (instances
-      (project "LedStrip_WS2812B_5050_V2"
+      (project "LedStrip_WS2812B_5050"
         (path "/eaf2c686-dc2b-4c82-853f-54c6be22f2cc"
           (reference "D25") (unit 1)
         )
