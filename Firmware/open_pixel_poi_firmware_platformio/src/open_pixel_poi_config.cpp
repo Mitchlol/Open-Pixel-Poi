@@ -2,7 +2,7 @@
 #define _OPEN_PIXEL_POI_CONFIG
 
 #include <FS.h>
-#include <SPIFFS.h>
+#include <LittleFS.h>
 #include <Preferences.h>
 #include "config.h"
 
@@ -42,6 +42,7 @@ enum BatteryState {
 class OpenPixelPoiConfig {
   private:
     Preferences preferences;
+    File patternFile;
     
   public:
     // Runtime State
@@ -115,8 +116,7 @@ class OpenPixelPoiConfig {
 
       loadFrameHeight();
       loadFrameCount();
-      fillDefaultPattern();
-      loadPattern();
+      startLoadingPattern();
 
       debugf("- frame\n");
       debugf("  - height = %d\n", this->frameHeight);
@@ -132,8 +132,7 @@ class OpenPixelPoiConfig {
       }
       loadFrameHeight();
       loadFrameCount();
-      fillDefaultPattern();
-      loadPattern();
+      startLoadingPattern();
       
       this->configLastUpdated = millis();
     }
@@ -168,9 +167,9 @@ class OpenPixelPoiConfig {
       }
       debugf_noprefix("\n");
 
-      File file = SPIFFS.open(String("/pattern") + (this->patternSlot + (this->patternBank * PATTERN_BANK_SIZE)) + ".oppp", FILE_WRITE);
+      File file = LittleFS.open(String("/pattern") + (this->patternSlot + (this->patternBank * PATTERN_BANK_SIZE)) + ".oppp", FILE_WRITE);
       if(!file || file.isDirectory()){
-        debugf("− failed to open file for reading\n");
+        debugf("− failed to open file for writing\n");
       }else{
         debugf(" - opened file for writing: %d\n");
         
@@ -198,14 +197,31 @@ class OpenPixelPoiConfig {
       }
     }
 
-    void loadPattern(){
-      File file = SPIFFS.open(String("/pattern") + (this->patternSlot  + (this->patternBank * PATTERN_BANK_SIZE)) + ".oppp");
-      if(!file || file.isDirectory()){
+    void startLoadingPattern(){
+      if(patternFile){
+        patternFile.close();
+      }
+      patternFile = LittleFS.open(String("/pattern") + (this->patternSlot  + (this->patternBank * PATTERN_BANK_SIZE)) + ".oppp");
+      if(!patternFile || patternFile.isDirectory()){
         debugf("− failed to open file for reading\n");
+        fillDefaultPattern();
       }else{
         debugf(" - this much available: %d\n", file.available());
-        file.read(pattern, file.available());
-        file.close();
+        // Filling the whole pattern with data is way too slow
+        // just fill one pixel so we don't have a completely black pattern if something goes weird
+        pattern[0] = 0xFF;
+      }
+      // Load first frame immediately (For large/fast patterns this is futile, as we already lagged past it)
+      continueLoadingPattern();
+    }
+
+    void continueLoadingPattern(){
+      if(patternFile && patternFile.available() > 0){
+        if(patternFile.available() <= frameHeight * 3){
+          patternFile.read(pattern + patternFile.position(), patternFile.available());
+        }else{
+          patternFile.read(pattern + patternFile.position(), frameHeight * 3);
+        }
       }
     }
 
@@ -230,7 +246,7 @@ class OpenPixelPoiConfig {
 
       preferences.putUShort("sequencerLength", this->sequencerLength);
 
-      File file = SPIFFS.open("/sequencer.opps", FILE_WRITE);
+      File file = LittleFS.open("/sequencer.opps", FILE_WRITE);
       if(!file || file.isDirectory()){
         debugf("− failed to open file for writing\n");
       }else{
@@ -244,7 +260,7 @@ class OpenPixelPoiConfig {
 
     void loadSequencer(){
       this->sequencerLength = preferences.getUShort("sequencerLength", 0x00);
-      File file = SPIFFS.open("/sequencer.opps");
+      File file = LittleFS.open("/sequencer.opps");
       if(!file || file.isDirectory()){
         debugf("− failed to open file for reading\n");
       }else{
@@ -260,8 +276,8 @@ class OpenPixelPoiConfig {
       debugf("Load Config (setup)\n");
 
       // Initialize storage access
-      if(!SPIFFS.begin(true)){
-        debugf("SPIFFS Mount Failed\n");
+      if(!LittleFS.begin(true)){
+        debugf("LittleFS Mount Failed\n");
       }
 
       preferences.begin("led_pattern", false);
@@ -291,11 +307,8 @@ class OpenPixelPoiConfig {
       debugf("- frame\n");
       debugf("  - height = %d\n", this->frameHeight);
       debugf("  - count = %d\n", this->frameCount);
-      
-      fillDefaultPattern();
 
-      loadPattern();
-
+      startLoadingPattern();
       loadSequencer();
 
       debugf("- pattern\n");
@@ -341,8 +354,7 @@ class OpenPixelPoiConfig {
           this->animationSpeed = this->sequencer[offset+ 3] << 8 | this->sequencer[offset + 4];
           loadFrameHeight();
           loadFrameCount();
-          fillDefaultPattern();
-          loadPattern();
+          startLoadingPattern();
           // Roll over time from previous update to keep real time regardless of pattern load times
           this->displayStateLastUpdated += previousTargetDuration;
         }
@@ -350,6 +362,9 @@ class OpenPixelPoiConfig {
         // Abort sequencer on button press
         this->sequencerStep = this->sequencerLength / 7;
       }
+
+      // Chunked pattern loading to avoid lag spike on pattern chanage
+      continueLoadingPattern();
 
       // Battery latching state
       if(batteryVoltage <= BATTERY_VOLTAGE_SHUTDOWN || batteryState == BAT_SHUTDOWN){
