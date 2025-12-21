@@ -69,6 +69,7 @@ class OpenPixelPoiConfig {
     uint8_t *sequencer = (uint8_t *) malloc(1785*sizeof(uint8_t)); // 255 Instruction max (7 bits per instruction)
     uint16_t sequencerLength;
     int sequencerStep;
+    ulong sequencerDelayed;
 
     // Variables
     long configLastUpdated;
@@ -341,11 +342,13 @@ class OpenPixelPoiConfig {
         if(sequencerStep == -1){
           this->displayStateLastUpdated = millis();
           previousTargetDuration = 0;
+          this->sequencerDelayed = 0;
         }else{
           offset = this->sequencerStep * 7; 
           previousTargetDuration = this->sequencer[offset+ 5] << 8 | this->sequencer[offset + 6];
         }
-        if(millis() - this->displayStateLastUpdated >= previousTargetDuration){
+        ulong lastStepStartTime = (this->displayStateLastUpdated - this->sequencerDelayed);
+        if(millis() - lastStepStartTime >= previousTargetDuration){
           this->sequencerStep++;
           offset = this->sequencerStep * 7; 
           this->patternSlot = this->sequencer[offset + 0];
@@ -356,7 +359,10 @@ class OpenPixelPoiConfig {
           loadFrameCount();
           startLoadingPattern();
           // Roll over time from previous update to keep real time regardless of pattern load times
-          this->displayStateLastUpdated += previousTargetDuration;
+          // But offset displayStateLastUpdated by the load time, so we start rendering from the start of the pattern
+          // This is important because the file is not fully loaded yet.
+          this->sequencerDelayed = millis() - (lastStepStartTime + previousTargetDuration);
+          this->displayStateLastUpdated = lastStepStartTime + previousTargetDuration + this->sequencerDelayed;
         }
       }else{
         // Abort sequencer on button press
