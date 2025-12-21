@@ -229,7 +229,7 @@ class OpenPixelPoiConfig {
       String key = "p";
       key += (this->patternSlot  + (this->patternBank * PATTERN_BANK_SIZE));
       key += "Height";
-      this->frameHeight = preferences.getChar(key.c_str(), 20);
+      this->frameHeight = preferences.getChar(key.c_str(), 5);
     }
 
     void loadFrameCount(){
@@ -237,7 +237,7 @@ class OpenPixelPoiConfig {
       key += (this->patternSlot  + (this->patternBank * PATTERN_BANK_SIZE));
       key += "FCount";
       debugf("key = %s\n", key);
-      this->frameCount = preferences.getUShort(key.c_str(), 2);
+      this->frameCount = preferences.getUShort(key.c_str(), 5);
     }
 
     void saveSequencer() {
