@@ -119,7 +119,6 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       "Speed",
                       1,
                       2000,
-                      1,
                       (int value) => setState(() {
                         segments[index].speed = value;
                       }),
@@ -129,7 +128,6 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       "Duration (milliseconds)",
                       1,
                       20000,
-                      1,
                       (int value) => setState(() {
                         segments[index].duration = value;
                       }),

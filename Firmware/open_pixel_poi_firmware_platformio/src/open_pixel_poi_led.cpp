@@ -291,15 +291,17 @@ class OpenPixelPoiLED {
       }else if(config.displayState == DS_BRIGHTNESS){
         // Override brightness without saving it. Button will save it upon release.
         if(millis() - config.displayStateLastUpdated < 500){
-          config.ledBrightness = 1;
+          config.ledBrightness = config.ledBrightnessOptions[0];
         }else if(millis() - config.displayStateLastUpdated < 1000){
-          config.ledBrightness = 4;
+          config.ledBrightness = config.ledBrightnessOptions[1];
         }else if(millis() - config.displayStateLastUpdated < 1500){
-          config.ledBrightness = 10;
+          config.ledBrightness = config.ledBrightnessOptions[2];
         }else if(millis() - config.displayStateLastUpdated < 2000){
-          config.ledBrightness = 25;
+          config.ledBrightness = config.ledBrightnessOptions[3];
+        }else if(millis() - config.displayStateLastUpdated < 2500){
+          config.ledBrightness = config.ledBrightnessOptions[4];
         }else{
-          config.ledBrightness = 100;
+          config.ledBrightness = config.ledBrightnessOptions[5];
         }
         ledStrip->SetBrightness(config.ledBrightness);
         red = 0xFF;
@@ -312,12 +314,12 @@ class OpenPixelPoiLED {
         }
       }else if(config.displayState == DS_SPEED){
         red = 0xFF;
-        if(config.ledCount < 10 && (millis() - config.displayStateLastUpdated) % 500 < 25 && (millis() - config.displayStateLastUpdated) < 5500){
+        if(config.ledCount < 6 && (millis() - config.displayStateLastUpdated) % 500 < 25 && (millis() - config.displayStateLastUpdated) < 3000){
           for (int j=0; j< config.ledCount; j++){
             ledStrip->SetPixelColor(j, RgbColor(red, 0, 0));
           }
         }else{
-           for (int j=0; j < min(int((millis() - config.displayStateLastUpdated)/500), 10) * int(config.ledCount/10); j++){
+          for (int j=0; j < min(int((millis() - config.displayStateLastUpdated + 500)/500), 6) * int(config.ledCount/6); j++){
             ledStrip->SetPixelColor(j, RgbColor(red, 0, 0));
           }
         }

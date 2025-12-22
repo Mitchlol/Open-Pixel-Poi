@@ -175,10 +175,26 @@ class PoiHardware {
     message.insert(0, code.index);
     return _sendIt(message, confirmation);
   }
+  Future<bool> sendInt8Array(List<int> values, CommCode code, [bool confirmation = true]) {
+    List<int> message = [];
+    ParseUtil.putInt8(message, code.index);
+    for(int value in values){
+      ParseUtil.putInt8(message, value);
+    }
+    return _sendIt(message, confirmation);
+  }
   Future<bool> sendInt16(int value, CommCode code, [bool confirmation = true]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
     ParseUtil.putInt16(message, value);
+    return _sendIt(message, confirmation);
+  }
+  Future<bool> sendInt16Array(List<int> values, CommCode code, [bool confirmation = true]) {
+    List<int> message = [];
+    ParseUtil.putInt8(message, code.index);
+    for(int value in values){
+      ParseUtil.putInt16(message, value);
+    }
     return _sendIt(message, confirmation);
   }
   Future<bool> sendString(String value, CommCode code, [bool confirmation = true]) {

@@ -165,21 +165,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: const Text("1", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt8(1, CommCode.CC_SET_BRIGHTNESS, false)),
+                        .forEach((poi) => poi.sendInt8(0, CommCode.CC_SET_BRIGHTNESS_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
                     child: const Text("2", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt8(4, CommCode.CC_SET_BRIGHTNESS, false)),
+                        .forEach((poi) => poi.sendInt8(1, CommCode.CC_SET_BRIGHTNESS_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
                     child: const Text("3", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt8(10, CommCode.CC_SET_BRIGHTNESS, false)),
+                        .forEach((poi) => poi.sendInt8(2, CommCode.CC_SET_BRIGHTNESS_OPTION, false)),
                   ),
                 ],
               ),
@@ -190,21 +190,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: const Text("4", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt8(25, CommCode.CC_SET_BRIGHTNESS, false)),
+                        .forEach((poi) => poi.sendInt8(3, CommCode.CC_SET_BRIGHTNESS_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
                     child: const Text("5", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt8(50, CommCode.CC_SET_BRIGHTNESS, false)),
+                        .forEach((poi) => poi.sendInt8(4, CommCode.CC_SET_BRIGHTNESS_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
                     child: const Text("6", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt8(100, CommCode.CC_SET_BRIGHTNESS, false)),
+                        .forEach((poi) => poi.sendInt8(5, CommCode.CC_SET_BRIGHTNESS_OPTION, false)),
                   ),
                 ],
               ),
@@ -221,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListTile(
-          title: const Text("Frames Per Second", style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold)),
+          title: const Text("Animation Speed (FPS)", style: TextStyle(color: Colors.blue, fontSize: 24, fontWeight: FontWeight.bold)),
           subtitle: Column(
             children: [
               Row(
@@ -231,96 +231,46 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: const Text("1", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(1, CommCode.CC_SET_SPEED, false)),
+                        .forEach((poi) => poi.sendInt8(0, CommCode.CC_SET_SPEED_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
                     child: const Text("2", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(2, CommCode.CC_SET_SPEED, false)),
+                        .forEach((poi) => poi.sendInt8(1, CommCode.CC_SET_SPEED_OPTION, false)),
+                  ),
+                  const VerticalDivider(width: 8.0),
+                  ElevatedButton(
+                    child: const Text("3", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    onPressed: () => Provider.of<Model>(context, listen: false)
+                        .connectedPoi!
+                        .forEach((poi) => poi.sendInt8(2, CommCode.CC_SET_SPEED_OPTION, false)),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    child: const Text("4", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    onPressed: () => Provider.of<Model>(context, listen: false)
+                        .connectedPoi!
+                        .forEach((poi) => poi.sendInt8(3, CommCode.CC_SET_SPEED_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
                     child: const Text("5", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(5, CommCode.CC_SET_SPEED, false)),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text("10", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(10, CommCode.CC_SET_SPEED, false)),
+                        .forEach((poi) => poi.sendInt8(4, CommCode.CC_SET_SPEED_OPTION, false)),
                   ),
                   const VerticalDivider(width: 8.0),
                   ElevatedButton(
-                    child: const Text("25", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    child: const Text("6", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     onPressed: () => Provider.of<Model>(context, listen: false)
                         .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(25, CommCode.CC_SET_SPEED, false)),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text("50", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(50, CommCode.CC_SET_SPEED, false)),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text("100", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(100, CommCode.CC_SET_SPEED, false)),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text("250", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(250, CommCode.CC_SET_SPEED, false)),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text("500", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(500, CommCode.CC_SET_SPEED, false)),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text("750", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(750, CommCode.CC_SET_SPEED, false)),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text("1500", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(1500, CommCode.CC_SET_SPEED, false)),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text("2000", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    onPressed: () => Provider.of<Model>(context, listen: false)
-                        .connectedPoi!
-                        .forEach((poi) => poi.sendInt16(2000, CommCode.CC_SET_SPEED, false)),
+                        .forEach((poi) => poi.sendInt8(5, CommCode.CC_SET_SPEED_OPTION, false)),
                   ),
                 ],
               ),

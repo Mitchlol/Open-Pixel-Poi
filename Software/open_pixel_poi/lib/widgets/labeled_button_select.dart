@@ -9,30 +9,30 @@ import '../model.dart';
 
 class LabeledButtonSelect extends StatefulWidget {
   String title;
-  int min, max, step;
+  int min, max;
   int? initial;
   Key? key;
   Function(int) onValueChanged;
 
-  LabeledButtonSelect(this.title, this.min, this.max, this.step, this.onValueChanged, [this.initial, this.key]){
+  LabeledButtonSelect(this.title, this.min, this.max, this.onValueChanged, [this.initial, this.key]){
     if (this.initial == null) {
       this.initial = this.min;
     }
   }
 
   @override
-  _LabeledButtonSelectState createState() => _LabeledButtonSelectState(title, min, max, step, onValueChanged, initial!, key);
+  _LabeledButtonSelectState createState() => _LabeledButtonSelectState(title, min, max, onValueChanged, initial!, key);
 }
 
 class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
   String title;
   Function(int) onValueChanged;
 
-  int min, max, step, initial;
+  int min, max, initial;
   late int value;
   Key? key;
 
-  _LabeledButtonSelectState(this.title, this.min, this.max, this.step, this.onValueChanged, this.initial, this.key){
+  _LabeledButtonSelectState(this.title, this.min, this.max, this.onValueChanged, this.initial, this.key){
     value = initial;
   }
 

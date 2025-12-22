@@ -52,22 +52,27 @@
 // D0 04 03 03 00 00 FF 00 00 00 00 00 FF 00 00 00 00 00 FF 00 00 00 00 00 FF 00 00 00 00 00 FF D1 (solid blue x)
 
 enum CommCode {
-  CC_SUCCESS,             // 0
-  CC_ERROR,               // 1
-  CC_SET_BRIGHTNESS,      // 2
-  CC_SET_SPEED,           // 3
-  CC_SET_PATTERN,         // 4
-  CC_SET_PATTERN_SLOT,    // 5
-  CC_SET_PATTERN_ALL,     // 6
-  CC_SET_BANK,            // 7
-  CC_SET_BANK_ALL,        // 8
-  CC_GET_FW_VERSION,      // 9
-  CC_SET_HARDWARE_VERSION,// 10
-  CC_SET_LED_TYPE,        // 11
-  CC_SET_LED_COUNT,       // 12
-  CC_SET_DEVICE_NAME,     // 13
-  CC_SET_SEQUENCER,       // 14
-  CC_START_SEQUENCER,     // 15
+  CC_SUCCESS,                     // 0
+  CC_ERROR,                       // 1
+  CC_SET_BRIGHTNESS,              // 2
+  CC_SET_SPEED,                   // 3
+  CC_SET_PATTERN,                 // 4
+  CC_SET_PATTERN_SLOT,            // 5
+  CC_SET_PATTERN_ALL,             // 6
+  CC_SET_BANK,                    // 7
+  CC_SET_BANK_ALL,                // 8
+  CC_GET_FW_VERSION,              // 9
+  CC_SET_HARDWARE_VERSION,        // 10
+  CC_SET_LED_TYPE,                // 11
+  CC_SET_LED_COUNT,               // 12
+  CC_SET_DEVICE_NAME,             // 13
+  CC_SET_SEQUENCER,               // 14
+  CC_START_SEQUENCER,             // 15
+  CC_SET_BRIGHTNESS_OPTION,       // 16
+  CC_SET_BRIGHTNESS_OPTIONS,      // 17
+  CC_SET_SPEED_OPTION,            // 18
+  CC_SET_SPEED_OPTIONS,           // 19
+  CC_SET_PATTERN_SHUFFLE_DURATION,// 20
 };
 
 class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallbacks{
@@ -249,6 +254,55 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
           }else if(requestCode == CC_START_SEQUENCER){
             config.sequencerStep = -1;
             bleSendSuccess();
+          }else if(requestCode == CC_SET_BRIGHTNESS_OPTION){
+            if(bleStatus[2] >= 0 && bleStatus[2] <= 5){
+              config.setLedBrightness(config.ledBrightnessOptions[bleStatus[2]]);
+              bleSendSuccess();
+            }else{
+              bleSendError();
+            }
+          }else if(requestCode == CC_SET_BRIGHTNESS_OPTIONS){
+            if(bleLength == 9){
+              config.setLedBrightnessOptions(
+                bleStatus[2], 
+                bleStatus[3], 
+                bleStatus[4],
+                bleStatus[5], 
+                bleStatus[6], 
+                bleStatus[7]
+              );
+              bleSendSuccess();
+            }else{
+              bleSendError();
+            }
+          }else if(requestCode == CC_SET_SPEED_OPTION){
+            if(bleStatus[2] >= 0 && bleStatus[2] <= 5){
+              config.setAnimationSpeed(config.animationSpeedOptions[bleStatus[2]]);
+              bleSendSuccess();
+            }else{
+              bleSendError();
+            }
+          }else if(requestCode == CC_SET_SPEED_OPTIONS){
+            if(bleLength == 15){
+              config.setAnimationSpeedOptions(
+                bleStatus[2] << 8 | bleStatus[3], 
+                bleStatus[4] << 8 | bleStatus[5], 
+                bleStatus[6] << 8 | bleStatus[7],
+                bleStatus[8] << 8 | bleStatus[9], 
+                bleStatus[10] << 8 | bleStatus[11], 
+                bleStatus[12] << 8 | bleStatus[13]
+              );
+              bleSendSuccess();
+            }else{
+              bleSendError();
+            }
+          }else if(requestCode == CC_SET_PATTERN_SHUFFLE_DURATION){
+            if(bleLength == 4){
+              config.setPatternShuffleDuration(bleStatus[2]);
+              bleSendSuccess();
+            }else{
+              bleSendError();
+            }
           }else{
             debugf("Recieved message with unknown code!\n");
             bleSendError();
@@ -264,7 +318,7 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             config.setFrameHeight(bleStatus[2]);
             config.setFrameCount(bleStatus[3] << 8 | bleStatus[4]);
             config.patternLength = config.frameHeight*config.frameCount*3;// Need exception handling for buffer overruns!!!
-            if(config.patternLength > 120000){
+            if(config.patternLength > PATTERN_PIXEL_LIMIT * 3){
               // set error pattern
               config.setFrameHeight(1);
               config.setFrameCount(2);
