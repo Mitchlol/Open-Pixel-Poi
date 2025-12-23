@@ -378,6 +378,9 @@ class _CreateMergeState extends State<CreateMergePage> {
     var topWidth = topImage!.item2.count;
     var bottomWidth = bottomImage!.item2.count;
 
+    // Taller of the 2 images
+    int desiredHeight = max(topImage!.item2.height, bottomImage!.item2.height);
+
     // Find least common multiple
     int x = topWidth, y = bottomWidth;
     while (y != 0) {
@@ -388,13 +391,14 @@ class _CreateMergeState extends State<CreateMergePage> {
     int gcd = x;
     int lcm = (topWidth * bottomWidth) ~/ gcd;
 
-    int desiredWidth = min(400, lcm);
+    int desiredWidth = min(40000~/desiredHeight, lcm);
+
     var images = await model.patternDB.getImgImages([topImage!.item2, bottomImage!.item2]);
-    var rgbList = Uint8List((desiredWidth*20)*3);
+    var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
 
     for(var column = 0; column < desiredWidth; column++){
-      for(var row = 0; row < 20; row++){
-        var columnOffset = column * 20 * 3;
+      for(var row = 0; row < desiredHeight; row++){
+        var columnOffset = column * desiredHeight * 3;
         var rowOffset = row * 3;
         var top = images[0].getPixel(column % topWidth, row % topImage!.item2.height);
         var bottom = images[1].getPixel(column % bottomWidth, row % bottomImage!.item2.height);
@@ -438,7 +442,7 @@ class _CreateMergeState extends State<CreateMergePage> {
     }
     var pattern = DBImage(
       id: null,
-      height: 20,
+      height: desiredHeight,
       count: desiredWidth,
       bytes: rgbList,
     );

@@ -8,6 +8,7 @@ import 'package:tuple/tuple.dart';
 import '../../database/dbimage.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../widgets/labeled_slider.dart';
 
 
 class CreateRotatePage extends StatefulWidget {
@@ -19,6 +20,7 @@ class CreateRotatePage extends StatefulWidget {
 
 class _CreateRotateState extends State<CreateRotatePage> {
   bool saving = false;
+  int outputImageHeightLimit = 25;
   Tuple2<Widget, DBImage>? image;
 
   @override
@@ -39,6 +41,16 @@ class _CreateRotateState extends State<CreateRotatePage> {
   Widget getForm() {
     return ListView(
       children: [
+        LabeledSlider(
+          "Rotated Image Height Limit",
+          1,
+          100,
+          1,
+          (int value) => setState(() {
+            outputImageHeightLimit = value;
+          }),
+          25,
+        ),
         InkWell(
           onTap: () => showDialog<void>(
             context: context,
@@ -230,7 +242,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
     var model = Provider.of<Model>(context, listen: false);
 
     int desiredWidth = max(2, image!.item2.height);
-    int desiredHeight = min(20, image!.item2.count);
+    int desiredHeight = min(outputImageHeightLimit, image!.item2.count);
     var imgImage = (await model.patternDB.getImgImages([image!.item2]))[0];
     var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
 

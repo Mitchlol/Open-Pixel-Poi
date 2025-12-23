@@ -23,6 +23,7 @@ class CreateTextPage extends StatefulWidget {
 
 class _CreateTextState extends State<CreateTextPage> {
   bool flagFirst = true;
+  int textHeight = 25;
   String text = "";
   late RGBValue textColor, backgroundColor;
   bool saving = false;
@@ -37,7 +38,7 @@ class _CreateTextState extends State<CreateTextPage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Solid Color Pattern Creator"),
+        title: const Text("Text Pattern Creator"),
         actions: [
           ...Provider.of<Model>(context)
               .connectedPoi!
@@ -53,6 +54,30 @@ class _CreateTextState extends State<CreateTextPage> {
       children: [
         ListTile(
           title: Text(
+            "Text Size:",
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.blue,
+            ),
+          ),
+          subtitle: DropdownButton<int>(
+            isExpanded: true,
+            style: Theme.of(context).textTheme.headlineSmall,
+            value: textHeight,
+            items: [
+              DropdownMenuItem(value: 20, child: Center(child: Text("20px"))),
+              DropdownMenuItem(value: 25, child: Center(child: Text("25px"))),
+              DropdownMenuItem(value: 55, child: Center(child: Text("55px"))),
+            ],
+            onChanged: (value) {
+              setState(() {
+                textHeight = value!;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: Text(
           "Text:",
             style: TextStyle(
               fontSize: 24,
@@ -66,7 +91,7 @@ class _CreateTextState extends State<CreateTextPage> {
             inputFormatters: [
               FilteringTextInputFormatter(RegExp("[0-9A-Z ]"), allow: true)
             ],
-            maxLength: 18,
+            maxLength: textHeight == 55 ? 13 :  25,
           ),
         ),
         ColorPicker(
@@ -162,17 +187,31 @@ class _CreateTextState extends State<CreateTextPage> {
 
   Future<void> makeAndStorePattern(BuildContext context) async{
 
-    int width = (text.length * 18) + 60;
-    final fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max.zip"));
+    Uint8List fontZipFile;
+    int xAdvance;
+    if(textHeight == 20){
+      xAdvance = 18;
+      fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max20.zip"));
+    }else if(textHeight == 25){
+      xAdvance = 22;
+      fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max25.zip"));
+    }else{
+      xAdvance = 49;
+      fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max55.zip"));
+    }
+
+
+    int width = (text.length * xAdvance) + (xAdvance * 1.5).toInt();
+
     final font = img.BitmapFont.fromZip(fontZipFile);
-    final image = img.Image(width: width, height: 20);
+    final image = img.Image(width: width, height: textHeight);
     img.fill(image, color: img.ColorRgb8(backgroundColor.red, backgroundColor.green, backgroundColor.blue));
     img.drawString(image, text, font: font, x: 0, y: 0, color: img.ColorRgb8(textColor.red, textColor.green, textColor.blue));
 
-    var rgbList = Uint8List((width*20)*3);
+    var rgbList = Uint8List((width*textHeight)*3);
     for(var column = 0; column < width; column++) {
-      for (var row = 0; row < 20; row++) {
-        var columnOffset = column * 20 * 3;
+      for (var row = 0; row < textHeight; row++) {
+        var columnOffset = column * textHeight * 3;
         var rowOffset = row * 3;
         var pixel = image.getPixel(column, row);
 
@@ -186,7 +225,7 @@ class _CreateTextState extends State<CreateTextPage> {
     var model = Provider.of<Model>(context, listen: false);
     var pattern = DBImage(
       id: null,
-      height: 20,
+      height: textHeight,
       count: width,
       bytes: rgbList,
     );
