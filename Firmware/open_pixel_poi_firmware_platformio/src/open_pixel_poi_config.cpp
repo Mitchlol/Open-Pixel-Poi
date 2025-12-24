@@ -335,7 +335,7 @@ class OpenPixelPoiConfig {
       this->deviceName = preferences.getString("deviceName", DEFAULT_DEVICE_NAME);
 
       // Load Display settings
-      this->ledBrightness = preferences.getChar("brightness", 0x0A);
+      this->ledBrightness = preferences.getChar("brightness", BRIGHTNESS_OPTIONS[0]);
       debugf("- brightness = %d\n", this->ledBrightness);
 
       this->ledBrightnessOptions[0] = preferences.getChar("brightnessOption0", BRIGHTNESS_OPTIONS[0]);
@@ -345,7 +345,7 @@ class OpenPixelPoiConfig {
       this->ledBrightnessOptions[4] = preferences.getChar("brightnessOption4", BRIGHTNESS_OPTIONS[4]);
       this->ledBrightnessOptions[5] = preferences.getChar("brightnessOption5", BRIGHTNESS_OPTIONS[5]);
 
-      this->animationSpeed = preferences.getUShort("animationSpeed", 0x0258);
+      this->animationSpeed = preferences.getUShort("animationSpeed", SPEED_OPTIONS[5]);
       debugf("- animation speed = %d frames per sec\n", this->animationSpeed);
 
       this->animationSpeedOptions[0] = preferences.getUShort("animationSpeedOption0", SPEED_OPTIONS[0]);
