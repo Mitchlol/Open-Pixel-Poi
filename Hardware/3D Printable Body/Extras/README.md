@@ -25,7 +25,10 @@ This shell is the same as the standard hex shell, but has chamfered holes around
         * Poor visibility at angles due to lack of difusion
         * LEDs are exposed to dirt and moisture (solvable with clear tape)
         * Slight gaps in pattern if the poi antispin roll while spinning at certain speeds
-1. **Option 2:** [Open Pixel Poi - Shell - Round Superdiffuser](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Extras/Open%20Pixel%20Poi%20-%20Shell%20-%20Round%20SuperDiffuser.3mf>) 
+        * Only works for led strips with 20 leds
+1. **Option 2:** [Open Pixel Poi - Shell - Hex Holes - 55 Pixel](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Open%20Pixel%20Poi%20-%20Shell%20-%20Hex%20Holes%20-%2055%20Pixel.3mf>)
+This shell is the same as the standard hex holes shell, but it has one big hole and will work for any number of LEDs. It requires cutting away the supports included in the model, and can be a bit soft/floppy after removal. I reccomend angle cutters.
+1. **Option 3:** [Open Pixel Poi - Shell - Round Superdiffuser](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Extras/Open%20Pixel%20Poi%20-%20Shell%20-%20Round%20SuperDiffuser.3mf>) 
 This shell is designed to try and maximize diffusion.
     <div>
         <img src="superdiffuser1.jpg" alt="drawing" width="150"/>
