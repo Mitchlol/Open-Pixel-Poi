@@ -73,16 +73,30 @@ class _CreateSequenceState extends State<CreateSequencePage> {
             itemBuilder: (context, index) {
               // Build each item in the list
               return Card(
+                key: ObjectKey(segments[index]),
                 elevation: 5,
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text(
-                        "Sequence Segment: ${index+1}",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.blue,
-                        ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Action: ${index+1}",
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  segments.removeAt(index);
+                                });
+                              },
+                              icon: Icon(Icons.close, color: Colors.blue)
+                          )
+                        ],
                       ),
                     ),
                     LabeledSlider(
