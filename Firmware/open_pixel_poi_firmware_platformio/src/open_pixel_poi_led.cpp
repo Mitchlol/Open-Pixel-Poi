@@ -22,12 +22,12 @@ public:
     virtual void SetBrightness(uint8_t luminance) = 0;
     virtual uint8_t GetLuminance() = 0;
     virtual ~ILedStrip() = default;
-    uint8_t CalculateLuminance(uint8_t brightnessSetting, uint8_t ledCount, double consumption, double outputScale){
+    uint8_t CalculateLuminance(uint8_t brightnessSetting, uint8_t ledCount, double consumption, double outputLimit){
       if(brightnessSetting <= 1){
         return brightnessSetting;
       }
-      double consumptionScale = min(1.0, OUTPUT_CURRENT_LIMIT/(consumption * ledCount * OUTPUT_CHANNELS));
-      return ceil(brightnessSetting * outputScale * consumptionScale);
+      double consumptionScale = min(1.0, OUTPUT_PCB_CURRENT_LIMIT/(consumption * ledCount * OUTPUT_CHANNELS));
+      return min(outputLimit, ceil(brightnessSetting * 2.55 * consumptionScale));
     }
 };
 
@@ -53,7 +53,7 @@ public:
     void ClearTo(RgbColor color) override { strip.ClearTo(color); }
     void SetBrightness(uint8_t i) override { 
       strip.SetLuminance(
-        CalculateLuminance(i, strip.PixelCount(), OUTPUT_WS2812B_5050_DRAW, OUTPUT_WS2812B_5050_SCALE)
+        CalculateLuminance(i, strip.PixelCount(), OUTPUT_WS2812B_5050_DRAW, OUTPUT_WS2812B_5050_LIMIT)
       ); 
     }
     uint8_t GetLuminance() override { return strip.GetLuminance(); }
@@ -77,7 +77,7 @@ public:
     void ClearTo(RgbColor color) override { strip.ClearTo(color); }
     void SetBrightness(uint8_t i) override { 
       strip.SetLuminance(
-        CalculateLuminance(i, strip.PixelCount(), OUTPUT_SK9822_2020_DRAW, OUTPUT_SK9822_2020_SCALE)
+        CalculateLuminance(i, strip.PixelCount(), OUTPUT_SK9822_2020_DRAW, OUTPUT_SK9822_2020_LIMIT)
       );
     }
     uint8_t GetLuminance() override { return strip.GetLuminance(); }
