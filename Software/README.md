@@ -19,12 +19,14 @@ All patterns are images. To import a new pattern to the app, it must be smaller 
 - Long press scan to proceed to app without any connections.
 - Long press a pattern to see it's size, or delete/flip/mirror it.
 - Selecting the ∞ pattern slot will trigger auto pattern looping.
+- Long press the app name on the patterns page to enter the secret device settings page.
 - The text pattern creation input only accepts capital letters.
 - When creating stacked patterns, be mindful of the widths, if the least common multiple is greater than 400, it will crop.
 - Buy a \$2000 macbook, a \$1000 iphone and a dev license to build the app for iOS.
 
 
 ## Android Releases
+###### ⚠️Uninstall the app  before switching versions.⚠️
 [Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v2.0.0.apk)
 [Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v1.0.0.apk)
 
