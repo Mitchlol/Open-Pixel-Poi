@@ -7,7 +7,7 @@ This is basic assembly guide, and while assembly should be intuitive, this guide
 Assembly is identical for both the 25 & 55 pixel LED strips. If you wish to solder your own LED strips or have a 2.2.1 version of the kit, see the <a href="./2.2.1/README.md">2.2.1 Assembly Guide</a> 
 
 ## Step 1: 
-#### Gather your parts
+### Gather your parts
 For a single poi you will need:
 1. 3D Printed outer shell (clear TPU) - 1x
 1. 3D Printed body top (PLA) - 1x
@@ -21,12 +21,12 @@ For a single poi you will need:
 ![wiring](./assembly_step_1.jpg)
 
 ## Step 2
-#### Insert 2 led stips. 
+### Insert 2 led stips. 
 Feed 2 led strips in though the holes at the top of the 3D printed top body piece.
 ![wiring](./assembly_step_2.jpg)
 
 ## Step 3
-#### Connect 2 LED strips to the PCB
+### Connect 2 LED strips to the PCB
 Ensure the black levers on the connectors are lifted up (perpendicular) from the PCB.
 Insert the FPC(ribbon cable) connections into the 2 outer connectors.
 Be gentle, minimal force is required, if it catches on something, pull back and try again.
@@ -35,13 +35,13 @@ The LED connections work both ways (like USB-C). I reccomend matching the direct
 ![wiring](./assembly_step_3.jpg)
 
 ## Step 4
-#### Thread 3rd led strip through the PCB
+### Thread 3rd led strip through the PCB
 Thread 3rd led strip through the small hole in the PCB.
 Give yourself plenty of slack.
 ![wiring](./assembly_step_4.jpg)
 
 ## Step 5
-#### Connect the 3rd LED strip to the PCB
+### Connect the 3rd LED strip to the PCB
 Same as step 3, but using the middle connector.
 Once connected, pull the slack back through the hole in the PCB.
 The LED connections work both ways (like USB-C). I reccomend matching the directions in the photos to avoid twists.
@@ -49,14 +49,14 @@ The LED connections work both ways (like USB-C). I reccomend matching the direct
 ![wiring](./assembly_step_5b.jpg)
 
 ## Step 6
-#### Insert the battery into the top of the body
+### Insert the battery into the top of the body
 Push the battery into the body, making sure the positive end is towards the USB port, and lines up with the batt+ label on the board.
 It is a tight fit, this is intentional.
 It goes in easiest if you slide it in all at once, rather than one end first.
 ![wiring](./assembly_step_6.jpg)
 
 ## Step 7
-#### Slot in the PCB
+### Slot in the PCB
 Order is important here.
 First slide the usb port into the usb port hole at the top of the poi, while keeping the switch end of the board elevated.
 Then, carefully lever down the board over the battery, this will turn the poi on.
@@ -67,7 +67,7 @@ You can turn the poi off with the switch see the [user manual]()
 ![wiring](./assembly_step_7b.jpg)
 
 ## Step 8
-#### Snap the button into body
+### Snap the button into body
 Push the button into the body, it is a snap fit.
 > [!CAUTION]
 > **Take extra care to avoid contact with the switch on bottom of the board!**
@@ -79,24 +79,24 @@ Push the button into the body, it is a snap fit.
 ![wiring](./assembly_step_8.jpg)
 
 ## Step 9
-#### Thread the 3rd led strip through the bottom of the body
+### Thread the 3rd led strip through the bottom of the body
 Thread the 3rd led strip through the hole at the top of the bottom body half, from the inside to out, make sure it is twisted the right way.
 ![wiring](./assembly_step_9.jpg)
 
 ## Step 10
-#### Push the 2 body halves together
+### Push the 2 body halves together
 Once again, the battery is snug. Make sure the LED stips don's get pinched.
 ![wiring](./assembly_step_10.jpg)
 
 ## Step 11
-#### Screw the two halves together
+### Screw the two halves together
 These screws are going directly into a 3d print, so be gentle, you don't want to strip the threads. You can hold it up to the light to make sure there is no visible gap between the 2 halfs, to know it is snug.
 
 Alternativley, you can just wrap the sucker in packing tape, just make sure you do it after sticking on the LEDs.
 ![wiring](./assembly_step_11.jpg)
 
 ## Step 12
-#### Apply the LED strips
+### Apply the LED strips
 Peel the backing off the LED strips, and apply to the to body. 
 One for each recess. 
 Start from the bottom of the poi (by the botton) and work back towards the top. 
@@ -106,18 +106,18 @@ Do this for all 3 strips.
 ![wiring](./assembly_step_12b.jpg)
 
 ## Step 13
-#### Tuck excess led strip into the body
+### Tuck excess led strip into the body
 Start with your hands, and feed the stips into the holes.
 Fold the strips tightly around the plastic edge.
 Use blunt tweezers to help apply the adhesive inside the holes.
 ![wiring](./assembly_step_13.jpg)
 
 ## Step 14
-#### Slot the body into the shell
+### Slot the body into the shell
 Pull the two longer tabs apart to get the clearnace needed.
 ![wiring](./assembly_step_14.jpg)
 
 ## Step 15
-#### Party!
+### Party!
 Woah! Where did that 2nd poi come from?
 ![wiring](./2.2.1/assembly_step_15.jpg)
