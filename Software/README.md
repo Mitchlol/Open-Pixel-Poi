@@ -12,7 +12,7 @@ This app is written using flutter, a multi-platform framework. It is designed to
 
 This app is the only way transmit patterns to the poi hardware.
 
-All patterns are images. To import a new pattern to the app, it must be smaller than or equal to 20x400px and a bitmap/png/jpg format. Then simply tap/click/etc the pattern to overwrite the currently active pattern on all connected poi.
+All patterns are images. To import a new pattern to the app, it must be a bitmap/png/jpg format. Then simply tap/click/etc the pattern to overwrite the currently active pattern on all connected poi. See the [pattern info doc](./PATTERN_INFO.md) for more details.
 
 ###### Tips & Tricks
 - Select multiple devices to connect to multiple devices.
