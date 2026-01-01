@@ -22,12 +22,12 @@ public:
     virtual void SetBrightness(uint8_t luminance) = 0;
     virtual uint8_t GetLuminance() = 0;
     virtual ~ILedStrip() = default;
-    uint8_t CalculateLuminance(uint8_t brightnessSetting, uint8_t ledCount, double consumption, double outputLimit){
+    uint8_t CalculateLuminance(uint8_t brightnessSetting, uint8_t ledCount, double consumption, int outputLimit){
       if(brightnessSetting <= 1){
         return brightnessSetting;
       }
       double consumptionScale = min(1.0, OUTPUT_PCB_CURRENT_LIMIT/(consumption * ledCount * OUTPUT_CHANNELS));
-      return min(outputLimit, ceil(brightnessSetting * 2.55 * consumptionScale));
+      return min(outputLimit, (int)ceil(brightnessSetting * 2.55 * consumptionScale));
     }
 };
 
@@ -134,14 +134,6 @@ class OpenPixelPoiLED {
         ledStrip->SetBrightness(1);
       }else{ // Normal operation
         ledStrip->SetBrightness(config.ledBrightness);
-      }
-      // Shutdown fadeout
-      if(config.displayState == DS_SHUTDOWN){
-        uint8_t fadedBrightness = ledStrip->GetLuminance() * ((2000-(millis() - config.displayStateLastUpdated))/2000.0);
-        if (fadedBrightness == 0){
-          fadedBrightness = 1;
-        }
-        ledStrip->SetBrightness(fadedBrightness);
       }
 
       // Clear previous data

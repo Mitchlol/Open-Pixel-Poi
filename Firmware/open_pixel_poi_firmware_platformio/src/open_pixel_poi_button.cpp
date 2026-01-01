@@ -248,7 +248,9 @@ public:
 
     // Read battery voltage
     if(BATTERY_VOLTAGE_SENSOR){
-      config.batteryVoltage = (config.batteryVoltage * 0.999) + ((analogReadMilliVolts(A0)/500.0) * .001);
+      if(config.displayState != DS_SHUTDOWN){ // Don't read voltage during shutdown sequence as it swings due to dimming
+        config.batteryVoltage = (config.batteryVoltage * 0.999) + ((analogReadMilliVolts(A0)/500.0) * .001);
+      }
     }else{
       config.batteryVoltage = 4.2;
     }
