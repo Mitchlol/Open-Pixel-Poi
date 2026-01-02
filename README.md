@@ -12,7 +12,7 @@ Open Pixel Poi
   ·
   <a href="./Hardware/Assembly/README.md">Assembly</a>
   ·
-  <a href="./Software/README.md">Android App</a>
+  <a href="./Software/README.md">Mobile App</a>
   ·
   <a href="https://mitchlol.github.io/#openpixelpoi">Firmware Tool</a>
   ·

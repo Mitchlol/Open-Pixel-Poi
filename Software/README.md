@@ -14,6 +14,8 @@ This app is the only way transmit patterns to the poi hardware.
 
 All patterns are images. To import a new pattern to the app, it must be a bitmap/png/jpg format. Then simply tap/click/etc the pattern to overwrite the currently active pattern on all connected poi. See the [pattern info doc](./PATTERN_INFO.md) for more details.
 
+App use may require a poi [firmware update](https://mitchlol.github.io/#openpixelpoi)
+
 ###### Tips & Tricks
 - Select multiple devices to connect to multiple devices.
 - Long press scan to proceed to app without any connections.
@@ -35,8 +37,8 @@ All patterns are images. To import a new pattern to the app, it must be a bitmap
 
 ## Web Releases
 Note: 
-- Web use may require a poi [firmware update](https://mitchlol.github.io/#openpixelpoi)
-- Additionally, web bluetooth api is limited to a single device connection at a time.
+- Web bluetooth api is limited to a single device connection at a time.
 - Also, it is unspported on iOS 🤦‍♂️.
 
-[Open Pixel Poi Webapp](https://mitchlol.github.io/opp_flutter_app/index.html)
+[Open Pixel Poi Web v2.0.0](https://mitchlol.github.io/opp_flutter_app_2.0/index.html)
+[Open Pixel Poi Web v1.0.0](https://mitchlol.github.io/opp_flutter_app_1.0/index.html)
