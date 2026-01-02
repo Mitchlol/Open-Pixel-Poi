@@ -29,17 +29,17 @@ App use may require a poi [firmware update](https://mitchlol.github.io/#openpixe
 
 ## Android Releases
 ###### ⚠️Uninstall the app  before switching versions.⚠️
-[Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v2.0.0.apk)
-[Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v1.0.0.apk)
+- [Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v2.0.0.apk)
+- [Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v1.0.0.apk)
 
 ## Windows Releases
-[Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v2.0.0.zip)
-[Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v1.0.0.zip)
+- [Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v2.0.0.zip)
+- [Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v1.0.0.zip)
 
 ## Web Releases
-Note: 
-- Web bluetooth api is limited to a single device connection at a time.
-- Also, it is unspported on iOS 🤦‍♂️.
+> [!TIP]
+> Web bluetooth api is limited to a single device connection at a time.
+> Also, it is unspported on iOS 🤦‍♂️.
 
-[Open Pixel Poi Web v2.0.0](https://mitchlol.github.io/opp_flutter_app_2.0/index.html)
-[Open Pixel Poi Web v1.0.0](https://mitchlol.github.io/opp_flutter_app_1.0/index.html)
+- [Open Pixel Poi Web v2.0.0](https://mitchlol.github.io/opp_flutter_app_2.0/index.html)
+- [Open Pixel Poi Web v1.0.0](https://mitchlol.github.io/opp_flutter_app_1.0/index.html)
