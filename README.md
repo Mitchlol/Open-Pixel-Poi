@@ -25,7 +25,7 @@ Open Pixel Poi  is an open source, 3D printable, LED pixel Poi, based around ESP
 Designed to be simple, afforable, repairable, and customizable.
 <div>
 <img src="./Hardware/Assembly/assembly_step_1.jpg" width="200" height="150" />
-<img src="./Hardware/Assembly/assembly_step_15.jpg" width="200" height="150" />
+<img src="./Hardware/Assembly/2.2.1/assembly_step_15.jpg" width="200" height="150" />
 <img src="./opp_action_shot.jpg" width="200" height="150" />
 </div>
 
