@@ -2,6 +2,10 @@
 #define _OPEN_PIXEL_POI_LED
 
 #include "open_pixel_poi_config.cpp"
+#include "led_strip/ILedStrip.h"
+#include "led_strip/NoStrip.h"
+#include "led_strip/NeoPixelStrip.h"
+#include "led_strip/DotStarStrip.h"
 
 #include <NeoPixelBusLg.h>
 //#define DEBUG  // Comment this line out to remove printf statements in released version
@@ -12,82 +16,6 @@
 #define debugf(...)
 #define debugf_noprefix(...)
 #endif
-
-class ILedStrip {
-public:
-    virtual void Begin() = 0;
-    virtual void Show() = 0;
-    virtual void SetPixelColor(uint16_t i, RgbColor color) = 0;
-    virtual void ClearTo(RgbColor color) = 0;
-    virtual void SetBrightness(uint8_t luminance) = 0;
-    virtual uint8_t GetLuminance() = 0;
-    virtual ~ILedStrip() = default;
-    uint8_t CalculateLuminance(uint8_t brightnessSetting, uint8_t ledCount, double consumption, int outputLimit){
-      if(brightnessSetting <= 1){
-        return brightnessSetting;
-      }
-      double consumptionScale = min(1.0, OUTPUT_PCB_CURRENT_LIMIT/(consumption * ledCount * OUTPUT_CHANNELS));
-      return min(outputLimit, (int)ceil(brightnessSetting * 2.55 * consumptionScale));
-    }
-};
-
-class NoStrip : public ILedStrip {
-public:
-    NoStrip(){}
-
-    void Begin() override {}
-    void Show() override {}
-    void SetPixelColor(uint16_t i, RgbColor color) override {}
-    void ClearTo(RgbColor color) override {}
-    void SetBrightness(uint8_t i) override {}
-    uint8_t GetLuminance() override { return 0;}
-};
-
-class NeoPixelStrip : public ILedStrip {
-public:
-    NeoPixelStrip(uint16_t count, uint8_t dataPin) : strip(count, dataPin) {}
-
-    void Begin() override { strip.Begin(); }
-    void Show() override { strip.Show(); }
-    void SetPixelColor(uint16_t i, RgbColor color) override { strip.SetPixelColor(i, color); }
-    void ClearTo(RgbColor color) override { strip.ClearTo(color); }
-    void SetBrightness(uint8_t i) override { 
-      strip.SetLuminance(
-        CalculateLuminance(i, strip.PixelCount(), OUTPUT_WS2812B_5050_DRAW, OUTPUT_WS2812B_5050_LIMIT)
-      ); 
-    }
-    uint8_t GetLuminance() override { return strip.GetLuminance(); }
-
-private:
-    NeoPixelBusLg<NeoGrbFeature, NeoWs2812xMethod, NeoGammaNullMethod> strip;
-};
-
-class DotStarStrip  : public ILedStrip {
-public:
-    DotStarStrip(uint16_t count, int8_t dataPin, int8_t clockPin) : 
-    strip(count, clockPin, dataPin),
-    dataPin_(dataPin),
-    clockPin_(clockPin) {}
-
-    void Begin() override { 
-      strip.Begin(clockPin_, -1, dataPin_, -1); 
-    }
-    void Show() override { strip.Show(); }
-    void SetPixelColor(uint16_t i, RgbColor color) override { strip.SetPixelColor(i, color); }
-    void ClearTo(RgbColor color) override { strip.ClearTo(color); }
-    void SetBrightness(uint8_t i) override { 
-      strip.SetLuminance(
-        CalculateLuminance(i, strip.PixelCount(), OUTPUT_SK9822_2020_DRAW, OUTPUT_SK9822_2020_LIMIT)
-      );
-    }
-    uint8_t GetLuminance() override { return strip.GetLuminance(); }
-
-private:
-    uint8_t dataPin_;
-    uint8_t clockPin_;
-    NeoPixelBusLg<DotStarBgrFeature, DotStarSpi20MhzMethod, NeoGammaNullMethod> strip;
-};
-
 
 class OpenPixelPoiLED {
   private:
