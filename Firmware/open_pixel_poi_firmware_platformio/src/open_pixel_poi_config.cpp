@@ -112,12 +112,12 @@ class OpenPixelPoiConfig {
       this->ledBrightnessOptions[3] = max((uint8_t)1, min((uint8_t)100, b3));
       this->ledBrightnessOptions[4] = max((uint8_t)1, min((uint8_t)100, b4));
       this->ledBrightnessOptions[5] = max((uint8_t)1, min((uint8_t)100, b5));
-      preferences.putChar("brightnessOption0", this->ledBrightnessOptions[0]);
-      preferences.putChar("brightnessOption1", this->ledBrightnessOptions[1]);
-      preferences.putChar("brightnessOption2", this->ledBrightnessOptions[2]);
-      preferences.putChar("brightnessOption3", this->ledBrightnessOptions[3]);
-      preferences.putChar("brightnessOption4", this->ledBrightnessOptions[4]);
-      preferences.putChar("brightnessOption5", this->ledBrightnessOptions[5]);
+      preferences.putChar("brightnessOp0", this->ledBrightnessOptions[0]);
+      preferences.putChar("brightnessOp1", this->ledBrightnessOptions[1]);
+      preferences.putChar("brightnessOp2", this->ledBrightnessOptions[2]);
+      preferences.putChar("brightnessOp3", this->ledBrightnessOptions[3]);
+      preferences.putChar("brightnessOp4", this->ledBrightnessOptions[4]);
+      preferences.putChar("brightnessOp5", this->ledBrightnessOptions[5]);
       this->configLastUpdated = millis();
     }
     
@@ -136,12 +136,12 @@ class OpenPixelPoiConfig {
       this->animationSpeedOptions[3] = max((uint16_t)1, min((uint16_t)2000, s3));
       this->animationSpeedOptions[4] = max((uint16_t)1, min((uint16_t)2000, s4));
       this->animationSpeedOptions[5] = max((uint16_t)1, min((uint16_t)2000, s5));
-      preferences.putUShort("animationSpeedOption0", this->animationSpeedOptions[0]);
-      preferences.putUShort("animationSpeedOption1", this->animationSpeedOptions[1]);
-      preferences.putUShort("animationSpeedOption2", this->animationSpeedOptions[2]);
-      preferences.putUShort("animationSpeedOption3", this->animationSpeedOptions[3]);
-      preferences.putUShort("animationSpeedOption4", this->animationSpeedOptions[4]);
-      preferences.putUShort("animationSpeedOption5", this->animationSpeedOptions[5]);
+      preferences.putUShort("animSpeedOp0", this->animationSpeedOptions[0]);
+      preferences.putUShort("animSpeedOp1", this->animationSpeedOptions[1]);
+      preferences.putUShort("animSpeedOp2", this->animationSpeedOptions[2]);
+      preferences.putUShort("animSpeedOp3", this->animationSpeedOptions[3]);
+      preferences.putUShort("animSpeedOp4", this->animationSpeedOptions[4]);
+      preferences.putUShort("animSpeedOp5", this->animationSpeedOptions[5]);
       this->configLastUpdated = millis();
     }
 
@@ -178,7 +178,7 @@ class OpenPixelPoiConfig {
     void setPatternShuffleDuration(uint8_t patternShuffleDuration) {
       debugf("Save Pattern Shuffle Duration = %d\n", patternShuffleDuration);
       this->patternShuffleDuration = patternShuffleDuration;
-      preferences.putChar("patternShuffleDuration", this->patternShuffleDuration);
+      preferences.putChar("patShuffleDur", this->patternShuffleDuration);
       this->configLastUpdated = millis();
     }
     
@@ -338,22 +338,22 @@ class OpenPixelPoiConfig {
       this->ledBrightness = preferences.getChar("brightness", BRIGHTNESS_OPTIONS[0]);
       debugf("- brightness = %d\n", this->ledBrightness);
 
-      this->ledBrightnessOptions[0] = preferences.getChar("brightnessOption0", BRIGHTNESS_OPTIONS[0]);
-      this->ledBrightnessOptions[1] = preferences.getChar("brightnessOption1", BRIGHTNESS_OPTIONS[1]);
-      this->ledBrightnessOptions[2] = preferences.getChar("brightnessOption2", BRIGHTNESS_OPTIONS[2]);
-      this->ledBrightnessOptions[3] = preferences.getChar("brightnessOption3", BRIGHTNESS_OPTIONS[3]);
-      this->ledBrightnessOptions[4] = preferences.getChar("brightnessOption4", BRIGHTNESS_OPTIONS[4]);
-      this->ledBrightnessOptions[5] = preferences.getChar("brightnessOption5", BRIGHTNESS_OPTIONS[5]);
+      this->ledBrightnessOptions[0] = preferences.getChar("brightnessOp0", BRIGHTNESS_OPTIONS[0]);
+      this->ledBrightnessOptions[1] = preferences.getChar("brightnessOp1", BRIGHTNESS_OPTIONS[1]);
+      this->ledBrightnessOptions[2] = preferences.getChar("brightnessOp2", BRIGHTNESS_OPTIONS[2]);
+      this->ledBrightnessOptions[3] = preferences.getChar("brightnessOp3", BRIGHTNESS_OPTIONS[3]);
+      this->ledBrightnessOptions[4] = preferences.getChar("brightnessOp4", BRIGHTNESS_OPTIONS[4]);
+      this->ledBrightnessOptions[5] = preferences.getChar("brightnessOp5", BRIGHTNESS_OPTIONS[5]);
 
       this->animationSpeed = preferences.getUShort("animationSpeed", SPEED_OPTIONS[5]);
       debugf("- animation speed = %d frames per sec\n", this->animationSpeed);
 
-      this->animationSpeedOptions[0] = preferences.getUShort("animationSpeedOption0", SPEED_OPTIONS[0]);
-      this->animationSpeedOptions[1] = preferences.getUShort("animationSpeedOption1", SPEED_OPTIONS[1]);
-      this->animationSpeedOptions[2] = preferences.getUShort("animationSpeedOption2", SPEED_OPTIONS[2]);
-      this->animationSpeedOptions[3] = preferences.getUShort("animationSpeedOption3", SPEED_OPTIONS[3]);
-      this->animationSpeedOptions[4] = preferences.getUShort("animationSpeedOption4", SPEED_OPTIONS[4]);
-      this->animationSpeedOptions[5] = preferences.getUShort("animationSpeedOption5", SPEED_OPTIONS[5]);
+      this->animationSpeedOptions[0] = preferences.getUShort("animSpeedOp0", SPEED_OPTIONS[0]);
+      this->animationSpeedOptions[1] = preferences.getUShort("animSpeedOp1", SPEED_OPTIONS[1]);
+      this->animationSpeedOptions[2] = preferences.getUShort("animSpeedOp2", SPEED_OPTIONS[2]);
+      this->animationSpeedOptions[3] = preferences.getUShort("animSpeedOp3", SPEED_OPTIONS[3]);
+      this->animationSpeedOptions[4] = preferences.getUShort("animSpeedOp4", SPEED_OPTIONS[4]);
+      this->animationSpeedOptions[5] = preferences.getUShort("animSpeedOp5", SPEED_OPTIONS[5]);
 
       this->patternSlot = preferences.getChar("patternSlot", 0x00);
       debugf("- pattern slot = %d\n", this->patternSlot);
@@ -361,7 +361,7 @@ class OpenPixelPoiConfig {
       this->patternBank = preferences.getChar("patternBank", 0x00);
       debugf("- pattern bank = %d\n", this->patternBank);
 
-      this->patternShuffleDuration = preferences.getChar("patternShuffleDuration", PATTERN_SHUFFLE_DURATION);
+      this->patternShuffleDuration = preferences.getChar("patShuffleDur", PATTERN_SHUFFLE_DURATION);
       debugf("- pattern shuffle duration = %d\n", this->patternShuffleDuration);
 
       loadFrameHeight();
