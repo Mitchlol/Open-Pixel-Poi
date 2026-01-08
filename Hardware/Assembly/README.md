@@ -31,7 +31,8 @@ Ensure the black levers on the connectors are lifted up (perpendicular) from the
 Insert the FPC(ribbon cable) connections into the 2 outer connectors.  
 Be gentle, minimal force is required, if it catches on something, pull back and try again.  
 Secure the ribbon cables by rotating/folding/pushing the black levers down, so they are parallel with the board.  
-The LED connections work both ways (like USB-C). I reccomend matching the directions in the main photo to avoid twists (not the one with the red markings, it is just showing the details of the insertion and lever mechanism).  
+The LED connections work both ways (like USB-C). I reccomend matching the directions in the photo with the yellow background to avoid twists.  
+Look at the 2nd photo with red markings for a generic close up view of the insertion and lever mechanism.  
 ![wiring](./assembly_step_3.jpg)
 ![wiring](./assembly_step_3b.jpg)
 
