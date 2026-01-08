@@ -27,42 +27,43 @@ Feed 2 led strips in though the holes at the top of the 3D printed top body piec
 
 ## Step 3
 ### Connect 2 LED strips to the PCB
-Ensure the black levers on the connectors are lifted up (perpendicular) from the PCB.
-Insert the FPC(ribbon cable) connections into the 2 outer connectors.
-Be gentle, minimal force is required, if it catches on something, pull back and try again.
-Secure the ribbon cables by rotating/folding/pushing the black levers down, so they are parallel with the board.
-The LED connections work both ways (like USB-C). I reccomend matching the directions in the photos to avoid twists.
+Ensure the black levers on the connectors are lifted up (perpendicular) from the PCB.  
+Insert the FPC(ribbon cable) connections into the 2 outer connectors.  
+Be gentle, minimal force is required, if it catches on something, pull back and try again.  
+Secure the ribbon cables by rotating/folding/pushing the black levers down, so they are parallel with the board.  
+The LED connections work both ways (like USB-C). I reccomend matching the directions in the main photo to avoid twists (not the one with the red markings, it is just showing the details of the insertion and lever mechanism).  
 ![wiring](./assembly_step_3.jpg)
+![wiring](./assembly_step_3b.jpg)
 
 ## Step 4
 ### Thread 3rd led strip through the PCB
-Thread 3rd led strip through the small hole in the PCB.
-Give yourself plenty of slack.
+Thread 3rd led strip through the small hole in the PCB.  
+Give yourself plenty of slack.  
 ![wiring](./assembly_step_4.jpg)
 
 ## Step 5
 ### Connect the 3rd LED strip to the PCB
-Same as step 3, but using the middle connector.
-Once connected, pull the slack back through the hole in the PCB.
-The LED connections work both ways (like USB-C). I reccomend matching the directions in the photos to avoid twists.
+Same as step 3, but using the middle connector.  
+Once connected, pull the slack back through the hole in the PCB.  
+The LED connections work both ways (like USB-C). I reccomend matching the directions in the photos to avoid twists.  
 ![wiring](./assembly_step_5a.jpg)
 ![wiring](./assembly_step_5b.jpg)
 
 ## Step 6
 ### Insert the battery into the top of the body
-Push the battery into the body, making sure the positive end is towards the USB port, and lines up with the batt+ label on the board.
-It is a tight fit, this is intentional.
-It goes in easiest if you slide it in all at once, rather than one end first.
+Push the battery into the body, making sure the positive end is towards the USB port, and lines up with the batt+ label on the board.  
+It is a tight fit, this is intentional.  
+It goes in easiest if you slide it in all at once, rather than one end first.  
 ![wiring](./assembly_step_6.jpg)
 
 ## Step 7
 ### Slot in the PCB
-Order is important here.
-First slide the usb port into the usb port hole at the top of the poi, while keeping the switch end of the board elevated.
-Then, carefully lever down the board over the battery, this will turn the poi on.
-Finally, make sure the bottom (and sides) of the pcb are fully seated and flush with the body.
-This is often tight as well and may snap in.
-You can turn the poi off with the switch see the [user manual]()
+Order is important here.  
+First slide the usb port into the usb port hole at the top of the poi, while keeping the switch end of the board elevated.  
+Then, carefully lever down the board over the battery, this will turn the poi on.  
+Finally, make sure the bottom (and sides) of the pcb are fully seated and flush with the body.  
+This is often tight as well and may snap in.  
+You can turn the poi off with the switch see the [user manual](../../Firmware/MANUAL.md)
 ![wiring](./assembly_step_7a.jpg)
 ![wiring](./assembly_step_7b.jpg)
 
@@ -98,18 +99,18 @@ Alternativley, you can just wrap the sucker in packing tape, just make sure you 
 ## Step 12
 ### Apply the LED strips
 Peel the backing off the LED strips, and apply to the to body. 
-One for each recess. 
-Start from the bottom of the poi (by the botton) and work back towards the top. 
-If you leave about 0.5mm space at the bottom, it should line up perfectly, and prevent accidental peeling.
-Do this for all 3 strips.
+One for each recess.  
+Start from the bottom of the poi (by the botton) and work back towards the top.  
+If you leave about 0.5mm space at the bottom, it should line up perfectly, and prevent accidental peeling.  
+Do this for all 3 strips.  
 ![wiring](./assembly_step_12a.jpg)
 ![wiring](./assembly_step_12b.jpg)
 
 ## Step 13
 ### Tuck excess led strip into the body
-Start with your hands, and feed the stips into the holes.
-Fold the strips tightly around the plastic edge.
-Use blunt tweezers to help apply the adhesive inside the holes.
+Start with your hands, and feed the stips into the holes.  
+Fold the strips tightly around the plastic edge.  
+Use blunt tweezers to help apply the adhesive inside the holes.  
 ![wiring](./assembly_step_13.jpg)
 
 ## Step 14
