@@ -393,7 +393,7 @@ class OpenPixelPoiConfig {
         if(this->patternSlot == 0 && this->displayState == DS_PATTERN_ALL_ALL){
           this->setPatternBank((this->patternBank + 1) % PATTERN_BANK_COUNT, false);
         }
-        this->displayStateLastUpdated = millis();
+        this->displayStateLastUpdated += this->patternShuffleDuration * 1000;
       }
 
       // Sequencer (pattern slot, battern bank, brightness, speedx2, durationx2)
