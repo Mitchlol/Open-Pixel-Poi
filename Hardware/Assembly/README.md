@@ -121,5 +121,8 @@ Pull the two longer tabs apart to get the clearnace needed.
 
 ## Step 15
 ### Party!
+> [!NOTE]
+> I reccomend doing a <a href="https://mitchlol.github.io/#openpixelpoi">Firmware update</a>. The newest firmware fixes a timing issue that can cause poi to drift out of sync. At the time of writing that is the only change from the currently shipping units. 
+
 Woah! Where did that 2nd poi come from?
 ![wiring](./2.2.1/assembly_step_15.jpg)
