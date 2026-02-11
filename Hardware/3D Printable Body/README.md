@@ -8,7 +8,7 @@ Print all the main body parts in **PLA** or any other rigid material. Slicer pro
 1. [Open Pixel Poi - Body - Button](<https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Hardware/3D%20Printable%20Body/Open%20Pixel%20Poi%20-%20Body%20-%20Button.3mf>)
 
 ## Outer Shell
-The outer shell must be printed in **Clear / Transparent TPU**. Ive included 3 primary shell variants and a few more in the [Extras](./Extras/README.md) folder. For HD LED strips make sure to use the ones labeled "55 Pixel" to minimize diffusion. For 20 or 25 pixel led strips, the regular shells all work.
+The outer shell must be printed in **Clear / Transparent TPU**. Ive included 3 primary shell variants and a few more in the [Extras](./Extras/README.md) folder, and there is also a new version with a [snap lid in beta](./SnapShell/README.md). For HD LED strips make sure to use the ones labeled "55 Pixel" to minimize diffusion. For 20 or 25 pixel led strips, the regular shells all work.
 
 The round shell should be mostly unaffected by infill, as it has thin walls and internal cavities to control diffusion. The hex shells look nice in 10% gyroid or 3d honeycomb. All shell files are preoriented and do not require any supports/brims/rafts/etc, see the section on orientation below to confirm your orientation. You need 1 shell per poi, so that means 2 shells for a pair. If you're undecided which shell you want, go with the round one.
 
