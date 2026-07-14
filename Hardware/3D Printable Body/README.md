@@ -23,7 +23,7 @@ For the cap, pick whichever version you preffer, they are all cross compatible. 
 
 ## Orientation
 The parts all print without supports when oriented like this. Take special note of orientation the bottom half of the body, the led groove is an overhang rather than requiring supports.
-![orientation](print_orientation_body.png)![orientation](print_orientation_shell.png)
+<img src="print_orientation_body.png" height="250" alt="Body orientation"><img src="print_orientation_shell.png" height="250" alt="Shell orientation">
 
 ## Extras
 The [Extras](./Extras/README.md) folder contains poi knobs, and whatever else seems relevant to upload. Nothing in this folder is required to have a functional poi, but it is worth having a look.
