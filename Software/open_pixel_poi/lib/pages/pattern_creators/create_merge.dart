@@ -13,7 +13,7 @@ class CreateMergePage extends StatefulWidget {
   const CreateMergePage({super.key});
 
   @override
-  _CreateMergeState createState() => _CreateMergeState();
+  State<CreateMergePage> createState() => _CreateMergeState();
 }
 
 class _CreateMergeState extends State<CreateMergePage> {
@@ -80,8 +80,8 @@ class _CreateMergeState extends State<CreateMergePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: .center,
+                                    crossAxisAlignment: .start,
                                     children: [
                                       SizedBox(
                                         height: 80,
@@ -124,8 +124,8 @@ class _CreateMergeState extends State<CreateMergePage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -202,8 +202,8 @@ class _CreateMergeState extends State<CreateMergePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: .center,
+                                    crossAxisAlignment: .start,
                                     children: [
                                       SizedBox(
                                         height: 80,
@@ -246,8 +246,8 @@ class _CreateMergeState extends State<CreateMergePage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -330,7 +330,7 @@ class _CreateMergeState extends State<CreateMergePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -339,7 +339,7 @@ class _CreateMergeState extends State<CreateMergePage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -351,14 +351,13 @@ class _CreateMergeState extends State<CreateMergePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if (context.mounted) {
-                        // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -378,14 +377,14 @@ class _CreateMergeState extends State<CreateMergePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(

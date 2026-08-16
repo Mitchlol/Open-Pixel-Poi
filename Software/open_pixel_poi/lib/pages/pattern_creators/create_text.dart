@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +15,7 @@ class CreateTextPage extends StatefulWidget {
   const CreateTextPage({super.key});
 
   @override
-  _CreateTextState createState() => _CreateTextState();
+  State<CreateTextPage> createState() => _CreateTextState();
 }
 
 class _CreateTextState extends State<CreateTextPage> {
@@ -126,7 +124,7 @@ class _CreateTextState extends State<CreateTextPage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -135,7 +133,7 @@ class _CreateTextState extends State<CreateTextPage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -147,14 +145,13 @@ class _CreateTextState extends State<CreateTextPage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if (context.mounted) {
-                        // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -174,14 +171,14 @@ class _CreateTextState extends State<CreateTextPage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -195,6 +192,8 @@ class _CreateTextState extends State<CreateTextPage> {
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {
+    final model = Provider.of<Model>(context, listen: false);
+
     Uint8List fontZipFile;
     int xAdvance;
     if (textHeight == 20) {
@@ -248,7 +247,6 @@ class _CreateTextState extends State<CreateTextPage> {
       }
     }
 
-    var model = Provider.of<Model>(context, listen: false);
     var pattern = DBImage(
       id: null,
       height: textHeight,

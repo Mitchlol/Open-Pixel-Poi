@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:open_pixel_poi/database/db_image.dart';
@@ -10,6 +12,7 @@ import '../pages/pattern_creators/create_sequence.dart';
 import './models/comm_code.dart';
 import 'ble_uart.dart';
 import 'models/confirmation.dart';
+import 'models/poi_response.dart';
 import 'models/led_pattern.dart';
 import 'parse_util.dart';
 
@@ -24,7 +27,7 @@ class PoiHardware {
   PoiHardware(this.uart) {
     subscription = uart.device.connectionState.listen((event) {
       state.add(event);
-      isConncted = event == BluetoothConnectionState.connected;
+      isConncted = event == .connected;
     });
   }
 
@@ -39,7 +42,7 @@ class PoiHardware {
   Future<bool> _writePackets(List<int> request) async {
     int maxPacketsize = 509;
     int packets = (request.length / maxPacketsize).ceil();
-    print(
+    debugPrint(
       "Write: request length = ${request.length}, splitting into $packets packets",
     );
     largeSendProgress.add(0);
@@ -54,16 +57,16 @@ class PoiHardware {
 
         sentPackets++;
         sentSize += packet.length;
-        print(
+        debugPrint(
           "Write batch: ${sentPackets / packets}% packet# = $sentPackets, length = ${packet.length}, sent = $sentSize, remaining = ${request.length - packet.length} data = $packet",
         );
         request.removeRange(0, packet.length);
         largeSendProgress.add(sentPackets / packets);
         consecutiveFailures = 0;
-      } catch (e, s) {
+      } catch (e) {
         consecutiveFailures++;
-        print("Failure, consecutive failures = $consecutiveFailures");
-        print("Error: $e");
+        debugPrint("Failure, consecutive failures = $consecutiveFailures");
+        debugPrint("Error: $e");
         if (consecutiveFailures > 2) {
           return true;
         }
@@ -74,7 +77,9 @@ class PoiHardware {
   }
 
   Future<bool> _writePacketWithConfirmation(List<int> request) async {
-    print("Write single packet:length = ${request.length}, data = $request");
+    debugPrint(
+      "Write single packet:length = ${request.length}, data = $request",
+    );
     if (request.length > 512) {
       return true;
     }
@@ -82,11 +87,11 @@ class PoiHardware {
         .write(request)
         .then(
           (value) {
-            print("Write Success!");
+            debugPrint("Write Success!");
             return false;
           },
           onError: (value) {
-            print("Write Fail! $value");
+            debugPrint("Write Fail! $value");
             return true;
           },
         );
@@ -109,7 +114,7 @@ class PoiHardware {
     return request;
   }
 
-  Future<dynamic> readResponse() async {
+  Future<PoiResponse?> readResponse() async {
     try {
       await uart.txCharacteristic.read();
     } catch (e) {
@@ -118,47 +123,45 @@ class PoiHardware {
 
     _buffer = List<int>.empty(growable: true);
     _buffer.addAll(uart.txCharacteristic.lastValue);
-    print(
-      "onRecievePacket: From TX Characteristic " + uart.txCharacteristic.lastValue.toString(),
+    debugPrint(
+      "onRecievePacket: From TX Characteristic ${uart.txCharacteristic.lastValue}",
     );
 
     if (_buffer.isEmpty || _buffer[0] != 0xD0 || _buffer[_buffer.length - 1] != 0xD1) {
       // Not the start of a message, ignore this packet
-      print(
-        "onRecievePacket: Invalid packet, discarding " + _buffer.toString(),
-      );
+      debugPrint("onRecievePacket: Invalid packet, discarding $_buffer");
       _buffer = List.empty();
-      return;
+      return null;
     }
 
     // Check packet length
     int packetLength = (_buffer[1] << 8) + _buffer[2];
     if (_buffer.length != packetLength) {
-      print(
+      debugPrint(
         "onRecievePacket: Invalid packet length ($packetLength), discarding",
       );
       _buffer = List.empty();
-      return;
+      return null;
     }
 
     List<int> message = _buffer.sublist(3, _buffer.length - 1);
-    print("onRecievePacket: Found message: " + message.toString());
+    debugPrint("onRecievePacket: Found message: $message");
     _buffer = List.empty();
     return onRecieveMessage(message);
   }
 
-  dynamic onRecieveMessage(List<int> message) {
+  PoiResponse? onRecieveMessage(List<int> message) {
     CommCode commCode = CommCode.values[message.removeAt(0)];
-    print("Message recieved: code = $commCode, message = $message");
+    debugPrint("Message recieved: code = $commCode, message = $message");
     switch (commCode) {
-      case CommCode.CC_SUCCESS:
+      case .CC_SUCCESS:
         return Confirmation(true);
-      case CommCode.CC_ERROR:
+      case .CC_ERROR:
         return Confirmation(false);
-      case CommCode.CC_GET_FW_VERSION:
+      case .CC_GET_FW_VERSION:
         return FWVersion(message[0]);
       default:
-        print(
+        debugPrint(
           "Unhandled message recieved: code = $commCode, message = $message",
         );
         return null;

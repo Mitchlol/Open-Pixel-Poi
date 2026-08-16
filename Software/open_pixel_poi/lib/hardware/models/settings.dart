@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import '../parse_util.dart';
 
 class Settings {
