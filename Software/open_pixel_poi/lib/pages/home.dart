@@ -444,7 +444,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (!kIsWeb) {
                           // Calling connect seems to bring device to the front of a magic queue and operate faster, and properly
                           await poi.uart.device
-                              .connect(timeout: Duration(seconds: 5), autoConnect: false)
+                              .connect(timeout: const Duration(seconds: 5), autoConnect: false)
                               .timeout(Duration(milliseconds: 5250));
                           await poi.uart.device.clearGattCache(); // Boosts speed too
                         }
