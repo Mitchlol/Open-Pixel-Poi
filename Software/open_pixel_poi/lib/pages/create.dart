@@ -8,17 +8,13 @@ import 'package:open_pixel_poi/pages/pattern_creators/create_sequence.dart';
 import 'package:open_pixel_poi/pages/pattern_creators/create_strobe.dart';
 import 'package:open_pixel_poi/pages/pattern_creators/create_text.dart';
 
+import '../widgets/big_button.dart';
 import '../widgets/connection_state_indicator.dart';
 import 'pattern_creators/create_solid_color.dart';
 
-class CreatePage extends StatefulWidget {
+class CreatePage extends StatelessWidget {
   const CreatePage({super.key});
 
-  @override
-  State<CreatePage> createState() => _CreateState();
-}
-
-class _CreateState extends State<CreatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,42 +24,48 @@ class _CreateState extends State<CreatePage> {
       ),
       body: ListView(
         children: [
-          getCreatorButton("Solid Color", () => CreateSolidColorPage()),
-          getCreatorButton("Check", () => CreateCheckPage()),
-          getCreatorButton("Fade", () => CreateFadePage()),
-          getCreatorButton("Strobe", () => CreateStrobePage()),
-          getCreatorButton("Text", () => CreateTextPage()),
-          getCreatorButton("Rotate", () => CreateRotatePage()),
-          getCreatorButton("Blur", () => CreateBlurPage()),
-          getCreatorButton("Layer", () => CreateMergePage()),
-          getCreatorButton("Sequencer Controller", () => CreateSequencePage()),
+          _CreatorButton("Solid Color", () => CreateSolidColorPage()),
+          _CreatorButton("Check", () => CreateCheckPage()),
+          _CreatorButton("Fade", () => CreateFadePage()),
+          _CreatorButton("Strobe", () => CreateStrobePage()),
+          _CreatorButton("Text", () => CreateTextPage()),
+          _CreatorButton("Rotate", () => CreateRotatePage()),
+          _CreatorButton("Blur", () => CreateBlurPage()),
+          _CreatorButton("Layer", () => CreateMergePage()),
+          _CreatorButton("Sequencer Controller", () => CreateSequencePage()),
         ],
       ),
     );
   }
+}
 
-  Widget getCreatorButton(String label, dynamic Function() constructor) {
+/// Opens the given pattern creator page and pops this page too once a
+/// pattern has been saved.
+class _CreatorButton extends StatelessWidget {
+  final String label;
+  final Widget Function() pageBuilder;
+
+  const _CreatorButton(this.label, this.pageBuilder);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 60,
-        child: ElevatedButton(
-          child: Text(label, style: TextStyle(fontSize: 24, fontWeight: .bold)),
-          onPressed: () async {
-            var result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return constructor();
-                },
-              ),
-            );
-            if (result != null && result && mounted) {
-              Navigator.pop(context);
-            }
-          },
-        ),
+      child: BigButton(
+        label,
+        onPressed: () async {
+          var result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return pageBuilder();
+              },
+            ),
+          );
+          if (result != null && result && context.mounted) {
+            Navigator.pop(context);
+          }
+        },
       ),
     );
   }

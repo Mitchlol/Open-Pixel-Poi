@@ -40,65 +40,66 @@ class _CreateFadeState extends State<CreateFadePage> {
         title: const Text("Fade Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return Column(
-      children: [
-        LabeledSlider(
-          "Fade width",
-          colors.length * 5,
-          (400 / colors.length).toInt() * colors.length,
-          colors.length,
-          (int value) => setState(() {
-            fadeSize = value;
-          }),
-          colors.length * 5,
-          Key("${colors.length}"),
-        ),
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: colors.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ColorPicker(
-                "Color ${index + 1}",
-                colors[index].red.toDouble(),
-                colors[index].green.toDouble(),
-                colors[index].blue.toDouble(),
-                (RgbValue color) => colors[index] = color,
-              );
-            },
-          ),
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "+ Color",
-              onPressed: () {
-                setState(() {
-                  addSegment();
-                });
-                _scrollController.animateToBottomAfterBuild();
-              },
+      body: saving
+          ? const StatusMessage.saving()
+          : Column(
+              children: [
+                LabeledSlider(
+                  "Fade width",
+                  colors.length * 5,
+                  (400 / colors.length).toInt() * colors.length,
+                  colors.length,
+                  (int value) => setState(() {
+                    fadeSize = value;
+                  }),
+                  colors.length * 5,
+                  Key("${colors.length}"),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: colors.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ColorPicker(
+                        "Color ${index + 1}",
+                        colors[index].red.toDouble(),
+                        colors[index].green.toDouble(),
+                        colors[index].blue.toDouble(),
+                        (RgbValue color) => colors[index] = color,
+                      );
+                    },
+                  ),
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    BigButton(
+                      "+ Color",
+                      onPressed: () {
+                        setState(() {
+                          addSegment();
+                        });
+                        _scrollController.animateToBottomAfterBuild();
+                      },
+                    ),
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        await makeAndStorePattern(context);
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
     );
   }
 
