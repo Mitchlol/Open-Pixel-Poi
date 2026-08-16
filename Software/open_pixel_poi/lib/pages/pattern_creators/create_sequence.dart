@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:open_pixel_poi/widgets/labeled_button_select.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/comm_code.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
@@ -274,7 +274,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
   Future<void> triggerSequence(BuildContext context) async {
     Provider.of<Model>(context, listen: false)
         .connectedPoi!
-        .forEach((poi) => poi.sendCommCode(CommCode.CC_START_SEQUENCER, false));
+        .forEach((poi) => poi.sendCommCode(CommCode.startSequencer, false));
   }
 
   Future<bool> setSequence(BuildContext context) async{

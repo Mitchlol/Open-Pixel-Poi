@@ -254,7 +254,7 @@ class _WelcomeState extends State<WelcomePage> {
                   Navigator.push(
                     _key.currentContext!,
                     MaterialPageRoute(builder: (context) {
-                      return MyHomePage();
+                      return HomePage();
                     }),
                   );
                 },
@@ -320,7 +320,7 @@ class _WelcomeState extends State<WelcomePage> {
     }
     // Scan
     hasScanned = true;
-    FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], webOptionalServices: [Guid(BLEUart.SERVICE_UUID)], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
+    FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], webOptionalServices: [Guid(BleUart.serviceUuid)], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
     // FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
   }
 
@@ -348,9 +348,9 @@ class _WelcomeState extends State<WelcomePage> {
     });
     Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi = List.empty(growable: true);
     for (var device in devices) {
-      BLEUart bleUart = BLEUart(device);
+      BleUart bleUart = BleUart(device);
       await bleUart.isIntialized.then((value) {
-        print("BLEUart Initialized");
+        print("BleUart Initialized");
         Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi!.add(PoiHardware(bleUart));
       }, onError: (error) {
         print("error = $error");
@@ -362,7 +362,7 @@ class _WelcomeState extends State<WelcomePage> {
     // Check the firmware version of each connected device
     print("Check firmware version");
     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-      await poi.sendInt8(0, CommCode.CC_GET_FW_VERSION, true);
+      await poi.sendInt8(0, CommCode.getFwVersion, true);
       FWVersion? version = await poi.readResponse();
       if((version?.version??0) != 2){
         setState(() {
@@ -378,7 +378,7 @@ class _WelcomeState extends State<WelcomePage> {
       Navigator.push(
         _key.currentContext!,
         MaterialPageRoute(builder: (context) {
-          return MyHomePage();
+          return HomePage();
         }),
       );
       await Future.delayed(const Duration(seconds: 1), () {

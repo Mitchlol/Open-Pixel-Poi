@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 
-class BLEUart {
+class BleUart {
   // Nordic nRF
-  static const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-  static const RX_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-  static const TX_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
-  static const NOTIFY_UUID = "6e400004-b5a3-f393-e0a9-e50e24dcca9e";
+  static const serviceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+  static const rxUuid = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+  static const txUuid = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+  static const notifyUuid = "6e400004-b5a3-f393-e0a9-e50e24dcca9e";
 
   BluetoothDevice device;
   late BluetoothService service;
@@ -18,7 +18,7 @@ class BLEUart {
 
   late Future<bool> isIntialized;
 
-  BLEUart(this.device) {
+  BleUart(this.device) {
     isIntialized = init();
   }
 
@@ -43,14 +43,14 @@ class BLEUart {
     if (services == null) {
       throw Exception("Cant discover bluetooth services");
     }
-    service = services.firstWhere((BluetoothService service) => service.uuid.toString() == SERVICE_UUID);
+    service = services.firstWhere((BluetoothService service) => service.uuid.toString() == serviceUuid);
     if (service == null) {
       throw Exception("Device does not have UART service");
     }
 
-    rxCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == RX_UUID);
-    txCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == TX_UUID);
-    notifyCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == NOTIFY_UUID);
+    rxCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == rxUuid);
+    txCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == txUuid);
+    notifyCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == notifyUuid);
     if (rxCharacteristic == null) {
       throw Exception("Device does not have UART RX characteristic");
     }

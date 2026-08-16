@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:open_pixel_poi/widgets/labeled_slider.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
@@ -22,8 +22,8 @@ class CreateCheckPage extends StatefulWidget {
 class _CreateCheckState extends State<CreateCheckPage> {
   bool flagFirst = true;
   late int gridSize = 1;
-  late RGBValue colorOne;
-  late RGBValue colorTwo;
+  late RgbValue colorOne;
+  late RgbValue colorTwo;
   bool saving = false;
 
   @override
@@ -31,8 +31,8 @@ class _CreateCheckState extends State<CreateCheckPage> {
     if(flagFirst){
       flagFirst = false;
       var random = Random();
-      colorOne = RGBValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
-      colorTwo = RGBValue([0, 0, 0]);
+      colorOne = RgbValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
+      colorTwo = RgbValue([0, 0, 0]);
     }
     return Scaffold(
       appBar: AppBar(
@@ -64,14 +64,14 @@ class _CreateCheckState extends State<CreateCheckPage> {
           colorOne.red.toDouble(),
           colorOne.green.toDouble(),
           colorOne.blue.toDouble(),
-              (RGBValue color) => colorOne = color,
+              (RgbValue color) => colorOne = color,
         ),
         ColorPicker(
           "Other Color",
           colorTwo.red.toDouble(),
           colorTwo.green.toDouble(),
           colorTwo.blue.toDouble(),
-              (RGBValue color) => colorTwo = color,
+              (RgbValue color) => colorTwo = color,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
