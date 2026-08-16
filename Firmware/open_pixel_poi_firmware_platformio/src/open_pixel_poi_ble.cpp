@@ -1,5 +1,5 @@
 // Some things need to be included here, seems files are loaded alphabetically
-#include <arduino.h>
+#include <Arduino.h>
 #include <Update.h>
 #include "config.h"
 #include "open_pixel_poi_config.cpp"
