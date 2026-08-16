@@ -44,82 +44,84 @@ class _CreateStrobeState extends State<CreateStrobePage> {
         title: const Text("Strobe Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount:
-                segmentValues.length, // Total number of items in the list
-            itemBuilder: (context, index) {
-              // Build each item in the list
-              return Card(
-                elevation: 5,
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        "Strobe Segment: ${index + 1}",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.blue,
+      body: saving
+          ? const StatusMessage.saving()
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: segmentValues
+                        .length, // Total number of items in the list
+                    itemBuilder: (context, index) {
+                      // Build each item in the list
+                      return Card(
+                        elevation: 5,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                "Strobe Segment: ${index + 1}",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                            LabeledSlider(
+                              "Segment Length",
+                              1,
+                              100,
+                              1,
+                              (int value) => setState(() {
+                                segmentValues[index].width = value;
+                              }),
+                              segmentValues[index].width,
+                            ),
+                            ColorPicker(
+                              "Segment Color",
+                              segmentValues[index].color.red.toDouble(),
+                              segmentValues[index].color.green.toDouble(),
+                              segmentValues[index].color.blue.toDouble(),
+                              (RgbValue color) =>
+                                  segmentValues[index].color = color,
+                            ),
+                          ],
                         ),
-                      ),
+                      );
+                    },
+                  ),
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
                     ),
-                    LabeledSlider(
-                      "Segment Length",
-                      1,
-                      100,
-                      1,
-                      (int value) => setState(() {
-                        segmentValues[index].width = value;
-                      }),
-                      segmentValues[index].width,
+                    BigButton(
+                      "+ Color",
+                      onPressed: () {
+                        setState(() {
+                          addSegment();
+                        });
+                        _scrollController.animateToBottomAfterBuild();
+                      },
                     ),
-                    ColorPicker(
-                      "Segment Color",
-                      segmentValues[index].color.red.toDouble(),
-                      segmentValues[index].color.green.toDouble(),
-                      segmentValues[index].color.blue.toDouble(),
-                      (RgbValue color) => segmentValues[index].color = color,
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        bool success = await makeAndStorePattern(context);
+                        if (success && context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
                     ),
                   ],
                 ),
-              );
-            },
-          ),
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "+ Color",
-              onPressed: () {
-                setState(() {
-                  addSegment();
-                });
-                _scrollController.animateToBottomAfterBuild();
-              },
+              ],
             ),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                bool success = await makeAndStorePattern(context);
-                if (success && mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
     );
   }
 
