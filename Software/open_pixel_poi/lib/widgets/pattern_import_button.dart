@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -10,22 +9,22 @@ import '../database/db_image.dart';
 import '../model.dart';
 
 class PatternImportButton extends StatelessWidget {
-  Function() onImageImported;
-  PatternImportButton(this.onImageImported, {super.key});
+  final Function() onImageImported;
+  const PatternImportButton(this.onImageImported, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
+        final messenger = ScaffoldMessenger.of(context);
         try {
-          SnackBar snackBar = SnackBar(content: Text("Importing..."));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          messenger.showSnackBar(const SnackBar(content: Text("Importing...")));
           await importPattern(context);
-          SnackBar snackBar2 = SnackBar(content: Text("Import succeeded!"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar2);
-        } on Exception catch(error){
-          SnackBar snackBar = SnackBar(content: Text("$error"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          messenger.showSnackBar(
+            const SnackBar(content: Text("Import succeeded!")),
+          );
+        } on Exception catch (error) {
+          messenger.showSnackBar(SnackBar(content: Text("$error")));
         }
       },
       icon: const Icon(
@@ -41,27 +40,28 @@ class PatternImportButton extends StatelessWidget {
     final ImagePicker picker = ImagePicker();
     final List<XFile> images = await picker.pickMultiImage();
     final List<DBImage> patterns = [];
-    for (var imageFile in images){
-      if(imageFile == null){
-        throw Exception("Invalid file.");
-      }
-
-      img.Image? image = null;
-      if(imageFile.name.endsWith('bmp') || imageFile.name.endsWith('BMP')){
+    for (var imageFile in images) {
+      img.Image? image;
+      if (imageFile.name.endsWith('bmp') || imageFile.name.endsWith('BMP')) {
         image = img.decodeBmp(await imageFile.readAsBytes())!;
       }
-      if(imageFile.name.endsWith('png') || imageFile.name.endsWith('PNG')){
+      if (imageFile.name.endsWith('png') || imageFile.name.endsWith('PNG')) {
         image = img.decodePng(await imageFile.readAsBytes())!;
       }
-      if(imageFile.name.endsWith('jpg') || imageFile.name.endsWith('JPG') || imageFile.name.endsWith('jpeg') || imageFile.name.endsWith('JPEG')){
+      if (imageFile.name.endsWith('jpg') ||
+          imageFile.name.endsWith('JPG') ||
+          imageFile.name.endsWith('jpeg') ||
+          imageFile.name.endsWith('JPEG')) {
         image = img.decodeJpg(await imageFile.readAsBytes())!;
       }
-      if(image == null){
+      if (image == null) {
         throw Exception("Unacceptable image format.");
       }
 
-      if(image.width * image.height > 40000){
-        throw Exception("Imported image is too large, max size is 40,000 pixels (200x200/100x400/25x1600 etc..).");
+      if (image.width * image.height > 40000) {
+        throw Exception(
+          "Imported image is too large, max size is 40,000 pixels (200x200/100x400/25x1600 etc..).",
+        );
       }
       List<int> imageBytes = List.empty(growable: true);
       for (var w = 0; w < image.width; w++) {
@@ -73,15 +73,17 @@ class PatternImportButton extends StatelessWidget {
         }
       }
 
-      patterns.add(DBImage(
-        id: null,
-        height: image.height,
-        count: image.width,
-        bytes: Uint8List.fromList(imageBytes),
-      ));
+      patterns.add(
+        DBImage(
+          id: null,
+          height: image.height,
+          count: image.width,
+          bytes: Uint8List.fromList(imageBytes),
+        ),
+      );
     }
 
-    for(var pattern in patterns){
+    for (var pattern in patterns) {
       await model.patternDB.insertImage(pattern);
     }
 

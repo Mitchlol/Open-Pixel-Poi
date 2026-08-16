@@ -10,12 +10,11 @@ import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
 import '../../widgets/labeled_slider.dart';
 
-
 class CreateRotatePage extends StatefulWidget {
   const CreateRotatePage({super.key});
 
   @override
-  _CreateRotateState createState() => _CreateRotateState();
+  State<CreateRotatePage> createState() => _CreateRotateState();
 }
 
 class _CreateRotateState extends State<CreateRotatePage> {
@@ -29,9 +28,11 @@ class _CreateRotateState extends State<CreateRotatePage> {
       appBar: AppBar(
         title: const Text("Rotate image 90 degrees"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -57,55 +58,60 @@ class _CreateRotateState extends State<CreateRotatePage> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select Image"),
               content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
-                  if (snapshot.hasData) {
-                    return SizedBox(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      child: ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index){
-                          return InkWell(
-                            onTap: (){
-                              image = snapshot.data![index];
-                              Navigator.pop(context, 'Cancel');
-                              setState(() {});
+                future: Provider.of<Model>(context).patternDB
+                    .getImages(context),
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<PatternEntry>> snapshot,
+                    ) {
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          child: ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  image = snapshot.data![index];
+                                  Navigator.pop(context, 'Cancel');
+                                  setState(() {});
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: .center,
+                                    crossAxisAlignment: .start,
+                                    children: [
+                                      SizedBox(
+                                        height: 80,
+                                        child: snapshot.data![index].preview,
+                                      ),
+                                      const SizedBox(
+                                        width: 100,
+                                        height: 8,
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                        thickness: 1,
+                                        indent: 0,
+                                        endIndent: 0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 80,
-                                    child: snapshot.data![index].preview,
-                                  ),
-                                  const SizedBox(
-                                    width: 100,
-                                    height: 8,
-                                  ),
-                                  const Divider(
-                                    height: 1,
-                                    thickness: 1,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }else if(snapshot.hasError){
-                    tooFewImagesError(context);
-                    return Container();
-                  }else{
-                    return Container();
-                  }
-                },
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        tooFewImagesError(context);
+                        return Container();
+                      } else {
+                        return Container();
+                      }
+                    },
               ),
               actionsPadding: const EdgeInsets.all(0.0),
               actions: <Widget>[
@@ -119,8 +125,8 @@ class _CreateRotateState extends State<CreateRotatePage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -135,20 +141,27 @@ class _CreateRotateState extends State<CreateRotatePage> {
                 SizedBox(
                   height: 80,
                   child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
-                      if (image != null){
-                        return image!.preview;
-                      }else if (snapshot.hasData && snapshot.data!.length >= 2) {
-                        image = snapshot.data![0];
-                        return snapshot.data!.first.preview;
-                      }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
-                        tooFewImagesError(context);
-                        return Container();
-                      }else{
-                        return Container();
-                      }
-                    },
+                    future: Provider.of<Model>(context).patternDB
+                        .getImages(context),
+                    builder:
+                        (
+                          BuildContext context,
+                          AsyncSnapshot<List<PatternEntry>> snapshot,
+                        ) {
+                          if (image != null) {
+                            return image!.preview;
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.length >= 2) {
+                            image = snapshot.data![0];
+                            return snapshot.data!.first.preview;
+                          } else if (snapshot.hasError ||
+                              (snapshot.hasData && snapshot.data!.length < 2)) {
+                            tooFewImagesError(context);
+                            return Container();
+                          } else {
+                            return Container();
+                          }
+                        },
                   ),
                 ),
                 const SizedBox(
@@ -171,7 +184,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -180,7 +193,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -192,13 +205,13 @@ class _CreateRotateState extends State<CreateRotatePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if(context.mounted) { // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -208,7 +221,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -218,14 +231,14 @@ class _CreateRotateState extends State<CreateRotatePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -238,16 +251,16 @@ class _CreateRotateState extends State<CreateRotatePage> {
     );
   }
 
-  Future<void> makeAndStorePattern(BuildContext context) async{
+  Future<void> makeAndStorePattern(BuildContext context) async {
     var model = Provider.of<Model>(context, listen: false);
 
     int desiredWidth = max(2, image!.dbImage.height);
     int desiredHeight = min(outputImageHeightLimit, image!.dbImage.count);
     var imgImage = (await model.patternDB.getImgImages([image!.dbImage]))[0];
-    var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
+    var rgbList = Uint8List((desiredWidth * desiredHeight) * 3);
 
-    for(var column = 0; column < desiredWidth; column++){
-      for(var row = 0; row < desiredHeight; row++){
+    for (var column = 0; column < desiredWidth; column++) {
+      for (var row = 0; row < desiredHeight; row++) {
         var columnOffset = column * desiredHeight * 3;
         var rowOffset = row * 3;
         var pixel = imgImage.getPixel(row, column % image!.dbImage.height);
@@ -265,10 +278,13 @@ class _CreateRotateState extends State<CreateRotatePage> {
     await model.patternDB.insertImage(pattern);
   }
 
-  void tooFewImagesError(BuildContext context){
-    const snackBar = SnackBar(content: Text('You must have at least 1 image stored to rotate.'));
+  void tooFewImagesError(BuildContext context) {
+    const snackBar = SnackBar(
+      content: Text('You must have at least 1 image stored to rotate.'),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    if(context.mounted) { // Do we actually want this check?
+    if (context.mounted) {
+      // Do we actually want this check?
       Navigator.pop(context);
     }
   }

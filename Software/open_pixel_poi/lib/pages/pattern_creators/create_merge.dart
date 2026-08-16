@@ -9,12 +9,11 @@ import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
 
-
 class CreateMergePage extends StatefulWidget {
   const CreateMergePage({super.key});
 
   @override
-  _CreateMergeState createState() => _CreateMergeState();
+  State<CreateMergePage> createState() => _CreateMergeState();
 }
 
 class _CreateMergeState extends State<CreateMergePage> {
@@ -23,7 +22,15 @@ class _CreateMergeState extends State<CreateMergePage> {
   PatternEntry? bottomImage;
 
   String blendMode = "Normal";
-  List<String> blendModes = ["Normal", "Hard Normal", "Lighten", "Darken", "Add", "Multiply", "Average"];
+  List<String> blendModes = [
+    "Normal",
+    "Hard Normal",
+    "Lighten",
+    "Darken",
+    "Add",
+    "Multiply",
+    "Average",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +38,11 @@ class _CreateMergeState extends State<CreateMergePage> {
       appBar: AppBar(
         title: const Text("Merge Two Images"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -49,55 +58,60 @@ class _CreateMergeState extends State<CreateMergePage> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select top Image"),
               content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
-                  if (snapshot.hasData) {
-                    return SizedBox(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      child: ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index){
-                          return InkWell(
-                            onTap: (){
-                              topImage = snapshot.data![index];
-                              Navigator.pop(context, 'Cancel');
-                              setState(() {});
+                future: Provider.of<Model>(context).patternDB
+                    .getImages(context),
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<PatternEntry>> snapshot,
+                    ) {
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          child: ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  topImage = snapshot.data![index];
+                                  Navigator.pop(context, 'Cancel');
+                                  setState(() {});
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: .center,
+                                    crossAxisAlignment: .start,
+                                    children: [
+                                      SizedBox(
+                                        height: 80,
+                                        child: snapshot.data![index].preview,
+                                      ),
+                                      const SizedBox(
+                                        width: 100,
+                                        height: 8,
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                        thickness: 1,
+                                        indent: 0,
+                                        endIndent: 0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 80,
-                                    child: snapshot.data![index].preview,
-                                  ),
-                                  const SizedBox(
-                                    width: 100,
-                                    height: 8,
-                                  ),
-                                  const Divider(
-                                    height: 1,
-                                    thickness: 1,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }else if(snapshot.hasError){
-                    tooFewImagesError(context);
-                    return Container();
-                  }else{
-                    return Container();
-                  }
-                },
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        tooFewImagesError(context);
+                        return Container();
+                      } else {
+                        return Container();
+                      }
+                    },
               ),
               actionsPadding: const EdgeInsets.all(0.0),
               actions: <Widget>[
@@ -111,8 +125,8 @@ class _CreateMergeState extends State<CreateMergePage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -127,20 +141,27 @@ class _CreateMergeState extends State<CreateMergePage> {
                 SizedBox(
                   height: 80,
                   child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
-                      if (topImage != null){
-                        return topImage!.preview;
-                      }else if (snapshot.hasData && snapshot.data!.length >= 2) {
-                        topImage = snapshot.data![0];
-                        return snapshot.data!.first.preview;
-                      }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
-                        tooFewImagesError(context);
-                        return Container();
-                      }else{
-                        return Container();
-                      }
-                    },
+                    future: Provider.of<Model>(context).patternDB
+                        .getImages(context),
+                    builder:
+                        (
+                          BuildContext context,
+                          AsyncSnapshot<List<PatternEntry>> snapshot,
+                        ) {
+                          if (topImage != null) {
+                            return topImage!.preview;
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.length >= 2) {
+                            topImage = snapshot.data![0];
+                            return snapshot.data!.first.preview;
+                          } else if (snapshot.hasError ||
+                              (snapshot.hasData && snapshot.data!.length < 2)) {
+                            tooFewImagesError(context);
+                            return Container();
+                          } else {
+                            return Container();
+                          }
+                        },
                   ),
                 ),
                 const SizedBox(
@@ -163,55 +184,60 @@ class _CreateMergeState extends State<CreateMergePage> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select bottom Image"),
               content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
-                  if (snapshot.hasData) {
-                    return SizedBox(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      child: ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index){
-                          return InkWell(
-                            onTap: (){
-                              bottomImage = snapshot.data![index];
-                              Navigator.pop(context, 'Cancel');
-                              setState(() {});
+                future: Provider.of<Model>(context).patternDB
+                    .getImages(context),
+                builder:
+                    (
+                      BuildContext context,
+                      AsyncSnapshot<List<PatternEntry>> snapshot,
+                    ) {
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          child: ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  bottomImage = snapshot.data![index];
+                                  Navigator.pop(context, 'Cancel');
+                                  setState(() {});
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: .center,
+                                    crossAxisAlignment: .start,
+                                    children: [
+                                      SizedBox(
+                                        height: 80,
+                                        child: snapshot.data![index].preview,
+                                      ),
+                                      const SizedBox(
+                                        width: 100,
+                                        height: 8,
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                        thickness: 1,
+                                        indent: 0,
+                                        endIndent: 0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 80,
-                                    child: snapshot.data![index].preview,
-                                  ),
-                                  const SizedBox(
-                                    width: 100,
-                                    height: 8,
-                                  ),
-                                  const Divider(
-                                    height: 1,
-                                    thickness: 1,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }else if(snapshot.hasError){
-                    tooFewImagesError(context);
-                    return Container();
-                  }else{
-                    return Container();
-                  }
-                },
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        tooFewImagesError(context);
+                        return Container();
+                      } else {
+                        return Container();
+                      }
+                    },
               ),
               actionsPadding: const EdgeInsets.all(0.0),
               actions: <Widget>[
@@ -225,8 +251,8 @@ class _CreateMergeState extends State<CreateMergePage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -241,20 +267,27 @@ class _CreateMergeState extends State<CreateMergePage> {
                 SizedBox(
                   height: 80,
                   child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
-                      if (bottomImage != null){
-                        return bottomImage!.preview;
-                      }else if (snapshot.hasData && snapshot.data!.length >= 2) {
-                        bottomImage = snapshot.data![1];
-                        return snapshot.data![1].preview;
-                      }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
-                        tooFewImagesError(context);
-                        return Container();
-                      }else{
-                        return Container();
-                      }
-                    },
+                    future: Provider.of<Model>(context).patternDB
+                        .getImages(context),
+                    builder:
+                        (
+                          BuildContext context,
+                          AsyncSnapshot<List<PatternEntry>> snapshot,
+                        ) {
+                          if (bottomImage != null) {
+                            return bottomImage!.preview;
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.length >= 2) {
+                            bottomImage = snapshot.data![1];
+                            return snapshot.data![1].preview;
+                          } else if (snapshot.hasError ||
+                              (snapshot.hasData && snapshot.data!.length < 2)) {
+                            tooFewImagesError(context);
+                            return Container();
+                          } else {
+                            return Container();
+                          }
+                        },
                   ),
                 ),
                 const SizedBox(
@@ -292,7 +325,7 @@ class _CreateMergeState extends State<CreateMergePage> {
                 child: Text(item),
               );
             }).toList(),
-            onChanged: (item){
+            onChanged: (item) {
               setState(() {
                 blendMode = item ?? blendMode;
               });
@@ -305,7 +338,7 @@ class _CreateMergeState extends State<CreateMergePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -314,7 +347,7 @@ class _CreateMergeState extends State<CreateMergePage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -326,13 +359,13 @@ class _CreateMergeState extends State<CreateMergePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if(context.mounted) { // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -342,7 +375,7 @@ class _CreateMergeState extends State<CreateMergePage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -352,14 +385,14 @@ class _CreateMergeState extends State<CreateMergePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -372,14 +405,17 @@ class _CreateMergeState extends State<CreateMergePage> {
     );
   }
 
-  Future<void> makeAndStorePattern(BuildContext context) async{
+  Future<void> makeAndStorePattern(BuildContext context) async {
     var model = Provider.of<Model>(context, listen: false);
 
     var topWidth = topImage!.dbImage.count;
     var bottomWidth = bottomImage!.dbImage.count;
 
     // Taller of the 2 images
-    int desiredHeight = max(topImage!.dbImage.height, bottomImage!.dbImage.height);
+    int desiredHeight = max(
+      topImage!.dbImage.height,
+      bottomImage!.dbImage.height,
+    );
 
     // Find least common multiple
     int x = topWidth, y = bottomWidth;
@@ -391,52 +427,85 @@ class _CreateMergeState extends State<CreateMergePage> {
     int gcd = x;
     int lcm = (topWidth * bottomWidth) ~/ gcd;
 
-    int desiredWidth = min(40000~/desiredHeight, lcm);
+    int desiredWidth = min(40000 ~/ desiredHeight, lcm);
 
-    var images = await model.patternDB.getImgImages([topImage!.dbImage, bottomImage!.dbImage]);
-    var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
+    var images = await model.patternDB.getImgImages([
+      topImage!.dbImage,
+      bottomImage!.dbImage,
+    ]);
+    var rgbList = Uint8List((desiredWidth * desiredHeight) * 3);
 
-    for(var column = 0; column < desiredWidth; column++){
-      for(var row = 0; row < desiredHeight; row++){
+    for (var column = 0; column < desiredWidth; column++) {
+      for (var row = 0; row < desiredHeight; row++) {
         var columnOffset = column * desiredHeight * 3;
         var rowOffset = row * 3;
-        var top = images[0].getPixel(column % topWidth, row % topImage!.dbImage.height);
-        var bottom = images[1].getPixel(column % bottomWidth, row % bottomImage!.dbImage.height);
+        var top = images[0].getPixel(
+          column % topWidth,
+          row % topImage!.dbImage.height,
+        );
+        var bottom = images[1].getPixel(
+          column % bottomWidth,
+          row % bottomImage!.dbImage.height,
+        );
         if (blendMode == "Lighten") {
-          rgbList[columnOffset + rowOffset + 0] = (top.r > bottom.r ? top.r : bottom.r).toInt();
-          rgbList[columnOffset + rowOffset + 1] = (top.g > bottom.g ? top.g : bottom.g).toInt();
-          rgbList[columnOffset + rowOffset + 2] = (top.b > bottom.b ? top.b : bottom.b).toInt();
-        }else if (blendMode == "Darken") {
-          rgbList[columnOffset + rowOffset + 0] = (top.r < bottom.r ? top.r : bottom.r).toInt();
-          rgbList[columnOffset + rowOffset + 1] = (top.g < bottom.g ? top.g : bottom.g).toInt();
-          rgbList[columnOffset + rowOffset + 2] = (top.b < bottom.b ? top.b : bottom.b).toInt();
-        }else if(blendMode == "Hard Normal"){
-          if(top.r > 0 || top.g > 0 || top.b > 0){
+          rgbList[columnOffset + rowOffset + 0] =
+              (top.r > bottom.r ? top.r : bottom.r).toInt();
+          rgbList[columnOffset + rowOffset + 1] =
+              (top.g > bottom.g ? top.g : bottom.g).toInt();
+          rgbList[columnOffset + rowOffset + 2] =
+              (top.b > bottom.b ? top.b : bottom.b).toInt();
+        } else if (blendMode == "Darken") {
+          rgbList[columnOffset + rowOffset + 0] =
+              (top.r < bottom.r ? top.r : bottom.r).toInt();
+          rgbList[columnOffset + rowOffset + 1] =
+              (top.g < bottom.g ? top.g : bottom.g).toInt();
+          rgbList[columnOffset + rowOffset + 2] =
+              (top.b < bottom.b ? top.b : bottom.b).toInt();
+        } else if (blendMode == "Hard Normal") {
+          if (top.r > 0 || top.g > 0 || top.b > 0) {
             rgbList[columnOffset + rowOffset + 0] = (top.r).toInt();
             rgbList[columnOffset + rowOffset + 1] = (top.g).toInt();
             rgbList[columnOffset + rowOffset + 2] = (top.b).toInt();
-          }else{
+          } else {
             rgbList[columnOffset + rowOffset + 0] = (bottom.r).toInt();
             rgbList[columnOffset + rowOffset + 1] = (bottom.g).toInt();
             rgbList[columnOffset + rowOffset + 2] = (bottom.b).toInt();
           }
-        }else if(blendMode == "Normal"){
+        } else if (blendMode == "Normal") {
           var topAlpha = max(max(top.r, top.g), top.b) / 255;
-          rgbList[columnOffset + rowOffset + 0] = ((topAlpha * top.r) + ((1-topAlpha) * bottom.r)).toInt();
-          rgbList[columnOffset + rowOffset + 1] = ((topAlpha * top.g) + ((1-topAlpha) * bottom.g)).toInt();
-          rgbList[columnOffset + rowOffset + 2] = ((topAlpha * top.b) + ((1-topAlpha) * bottom.b)).toInt();
-        }else if(blendMode == "Add") {
-          rgbList[columnOffset + rowOffset + 0] = (min(255, top.r + bottom.r)).toInt();
-          rgbList[columnOffset + rowOffset + 1] = (min(255, top.g + bottom.g)).toInt();
-          rgbList[columnOffset + rowOffset + 2] = (min(255, top.b + bottom.b)).toInt();
-        }else if(blendMode == "Multiply") {
-          rgbList[columnOffset + rowOffset + 0] = ((top.r * bottom.r) / 255).toInt();
-          rgbList[columnOffset + rowOffset + 1] = ((top.g * bottom.g) / 255).toInt();
-          rgbList[columnOffset + rowOffset + 2] = ((top.b * bottom.b) / 255).toInt();
-        }else if(blendMode == "Average") {
-          rgbList[columnOffset + rowOffset + 0] = ((top.r + bottom.r) / 2).toInt();
-          rgbList[columnOffset + rowOffset + 1] = ((top.g + bottom.g) / 2).toInt();
-          rgbList[columnOffset + rowOffset + 2] = ((top.b + bottom.b) / 2).toInt();
+          rgbList[columnOffset + rowOffset + 0] =
+              ((topAlpha * top.r) + ((1 - topAlpha) * bottom.r)).toInt();
+          rgbList[columnOffset + rowOffset + 1] =
+              ((topAlpha * top.g) + ((1 - topAlpha) * bottom.g)).toInt();
+          rgbList[columnOffset + rowOffset + 2] =
+              ((topAlpha * top.b) + ((1 - topAlpha) * bottom.b)).toInt();
+        } else if (blendMode == "Add") {
+          rgbList[columnOffset + rowOffset + 0] = (min(
+            255,
+            top.r + bottom.r,
+          )).toInt();
+          rgbList[columnOffset + rowOffset + 1] = (min(
+            255,
+            top.g + bottom.g,
+          )).toInt();
+          rgbList[columnOffset + rowOffset + 2] = (min(
+            255,
+            top.b + bottom.b,
+          )).toInt();
+        } else if (blendMode == "Multiply") {
+          rgbList[columnOffset + rowOffset + 0] = ((top.r * bottom.r) / 255)
+              .toInt();
+          rgbList[columnOffset + rowOffset + 1] = ((top.g * bottom.g) / 255)
+              .toInt();
+          rgbList[columnOffset + rowOffset + 2] = ((top.b * bottom.b) / 255)
+              .toInt();
+        } else if (blendMode == "Average") {
+          rgbList[columnOffset + rowOffset + 0] = ((top.r + bottom.r) / 2)
+              .toInt();
+          rgbList[columnOffset + rowOffset + 1] = ((top.g + bottom.g) / 2)
+              .toInt();
+          rgbList[columnOffset + rowOffset + 2] = ((top.b + bottom.b) / 2)
+              .toInt();
         }
       }
     }
@@ -449,10 +518,15 @@ class _CreateMergeState extends State<CreateMergePage> {
     await model.patternDB.insertImage(pattern);
   }
 
-  void tooFewImagesError(BuildContext context){
-    const snackBar = SnackBar(content: Text('You must have at least 2 images stored to make merged image.'));
+  void tooFewImagesError(BuildContext context) {
+    const snackBar = SnackBar(
+      content: Text(
+        'You must have at least 2 images stored to make merged image.',
+      ),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    if(context.mounted) { // Do we actually want this check?
+    if (context.mounted) {
+      // Do we actually want this check?
       Navigator.pop(context);
     }
   }

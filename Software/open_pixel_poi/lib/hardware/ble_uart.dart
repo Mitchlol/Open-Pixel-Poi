@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
 // import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 
 class BleUart {
@@ -23,43 +26,53 @@ class BleUart {
   }
 
   Future<bool> init() async {
-
-    if (await device.connectionState.first.timeout(Duration(seconds: 1), onTimeout: () => BluetoothConnectionState.disconnected) == BluetoothConnectionState.connected) {
+    if (await device.connectionState.first.timeout(
+          Duration(seconds: 1),
+          onTimeout: () => .disconnected,
+        ) ==
+        .connected) {
       await device.disconnect();
     }
 
-    try{
+    try {
       await device
-          .connect(timeout: const Duration(seconds: 5), autoConnect: false, license: License.nonprofit)
-          .timeout(Duration(milliseconds: 5250), onTimeout: () => throw Exception("Connection Timeout"));
-    }catch(e){
+          .connect(
+            timeout: const Duration(seconds: 5),
+            autoConnect: false,
+            license: License.nonprofit,
+          )
+          .timeout(
+            Duration(milliseconds: 5250),
+            onTimeout: () => throw Exception("Connection Timeout"),
+          );
+    } catch (e) {
       // Retry once
       await device
-          .connect(timeout: const Duration(seconds: 5), autoConnect: false, license: License.nonprofit)
-          .timeout(Duration(milliseconds: 5250), onTimeout: () => throw Exception("Connection Timeout"));
+          .connect(
+            timeout: const Duration(seconds: 5),
+            autoConnect: false,
+            license: License.nonprofit,
+          )
+          .timeout(
+            Duration(milliseconds: 5250),
+            onTimeout: () => throw Exception("Connection Timeout"),
+          );
     }
 
     List<BluetoothService> services = await device.discoverServices(timeout: 5);
-    if (services == null) {
-      throw Exception("Cant discover bluetooth services");
-    }
-    service = services.firstWhere((BluetoothService service) => service.uuid.toString() == serviceUuid);
-    if (service == null) {
-      throw Exception("Device does not have UART service");
-    }
+    service = services.firstWhere(
+      (BluetoothService service) => service.uuid.toString() == serviceUuid,
+    );
 
-    rxCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == rxUuid);
-    txCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == txUuid);
-    notifyCharacteristic = service.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == notifyUuid);
-    if (rxCharacteristic == null) {
-      throw Exception("Device does not have UART RX characteristic");
-    }
-    if (txCharacteristic == null) {
-      throw Exception("Device does not have UART TX characteristic");
-    }
-    if (notifyCharacteristic == null) {
-      throw Exception("Device does not have UART NOTIFY characteristic");
-    }
+    rxCharacteristic = service.characteristics.firstWhere(
+      (characteristic) => characteristic.uuid.toString() == rxUuid,
+    );
+    txCharacteristic = service.characteristics.firstWhere(
+      (characteristic) => characteristic.uuid.toString() == txUuid,
+    );
+    notifyCharacteristic = service.characteristics.firstWhere(
+      (characteristic) => characteristic.uuid.toString() == notifyUuid,
+    );
 
     // No longer using notifications!
     // bool notificationsEnabled = await notifyCharacteristic.setNotifyValue(true);
@@ -85,7 +98,7 @@ class BleUart {
     try {
       return await device.disconnect();
     } catch (e) {
-      print(e);
+      debugPrint("$e");
     }
   }
 }
