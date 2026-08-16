@@ -6,7 +6,7 @@ import 'package:image/image.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
 
