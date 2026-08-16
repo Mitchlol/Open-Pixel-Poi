@@ -1,99 +1,62 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../hardware/models/rgb_value.dart';
-import '../model.dart';
 
 class ColorPicker extends StatefulWidget {
-  String title;
-  double red, green, blue;
-  Function(RGBValue) onValueChanged;
+  final String title;
+  final double red, green, blue;
+  final Function(RgbValue) onValueChanged;
 
-  ColorPicker(this.title, this.red, this.green, this.blue, this.onValueChanged);
+  const ColorPicker(
+    this.title,
+    this.red,
+    this.green,
+    this.blue,
+    this.onValueChanged, {
+    super.key,
+  });
 
   @override
-  _ColorPickerState createState() => _ColorPickerState(title, red, green, blue, onValueChanged);
+  State<ColorPicker> createState() => _ColorPickerState();
 }
 
 class _ColorPickerState extends State<ColorPicker> {
-  String title;
-  Function(RGBValue) onValueChanged;
+  late double red = widget.red;
+  late double green = widget.green;
+  late double blue = widget.blue;
 
-  double red, green, blue;
-
-  _ColorPickerState(this.title, this.red, this.green, this.blue, this.onValueChanged);
+  void _notify() {
+    widget.onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        title,
-        style: TextStyle(
+        widget.title,
+        style: const TextStyle(
           color: Colors.blue,
         ),
       ),
       subtitle: Column(
         children: [
-          Row(
-            children: [
-              Text("R:"),
-              Expanded(
-                child: Slider(
-                  value: red,
-                  max: 255.0,
-                  divisions: 255,
-                  onChanged: (double value) {
-                    setState(() {
-                      red = value;
-                    });
-                  },
-                  onChangeEnd: (double value) {
-                    onValueChanged(RGBValue([red.toInt(), green.toInt(), blue.toInt()]));
-                  },
-                ),
-              ),
-            ],
+          _ChannelSlider(
+            label: "R:",
+            value: red,
+            onChanged: (value) => setState(() => red = value),
+            onChangeEnd: _notify,
           ),
-          Row(
-            children: [
-              Text("G:"),
-              Expanded(
-                child: Slider(
-                  value: green,
-                  max: 255,
-                  divisions: 255,
-                  onChanged: (double value) {
-                    setState(() {
-                      green = value;
-                    });
-                  },
-                  onChangeEnd: (double value) {
-                    onValueChanged(RGBValue([red.toInt(), green.toInt(), blue.toInt()]));
-                  },
-                ),
-              ),
-            ],
+          _ChannelSlider(
+            label: "G:",
+            value: green,
+            onChanged: (value) => setState(() => green = value),
+            onChangeEnd: _notify,
           ),
-          Row(
-            children: [
-              Text("B:"),
-              Expanded(
-                child: Slider(
-                  value: blue,
-                  max: 255,
-                  divisions: 255,
-                  onChanged: (double value) {
-                    setState(() {
-                      blue = value;
-                    });
-                  },
-                  onChangeEnd: (double value) {
-                    onValueChanged(RGBValue([red.toInt(), green.toInt(), blue.toInt()]));
-                  },
-                ),
-              ),
-            ],
+          _ChannelSlider(
+            label: "B:",
+            value: blue,
+            onChanged: (value) => setState(() => blue = value),
+            onChangeEnd: _notify,
           ),
         ],
       ),
@@ -102,11 +65,49 @@ class _ColorPickerState extends State<ColorPicker> {
         child: Container(
           decoration: BoxDecoration(
             color: Color.fromARGB(
-                255, red.toInt(), green.toInt(), blue.toInt()),
+              255,
+              red.toInt(),
+              green.toInt(),
+              blue.toInt(),
+            ),
             border: Border.all(color: Colors.black),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ChannelSlider extends StatelessWidget {
+  final String label;
+  final double value;
+  final ValueChanged<double> onChanged;
+  final VoidCallback onChangeEnd;
+
+  const _ChannelSlider({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+    required this.onChangeEnd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(label),
+        Expanded(
+          child: Slider(
+            value: value,
+            max: 255.0,
+            divisions: 255,
+            onChanged: onChanged,
+            onChangeEnd: (double value) {
+              onChangeEnd();
+            },
+          ),
+        ),
+      ],
     );
   }
 }
