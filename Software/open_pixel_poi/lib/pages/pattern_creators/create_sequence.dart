@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../scroll_utils.dart';
+import '../../widgets/big_button.dart';
+import '../../widgets/status_message.dart';
 import '../../widgets/labeled_slider.dart';
 
 class CreateSequencePage extends StatefulWidget {
@@ -25,6 +28,8 @@ class SegmentValues {
   }
 }
 
+const _sequenceButtonStyle = TextStyle(fontSize: 20, fontWeight: .bold);
+
 class _CreateSequenceState extends State<CreateSequencePage> {
   List<SegmentValues> segments = [];
   bool saving = false;
@@ -35,15 +40,9 @@ class _CreateSequenceState extends State<CreateSequencePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sequencer Controller"),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? getSaving() : getForm(),
+      body: saving ? const StatusMessage.saving() : getForm(),
     );
   }
 
@@ -148,116 +147,50 @@ class _CreateSequenceState extends State<CreateSequencePage> {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Row(
-              crossAxisAlignment: .stretch,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (segments.length < 70) {
-                        setState(() {
-                          addSegment();
-                        });
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _scrollController.animateTo(
-                            _scrollController
-                                .position
-                                .maxScrollExtent, // Scroll to the bottom
-                            duration: Duration(
-                              milliseconds: 300,
-                            ), // Duration of the animation
-                            curve: Curves.easeOut, // Smooth easing curve
-                          );
-                        });
-                      } else {
-                        const snackBar = SnackBar(
-                          content: Text(
-                            'Sequence length limited to 70. If this bothers you, ask mitch to implement multi-part ble messages for sequences.',
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    child: const Text(
-                      "Add Seg",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: .bold,
-                      ),
+        BigButtonRow(
+          buttons: [
+            BigButton(
+              "Add Seg",
+              child: const Text("Add Seg", style: _sequenceButtonStyle),
+              onPressed: () {
+                if (segments.length < 70) {
+                  setState(() {
+                    addSegment();
+                  });
+                  _scrollController.animateToBottomAfterBuild();
+                } else {
+                  const snackBar = SnackBar(
+                    content: Text(
+                      'Sequence length limited to 70. If this bothers you, ask mitch to implement multi-part ble messages for sequences.',
                     ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      triggerSequence(context);
-                    },
-                    child: const Text(
-                      "Trigger",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        saving = true;
-                      });
-                      await setSequence(context);
-                      setState(() {
-                        saving = false;
-                      });
-                    },
-                  ),
-                ),
-              ],
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              },
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getSaving() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Saving...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
+            BigButton(
+              "Trigger",
+              child: const Text("Trigger", style: _sequenceButtonStyle),
+              onPressed: () {
+                triggerSequence(context);
+              },
             ),
-            SizedBox(
-              height: 30,
+            BigButton(
+              "Save",
+              child: const Text("Save", style: _sequenceButtonStyle),
+              onPressed: () async {
+                setState(() {
+                  saving = true;
+                });
+                await setSequence(context);
+                setState(() {
+                  saving = false;
+                });
+              },
             ),
-            CircularProgressIndicator(),
           ],
         ),
-      ),
+      ],
     );
   }
 

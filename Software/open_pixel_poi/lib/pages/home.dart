@@ -40,13 +40,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: Text("Open Pixel Poi"),
         ),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
       body: Stack(
         children: [
