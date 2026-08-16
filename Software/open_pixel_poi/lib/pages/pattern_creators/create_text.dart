@@ -44,94 +44,30 @@ class _CreateTextState extends State<CreateTextPage> {
         title: const Text("Text Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
+      body: saving
+          ? const StatusMessage.saving()
+          : _TextAndColorInputs(
+              textHeight: textHeight,
+              textColor: textColor,
+              backgroundColor: backgroundColor,
+              onTextHeightChanged: (value) => setState(() {
+                textHeight = value;
+              }),
+              onTextChanged: (value) => text = value,
+              onTextColorChanged: (color) => textColor = color,
+              onBackgroundColorChanged: (color) => backgroundColor = color,
+              onSave: _save,
+            ),
     );
   }
 
-  Widget getForm() {
-    return ListView(
-      children: [
-        ListTile(
-          title: Text(
-            "Text Size:",
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.blue,
-            ),
-          ),
-          subtitle: DropdownButton<int>(
-            isExpanded: true,
-            style: Theme.of(context).textTheme.headlineSmall,
-            value: textHeight,
-            items: [
-              DropdownMenuItem(value: 20, child: Center(child: Text("20px"))),
-              DropdownMenuItem(value: 25, child: Center(child: Text("25px"))),
-              DropdownMenuItem(value: 55, child: Center(child: Text("55px"))),
-            ],
-            onChanged: (value) {
-              setState(() {
-                textHeight = value!;
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: Text(
-            "Text:",
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.blue,
-            ),
-          ),
-          subtitle: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Your text',
-            ),
-            onChanged: (newValue) => text = newValue,
-            textCapitalization: TextCapitalization.characters,
-            inputFormatters: [
-              FilteringTextInputFormatter(RegExp("[0-9A-Z ]"), allow: true),
-            ],
-            maxLength: textHeight == 55 ? 13 : 25,
-          ),
-        ),
-        ColorPicker(
-          "Text Color",
-          textColor.red.toDouble(),
-          textColor.green.toDouble(),
-          textColor.blue.toDouble(),
-          (RgbValue color) {
-            textColor = color;
-          },
-        ),
-        ColorPicker(
-          "Background Color",
-          backgroundColor.red.toDouble(),
-          backgroundColor.green.toDouble(),
-          backgroundColor.blue.toDouble(),
-          (RgbValue color) {
-            backgroundColor = color;
-          },
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {
@@ -178,5 +114,91 @@ class _CreateTextState extends State<CreateTextPage> {
     );
 
     await model.patternDB.insertImage(DBImage.fromImg(image));
+  }
+}
+
+class _TextAndColorInputs extends StatelessWidget {
+  static const _titleStyle = TextStyle(fontSize: 24, color: Colors.blue);
+
+  final int textHeight;
+  final RgbValue textColor;
+  final RgbValue backgroundColor;
+  final ValueChanged<int> onTextHeightChanged;
+  final ValueChanged<String> onTextChanged;
+  final ValueChanged<RgbValue> onTextColorChanged;
+  final ValueChanged<RgbValue> onBackgroundColorChanged;
+  final VoidCallback onSave;
+
+  const _TextAndColorInputs({
+    required this.textHeight,
+    required this.textColor,
+    required this.backgroundColor,
+    required this.onTextHeightChanged,
+    required this.onTextChanged,
+    required this.onTextColorChanged,
+    required this.onBackgroundColorChanged,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        ListTile(
+          title: const Text("Text Size:", style: _titleStyle),
+          subtitle: DropdownButton<int>(
+            isExpanded: true,
+            style: Theme.of(context).textTheme.headlineSmall,
+            value: textHeight,
+            items: [
+              for (final height in const [20, 25, 55])
+                DropdownMenuItem(
+                  value: height,
+                  child: Center(child: Text("${height}px")),
+                ),
+            ],
+            onChanged: (value) => onTextHeightChanged(value!),
+          ),
+        ),
+        ListTile(
+          title: const Text("Text:", style: _titleStyle),
+          subtitle: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Your text',
+            ),
+            onChanged: onTextChanged,
+            textCapitalization: TextCapitalization.characters,
+            inputFormatters: [
+              FilteringTextInputFormatter(
+                RegExp("[0-9A-Z ]"),
+                allow: true,
+              ),
+            ],
+            maxLength: textHeight == 55 ? 13 : 25,
+          ),
+        ),
+        ColorPicker(
+          "Text Color",
+          textColor.red.toDouble(),
+          textColor.green.toDouble(),
+          textColor.blue.toDouble(),
+          onTextColorChanged,
+        ),
+        ColorPicker(
+          "Background Color",
+          backgroundColor.red.toDouble(),
+          backgroundColor.green.toDouble(),
+          backgroundColor.blue.toDouble(),
+          onBackgroundColorChanged,
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton("Save", onPressed: onSave),
+          ],
+        ),
+      ],
+    );
   }
 }

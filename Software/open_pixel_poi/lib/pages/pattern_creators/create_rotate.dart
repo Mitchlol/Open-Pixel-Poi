@@ -8,8 +8,7 @@ import '../../database/db_image.dart';
 import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
-import '../../widgets/pattern_picker.dart';
-import '../../widgets/big_button.dart';
+import '../../widgets/source_image_selector.dart';
 import '../../widgets/status_message.dart';
 import '../../widgets/labeled_slider.dart';
 
@@ -32,48 +31,37 @@ class _CreateRotateState extends State<CreateRotatePage> {
         title: const Text("Rotate image 90 degrees"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
+      body: saving
+          ? const StatusMessage.saving()
+          : SourceImageSelector(
+              image: image,
+              onImageSelected: (entry) => setState(() => image = entry),
+              onDefaultImageAssigned: (entry) => image = entry,
+              tooFewImagesMessage: 'You must have at least 1 image stored to rotate.',
+              onSave: _save,
+              settings: [
+                LabeledSlider(
+                  "Rotated Image Height Limit",
+                  1,
+                  100,
+                  1,
+                  (int value) => setState(() {
+                    outputImageHeightLimit = value;
+                  }),
+                  25,
+                ),
+              ],
+            ),
     );
   }
 
-  Widget getForm() {
-    return ListView(
-      children: [
-        LabeledSlider(
-          "Rotated Image Height Limit",
-          1,
-          100,
-          1,
-          (int value) => setState(() {
-            outputImageHeightLimit = value;
-          }),
-          25,
-        ),
-        PatternPicker(
-          label: "Image",
-          selected: image,
-          onSelected: (entry) => setState(() => image = entry),
-          onDefaultAssigned: (entry) => image = entry,
-          tooFewImagesMessage: 'You must have at least 1 image stored to rotate.',
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {

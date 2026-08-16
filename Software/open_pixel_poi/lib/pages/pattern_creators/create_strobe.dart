@@ -44,82 +44,30 @@ class _CreateStrobeState extends State<CreateStrobePage> {
         title: const Text("Strobe Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: segmentValues.length, // Total number of items in the list
-            itemBuilder: (context, index) {
-              // Build each item in the list
-              return Card(
-                elevation: 5,
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        "Strobe Segment: ${index + 1}",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    LabeledSlider(
-                      "Segment Length",
-                      1,
-                      100,
-                      1,
-                      (int value) => setState(() {
-                        segmentValues[index].width = value;
-                      }),
-                      segmentValues[index].width,
-                    ),
-                    ColorPicker(
-                      "Segment Color",
-                      segmentValues[index].color.red.toDouble(),
-                      segmentValues[index].color.green.toDouble(),
-                      segmentValues[index].color.blue.toDouble(),
-                      (RgbValue color) => segmentValues[index].color = color,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "+ Color",
-              onPressed: () {
+      body: saving
+          ? const StatusMessage.saving()
+          : _StrobeSegmentList(
+              segments: segmentValues,
+              scrollController: _scrollController,
+              onSegmentChanged: () => setState(() {}),
+              onAddSegment: () {
                 setState(() {
                   addSegment();
                 });
                 _scrollController.animateToBottomAfterBuild();
               },
+              onSave: _save,
             ),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                bool success = await makeAndStorePattern(context);
-                if (success && mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
     );
+  }
+
+  Future<void> _save() async {
+    saving = true;
+    bool success = await makeAndStorePattern(context);
+    if (success && mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   void addSegment() {
@@ -167,5 +115,94 @@ class _CreateStrobeState extends State<CreateStrobePage> {
     var model = Provider.of<Model>(context, listen: false);
     await model.patternDB.insertImage(pattern);
     return true;
+  }
+}
+
+class _StrobeSegmentList extends StatelessWidget {
+  final List<SegmentValues> segments;
+  final ScrollController scrollController;
+  final VoidCallback onSegmentChanged;
+  final VoidCallback onAddSegment;
+  final VoidCallback onSave;
+
+  const _StrobeSegmentList({
+    required this.segments,
+    required this.scrollController,
+    required this.onSegmentChanged,
+    required this.onAddSegment,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: segments.length,
+            itemBuilder: (context, index) => _StrobeSegmentCard(
+              number: index + 1,
+              segment: segments[index],
+              onChanged: onSegmentChanged,
+            ),
+          ),
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton("+ Color", onPressed: onAddSegment),
+            BigButton("Save", onPressed: onSave),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _StrobeSegmentCard extends StatelessWidget {
+  final int number;
+  final SegmentValues segment;
+  final VoidCallback onChanged;
+
+  const _StrobeSegmentCard({
+    required this.number,
+    required this.segment,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              "Strobe Segment: $number",
+              style: const TextStyle(fontSize: 24, color: Colors.blue),
+            ),
+          ),
+          LabeledSlider(
+            "Segment Length",
+            1,
+            100,
+            1,
+            (int value) {
+              segment.width = value;
+              onChanged();
+            },
+            segment.width,
+          ),
+          ColorPicker(
+            "Segment Color",
+            segment.color.red.toDouble(),
+            segment.color.green.toDouble(),
+            segment.color.blue.toDouble(),
+            (RgbValue color) => segment.color = color,
+          ),
+        ],
+      ),
+    );
   }
 }
