@@ -1,5 +1,5 @@
 // Some things need to be included here, seems files are loaded alphabetically
-#include <arduino.h>
+#include <Arduino.h>
 #include <Update.h>
 #include "config.h"
 #include "open_pixel_poi_config.cpp"
@@ -73,7 +73,24 @@ enum CommCode {
   CC_SET_SPEED_OPTION,            // 18
   CC_SET_SPEED_OPTIONS,           // 19
   CC_SET_PATTERN_SHUFFLE_DURATION,// 20
+  CC_GET_STATE,                   // 21
 };
+
+// Get State response payload (all multi byte values big endian):
+//   displayState           1 byte  (0 = pattern, 1 = shuffle bank, 2 = shuffle all banks)
+//   patternBank            1 byte
+//   patternSlot            1 byte
+//   ledBrightness          1 byte
+//   animationSpeed         2 bytes
+//   patternShuffleDuration 1 byte  (seconds)
+//   sequencerStepCount     1 byte  (0 = no sequence loaded)
+//   sequencerStep          2 bytes (signed; -1 = about to start, stepCount = stopped)
+//   bankCount              1 byte
+//   bankSize               1 byte
+//   patternHashes          bankCount * bankSize * 4 bytes, ordered
+//                          slot + bank * bankSize. FNV-1a 32 over frame
+//                          height, frame count (big endian), and the raw
+//                          pattern bytes. 0 = unknown (empty slot).
 
 class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallbacks{
   
@@ -109,6 +126,37 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
 
     void bleSendFWVersion(){
       uint8_t response[] = {0xD0, 0x00, 0x06, CC_GET_FW_VERSION, 0x02, 0xD1};
+      writeToPixelPoi(response);
+    }
+
+    void bleSendState(){
+      const uint8_t hashCount = PATTERN_BANK_COUNT * PATTERN_BANK_SIZE;
+      const uint16_t length = 17 + hashCount * 4; // Framing (5) + fixed payload (12) + hashes
+      uint8_t response[length];
+      int i = 0;
+      response[i++] = 0xD0;
+      response[i++] = length >> 8;
+      response[i++] = length & 0xFF;
+      response[i++] = CC_GET_STATE;
+      response[i++] = config.displayState;
+      response[i++] = config.patternBank;
+      response[i++] = config.patternSlot;
+      response[i++] = config.ledBrightness;
+      response[i++] = config.animationSpeed >> 8;
+      response[i++] = config.animationSpeed & 0xFF;
+      response[i++] = config.patternShuffleDuration;
+      response[i++] = config.sequencerLength / 7;
+      response[i++] = (config.sequencerStep >> 8) & 0xFF;
+      response[i++] = config.sequencerStep & 0xFF;
+      response[i++] = PATTERN_BANK_COUNT;
+      response[i++] = PATTERN_BANK_SIZE;
+      for (uint8_t p = 0; p < hashCount; p++){
+        response[i++] = config.patternHashes[p] >> 24;
+        response[i++] = (config.patternHashes[p] >> 16) & 0xFF;
+        response[i++] = (config.patternHashes[p] >> 8) & 0xFF;
+        response[i++] = config.patternHashes[p] & 0xFF;
+      }
+      response[i++] = 0xD1;
       writeToPixelPoi(response);
     }
     
@@ -224,6 +272,8 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             bleSendSuccess();
           }else if(requestCode == CC_GET_FW_VERSION){
             bleSendFWVersion();
+          }else if(requestCode == CC_GET_STATE){
+            bleSendState();
           }else if(requestCode == CC_SET_HARDWARE_VERSION){
             config.setHardwareVersion(bleStatus[2]);
             bleSendSuccess();
