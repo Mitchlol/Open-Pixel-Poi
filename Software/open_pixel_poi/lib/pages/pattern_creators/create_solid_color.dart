@@ -14,7 +14,7 @@ class CreateSolidColorPage extends StatefulWidget {
   const CreateSolidColorPage({super.key});
 
   @override
-  _CreateSolidColorState createState() => _CreateSolidColorState();
+  State<CreateSolidColorPage> createState() => _CreateSolidColorState();
 }
 
 class _CreateSolidColorState extends State<CreateSolidColorPage> {
@@ -66,7 +66,7 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -75,7 +75,7 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -87,14 +87,13 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if (context.mounted) {
-                        // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -114,14 +113,14 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(

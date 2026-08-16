@@ -15,7 +15,7 @@ class CreateFadePage extends StatefulWidget {
   const CreateFadePage({super.key});
 
   @override
-  _CreateFadeState createState() => _CreateFadeState();
+  State<CreateFadePage> createState() => _CreateFadeState();
 }
 
 class _CreateFadeState extends State<CreateFadePage> {
@@ -82,7 +82,7 @@ class _CreateFadeState extends State<CreateFadePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -91,7 +91,7 @@ class _CreateFadeState extends State<CreateFadePage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -117,7 +117,7 @@ class _CreateFadeState extends State<CreateFadePage> {
                       "+ Color",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -129,14 +129,13 @@ class _CreateFadeState extends State<CreateFadePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if (context.mounted) {
-                        // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -156,14 +155,14 @@ class _CreateFadeState extends State<CreateFadePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(

@@ -6,7 +6,6 @@ import 'package:open_pixel_poi/pages/home.dart';
 import 'package:provider/provider.dart';
 
 import '../hardware/ble_uart.dart';
-import '../hardware/models/comm_code.dart';
 import '../hardware/models/fw_version.dart';
 import '../model.dart';
 
@@ -14,7 +13,7 @@ class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
   @override
-  _WelcomeState createState() => _WelcomeState();
+  State<WelcomePage> createState() => _WelcomeState();
 }
 
 class _WelcomeState extends State<WelcomePage> {
@@ -63,7 +62,7 @@ class _WelcomeState extends State<WelcomePage> {
 
   Widget getBody(bool isScanning, List<ScanResult> scanResults) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: <Widget>[
         Expanded(child: getAllListStates(isScanning, scanResults)),
         getButtons(isScanning, scanResults),
@@ -76,7 +75,7 @@ class _WelcomeState extends State<WelcomePage> {
       return getConnecting();
     } else if (isDisconnecting) {
       return getDisconnecting();
-    } else if (!isScanning && (scanResults == null || hasScanned == false)) {
+    } else if (!isScanning && (hasScanned == false)) {
       return getWelcome();
     } else if (!isScanning && scanResults.isEmpty) {
       return getEmpty();
@@ -90,14 +89,14 @@ class _WelcomeState extends State<WelcomePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Welcome to your poi!",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -120,14 +119,14 @@ class _WelcomeState extends State<WelcomePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "No bluetooth devices found!",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -156,7 +155,7 @@ class _WelcomeState extends State<WelcomePage> {
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: scanResults.length,
-      scrollDirection: Axis.vertical,
+      scrollDirection: .vertical,
       itemBuilder: (BuildContext context, int index) {
         return Card(
           child: ListTile(
@@ -211,14 +210,14 @@ class _WelcomeState extends State<WelcomePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Connecting...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -236,14 +235,14 @@ class _WelcomeState extends State<WelcomePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Disconnecting...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -263,7 +262,7 @@ class _WelcomeState extends State<WelcomePage> {
         width: double.infinity,
         height: 60,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             Expanded(
               child: ElevatedButton(
@@ -294,7 +293,7 @@ class _WelcomeState extends State<WelcomePage> {
                         "Scan",
                         style: TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: .bold,
                         ),
                       ),
               ),
@@ -323,7 +322,7 @@ class _WelcomeState extends State<WelcomePage> {
                           "Connect",
                           style: TextStyle(
                             fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: .bold,
                           ),
                         ),
                 ),
@@ -343,7 +342,7 @@ class _WelcomeState extends State<WelcomePage> {
         setState(() {
           isDisconnecting = true;
         });
-        if (await hardware.uart.device.connectionState.first == BluetoothConnectionState.connected) {
+        if (await hardware.uart.device.connectionState.first == .connected) {
           await hardware.uart.disconnect();
           await Future.delayed(Duration(milliseconds: 2000));
         }
@@ -365,15 +364,17 @@ class _WelcomeState extends State<WelcomePage> {
   }
 
   void connect(List<BluetoothDevice> devices) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final model = Provider.of<Model>(context, listen: false);
     // Clear stale state
-    var connectedPoi = Provider.of<Model>(context, listen: false).connectedPoi;
-    Provider.of<Model>(context, listen: false).connectedPoi = null;
+    var connectedPoi = model.connectedPoi;
+    model.connectedPoi = null;
     if (connectedPoi != null) {
       for (var hardware in connectedPoi) {
         setState(() {
           isDisconnecting = true;
         });
-        if (await hardware.uart.device.connectionState.first == BluetoothConnectionState.connected) {
+        if (await hardware.uart.device.connectionState.first == .connected) {
           await hardware.uart.disconnect();
         }
         await hardware.subscription.cancel();
@@ -391,32 +392,29 @@ class _WelcomeState extends State<WelcomePage> {
       BleUart bleUart = BleUart(device);
       await bleUart.isIntialized.then(
         (value) {
-          print("BleUart Initialized");
+          debugPrint("BleUart Initialized");
           Provider.of<Model>(
             _key.currentContext!,
             listen: false,
           ).connectedPoi!.add(PoiHardware(bleUart));
         },
         onError: (error) {
-          print("error = $error");
+          debugPrint("error = $error");
           const snackBar = SnackBar(
             content: Text(
               'Unable to connect, please make sure selected device is a Open Pixel Poi.',
             ),
           );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          messenger.showSnackBar(snackBar);
           return;
         },
       );
     }
     // Check the firmware version of each connected device
-    print("Check firmware version");
-    for (PoiHardware poi in Provider.of<Model>(
-      context,
-      listen: false,
-    ).connectedPoi!) {
-      await poi.sendInt8(0, CommCode.CC_GET_FW_VERSION, true);
-      FWVersion? version = await poi.readResponse();
+    debugPrint("Check firmware version");
+    for (PoiHardware poi in model.connectedPoi!) {
+      await poi.sendInt8(0, .CC_GET_FW_VERSION, true);
+      final version = await poi.readResponse() as FWVersion?;
       if ((version?.version ?? 0) != 2) {
         setState(() {
           isConnecting = false;
@@ -426,7 +424,7 @@ class _WelcomeState extends State<WelcomePage> {
             'Outdated firmware on you Open Pixel Poi, please update your firmware. (Or use an old version of the app.)',
           ),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        messenger.showSnackBar(snackBar);
         return;
       }
     }
