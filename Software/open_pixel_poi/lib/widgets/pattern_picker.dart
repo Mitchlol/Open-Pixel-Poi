@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,8 +34,7 @@ class PatternPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imagesFuture = Provider.of<Model>(context).patternDB
-        .getImages(context);
+    final imagesFuture = Provider.of<Model>(context).patternDB.getImages();
     return InkWell(
       onTap: () => showDialog<void>(
         context: context,
@@ -61,7 +62,9 @@ class PatternPicker extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: PatternPreview(
-                                child: snapshot.data![index].preview,
+                                child: PatternPreviewImage(
+                                  bytes: snapshot.data![index].previewBytes,
+                                ),
                               ),
                             ),
                           );
@@ -110,12 +113,14 @@ class PatternPicker extends StatelessWidget {
                       AsyncSnapshot<List<PatternEntry>> snapshot,
                     ) {
                       if (selected != null) {
-                        return selected!.preview;
+                        return PatternPreviewImage(
+                          bytes: selected!.previewBytes,
+                        );
                       } else if (snapshot.hasData &&
                           snapshot.data!.length >= minImages) {
                         final entry = snapshot.data![defaultIndex];
                         onDefaultAssigned(entry);
-                        return entry.preview;
+                        return PatternPreviewImage(bytes: entry.previewBytes);
                       } else if (snapshot.hasError ||
                           (snapshot.hasData &&
                               snapshot.data!.length < minImages)) {
@@ -140,6 +145,22 @@ class PatternPicker extends StatelessWidget {
     if (context.mounted) {
       Navigator.pop(context);
     }
+  }
+}
+
+/// Renders a stored pattern's JPEG encoded preview bytes.
+class PatternPreviewImage extends StatelessWidget {
+  final Uint8List bytes;
+
+  const PatternPreviewImage({required this.bytes, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.memory(
+      bytes,
+      alignment: Alignment.topLeft,
+      fit: .fitHeight,
+    );
   }
 }
 

@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
 
 import 'db_image.dart';
 
@@ -13,9 +13,9 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
-typedef PatternEntry = ({Widget preview, DBImage dbImage});
+/// A stored pattern together with its JPEG encoded preview strip.
+typedef PatternEntry = ({Uint8List previewBytes, DBImage dbImage});
 
 class PatternDB {
   late Future<Database> databaseFuture;
@@ -204,25 +204,18 @@ class PatternDB {
     return imgimages;
   }
 
-  Future<List<PatternEntry>> getImages(BuildContext context) async {
+  Future<List<PatternEntry>> getImages() async {
     if (inMemoryCache != null) {
       return Future.value(inMemoryCache);
     }
     var dbImages = await getDBImages();
     List<img.Image> imgImages = await getRepeatingImgImages(dbImages);
-    List<PatternEntry> imageWidgets = List.empty(growable: true);
-    for (var imgImage in imgImages) {
-      imageWidgets.add((
-        preview: Image.memory(
-          img.encodeJpg(imgImage),
-          alignment: Alignment.topLeft,
-          fit: .fitHeight,
-        ),
-        dbImage: dbImages[imgImages.indexOf(imgImage)],
-      ));
-    }
-    inMemoryCache = imageWidgets;
-    return imageWidgets;
+    List<PatternEntry> entries = [
+      for (final (index, imgImage) in imgImages.indexed)
+        (previewBytes: img.encodeJpg(imgImage), dbImage: dbImages[index]),
+    ];
+    inMemoryCache = entries;
+    return entries;
   }
 
   void clearInMemoryCache() {
