@@ -205,8 +205,11 @@ class _HomePageState extends State<HomePage> {
                   for (final option in options)
                     _commandButton(
                       "${option + 1}",
-                      (poi) =>
-                          poi.sendInt8(option, .CC_SET_BRIGHTNESS_OPTION, false),
+                      (poi) => poi.sendInt8(
+                        option,
+                        .CC_SET_BRIGHTNESS_OPTION,
+                        false,
+                      ),
                     ),
                 ]),
             ],
@@ -233,7 +236,8 @@ class _HomePageState extends State<HomePage> {
                   for (final option in options)
                     _commandButton(
                       "${option + 1}",
-                      (poi) => poi.sendInt8(option, .CC_SET_SPEED_OPTION, false),
+                      (poi) =>
+                          poi.sendInt8(option, .CC_SET_SPEED_OPTION, false),
                     ),
                 ]),
             ],
@@ -272,14 +276,16 @@ class _HomePageState extends State<HomePage> {
                     for (final slot in const [0, 1, 2])
                       _commandButton(
                         "${slot + 1}",
-                        (poi) => poi.sendInt8(slot, .CC_SET_PATTERN_SLOT, false),
+                        (poi) =>
+                            poi.sendInt8(slot, .CC_SET_PATTERN_SLOT, false),
                       ),
                   ]),
                   _buttonRow([
                     for (final slot in const [3, 4])
                       _commandButton(
                         "${slot + 1}",
-                        (poi) => poi.sendInt8(slot, .CC_SET_PATTERN_SLOT, false),
+                        (poi) =>
+                            poi.sendInt8(slot, .CC_SET_PATTERN_SLOT, false),
                       ),
                     _commandButton(
                       "∞",
