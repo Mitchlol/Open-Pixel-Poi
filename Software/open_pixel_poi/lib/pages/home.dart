@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
 import '../database/db_image.dart';
+import '../database/pattern_db.dart';
 import '../hardware/models/comm_code.dart';
 import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
@@ -425,12 +425,12 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        subtitle: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+        subtitle: FutureBuilder<List<PatternEntry>>(
           future: Provider.of<Model>(context).patternDB.getImages(context),
-          builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
-              List<Tuple2<Widget, DBImage>>? tuples = snapshot.data;
+              List<PatternEntry>? tuples = snapshot.data;
               tuples ??= List.empty();
               List<Widget> widgets = List.empty(growable: true);
               for (var tuple in tuples) {
@@ -448,7 +448,7 @@ class _HomePageState extends State<HomePage> {
                               .timeout(Duration(milliseconds: 5250));
                           await poi.uart.device.clearGattCache(); // Boosts speed too
                         }
-                        await poi.sendPattern2(tuple.item2).timeout(const Duration(seconds: 5), onTimeout: () {return false;});
+                        await poi.sendPattern2(tuple.dbImage).timeout(const Duration(seconds: 5), onTimeout: () {return false;});
                       }
                       setState(() {
                         loading.value = false;
@@ -458,7 +458,7 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: const Text("Edit/Delete Pattern"),
-                        content: Text('Image Stats:\nwidth=${tuple.item2.count}\nheight=${tuple.item2.height}'),
+                        content: Text('Image Stats:\nwidth=${tuple.dbImage.count}\nheight=${tuple.dbImage.height}'),
                         actionsPadding: const EdgeInsets.all(0.0),
                         actions: <Widget>[
                           TextButton(
@@ -470,7 +470,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context, 'Flip');
                               Provider.of<Model>(context, listen: false)
                                   .patternDB
-                                  .invertImage(tuple.item2.id!)
+                                  .invertImage(tuple.dbImage.id!)
                                   .then((value) => setState(() {}));
                             },
                             child: const Text('Flip'),
@@ -480,7 +480,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context, 'Mirror');
                               Provider.of<Model>(context, listen: false)
                                   .patternDB
-                                  .reverseImage(tuple.item2.id!)
+                                  .reverseImage(tuple.dbImage.id!)
                                   .then((value) => setState(() {}));
                             },
                             child: const Text('Mirror'),
@@ -490,7 +490,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context, 'Delete');
                               Provider.of<Model>(context, listen: false)
                                   .patternDB
-                                  .deleteImage(tuple.item2.id!)
+                                  .deleteImage(tuple.dbImage.id!)
                                   .then((value) => setState(() {}));
                             },
                             child: const Text('Delete'),
@@ -507,7 +507,7 @@ class _HomePageState extends State<HomePage> {
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
                               height: 80,
-                              child: tuple.item1,
+                              child: tuple.preview,
                             ),
                           ),
                           const SizedBox(
