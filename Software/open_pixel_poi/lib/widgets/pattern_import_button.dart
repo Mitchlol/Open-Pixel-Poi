@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -10,22 +9,22 @@ import '../database/db_image.dart';
 import '../model.dart';
 
 class PatternImportButton extends StatelessWidget {
-  Function() onImageImported;
-  PatternImportButton(this.onImageImported, {super.key});
+  final Function() onImageImported;
+  const PatternImportButton(this.onImageImported, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
+        final messenger = ScaffoldMessenger.of(context);
         try {
-          SnackBar snackBar = SnackBar(content: Text("Importing..."));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          messenger.showSnackBar(const SnackBar(content: Text("Importing...")));
           await importPattern(context);
-          SnackBar snackBar2 = SnackBar(content: Text("Import succeeded!"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar2);
+          messenger.showSnackBar(
+            const SnackBar(content: Text("Import succeeded!")),
+          );
         } on Exception catch (error) {
-          SnackBar snackBar = SnackBar(content: Text("$error"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          messenger.showSnackBar(SnackBar(content: Text("$error")));
         }
       },
       icon: const Icon(
@@ -42,11 +41,7 @@ class PatternImportButton extends StatelessWidget {
     final List<XFile> images = await picker.pickMultiImage();
     final List<DBImage> patterns = [];
     for (var imageFile in images) {
-      if (imageFile == null) {
-        throw Exception("Invalid file.");
-      }
-
-      img.Image? image = null;
+      img.Image? image;
       if (imageFile.name.endsWith('bmp') || imageFile.name.endsWith('BMP')) {
         image = img.decodeBmp(await imageFile.readAsBytes())!;
       }

@@ -17,7 +17,7 @@ class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
 
   @override
-  _CreateState createState() => _CreateState();
+  State<CreatePage> createState() => _CreateState();
 }
 
 class _CreateState extends State<CreatePage> {
@@ -57,10 +57,7 @@ class _CreateState extends State<CreatePage> {
         width: double.infinity,
         height: 60,
         child: ElevatedButton(
-          child: Text(
-            label,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          child: Text(label, style: TextStyle(fontSize: 24, fontWeight: .bold)),
           onPressed: () async {
             var result = await Navigator.push(
               context,
@@ -70,7 +67,7 @@ class _CreateState extends State<CreatePage> {
                 },
               ),
             );
-            if (result != null && result && context.mounted) {
+            if (result != null && result && mounted) {
               Navigator.pop(context);
             }
           },

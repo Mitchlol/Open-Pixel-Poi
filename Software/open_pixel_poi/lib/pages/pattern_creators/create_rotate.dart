@@ -14,7 +14,7 @@ class CreateRotatePage extends StatefulWidget {
   const CreateRotatePage({super.key});
 
   @override
-  _CreateRotateState createState() => _CreateRotateState();
+  State<CreateRotatePage> createState() => _CreateRotateState();
 }
 
 class _CreateRotateState extends State<CreateRotatePage> {
@@ -80,8 +80,8 @@ class _CreateRotateState extends State<CreateRotatePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: .center,
+                                    crossAxisAlignment: .start,
                                     children: [
                                       SizedBox(
                                         height: 80,
@@ -124,8 +124,8 @@ class _CreateRotateState extends State<CreateRotatePage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -180,7 +180,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -189,7 +189,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -201,14 +201,13 @@ class _CreateRotateState extends State<CreateRotatePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if (context.mounted) {
-                        // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -228,14 +227,14 @@ class _CreateRotateState extends State<CreateRotatePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(

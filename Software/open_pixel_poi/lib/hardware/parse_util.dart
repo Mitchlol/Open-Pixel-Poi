@@ -79,67 +79,67 @@ class ParseUtil {
     return data.removeAt(0) == 1;
   }
 
-  static putString(List<int> buffer, String data) {
+  static void putString(List<int> buffer, String data) {
     buffer.addAll(utf8.encode(data));
   }
 
-  static putInt8(List<int> buffer, int data) {
+  static void putInt8(List<int> buffer, int data) {
     buffer.add(data & 0xff);
   }
 
-  static putInt8s(List<int> buffer, int data) {
-    return putInt8(buffer, data.toUnsigned(8));
+  static void putInt8s(List<int> buffer, int data) {
+    putInt8(buffer, data.toUnsigned(8));
   }
 
-  static putInt8List(List<int> buffer, List<int> data) {
+  static void putInt8List(List<int> buffer, List<int> data) {
     for (int variable in data) {
       putInt8(buffer, variable);
     }
   }
 
-  static putInt16(List<int> buffer, int data) {
+  static void putInt16(List<int> buffer, int data) {
     buffer.add((data >> 8) & 0xff);
     buffer.add(data & 0xff);
   }
 
-  static putInt16s(List<int> buffer, int data) {
-    return putInt16(buffer, data.toUnsigned(16));
+  static void putInt16s(List<int> buffer, int data) {
+    putInt16(buffer, data.toUnsigned(16));
   }
 
-  static putInt24(List<int> buffer, int data) {
+  static void putInt24(List<int> buffer, int data) {
     buffer.add((data >> 16) & 0xff);
     buffer.add((data >> 8) & 0xff);
     buffer.add(data & 0xff);
   }
 
-  static putInt32(List<int> buffer, int data) {
+  static void putInt32(List<int> buffer, int data) {
     buffer.add(data >> 24);
     buffer.add((data >> 16) & 0xff);
     buffer.add((data >> 8) & 0xff);
     buffer.add(data & 0xff);
   }
 
-  static putInt32s(List<int> buffer, int data) {
-    return putInt32(buffer, data.toUnsigned(32));
+  static void putInt32s(List<int> buffer, int data) {
+    putInt32(buffer, data.toUnsigned(32));
   }
 
-  static putDouble2Byte(List<int> buffer, double data, int scale) {
-    return putInt16(buffer, (data * scale).truncate());
+  static void putDouble2Byte(List<int> buffer, double data, int scale) {
+    putInt16(buffer, (data * scale).truncate());
   }
 
-  static putDouble(List<int> buffer, double number) {
+  static void putDouble(List<int> buffer, double number) {
     List frexped = frexp(number);
     int e = frexped[1];
     double sig = frexped[0];
-    double sig_abs = sig.abs();
-    int sig_i = 0;
+    double sigAbs = sig.abs();
+    int sigI = 0;
 
-    if (sig_abs >= 0.5) {
-      sig_i = ((sig_abs - 0.5) * 2.0 * 8388608.0).truncate();
+    if (sigAbs >= 0.5) {
+      sigI = ((sigAbs - 0.5) * 2.0 * 8388608.0).truncate();
       e += 126;
     }
 
-    int res = ((e & 0xFF) << 23) | (sig_i & 0x7FFFFF);
+    int res = ((e & 0xFF) << 23) | (sigI & 0x7FFFFF);
     if (sig < 0) {
       res |= 1 << 31;
     }
@@ -147,13 +147,13 @@ class ParseUtil {
     putInt32(buffer, res);
   }
 
-  static putDoubleList(List<int> buffer, List<double> data) {
+  static void putDoubleList(List<int> buffer, List<double> data) {
     for (double variable in data) {
       putDouble(buffer, variable);
     }
   }
 
-  static putBoolean(List<int> buffer, bool data) {
+  static void putBoolean(List<int> buffer, bool data) {
     return buffer.add(data ? 1 : 0);
   }
 
