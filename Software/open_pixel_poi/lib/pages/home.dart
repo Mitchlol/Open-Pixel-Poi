@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -444,7 +445,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (!kIsWeb) {
                           // Calling connect seems to bring device to the front of a magic queue and operate faster, and properly
                           await poi.uart.device
-                              .connect(timeout: Duration(seconds: 5), autoConnect: false)
+                              .connect(timeout: const Duration(seconds: 5), autoConnect: false, license: License.nonprofit)
                               .timeout(Duration(milliseconds: 5250));
                           await poi.uart.device.clearGattCache(); // Boosts speed too
                         }

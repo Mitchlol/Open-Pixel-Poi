@@ -30,12 +30,12 @@ class BLEUart {
 
     try{
       await device
-          .connect(timeout: Duration(seconds: 5), autoConnect: false)
+          .connect(timeout: const Duration(seconds: 5), autoConnect: false, license: License.nonprofit)
           .timeout(Duration(milliseconds: 5250), onTimeout: () => throw Exception("Connection Timeout"));
     }catch(e){
       // Retry once
       await device
-          .connect(timeout: Duration(seconds: 5), autoConnect: false)
+          .connect(timeout: const Duration(seconds: 5), autoConnect: false, license: License.nonprofit)
           .timeout(Duration(milliseconds: 5250), onTimeout: () => throw Exception("Connection Timeout"));
     }
 
