@@ -454,16 +454,6 @@ class _PatternTile extends StatelessWidget {
         ).connectedPoi!.where((poi) => poi.isConncted).toList();
         loading.value = true;
         for (var poi in connectedPoi) {
-          if (!kIsWeb) {
-            // Calling connect seems to bring device to the front of a magic queue and operate faster, and properly
-            await poi.uart.device
-                .connect(
-                  timeout: const Duration(seconds: 5),
-                  autoConnect: false,
-                )
-                .timeout(Duration(milliseconds: 5250));
-            await poi.uart.device.clearGattCache(); // Boosts speed too
-          }
           await poi
               .sendPattern2(entry.dbImage)
               .timeout(
