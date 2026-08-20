@@ -1,10 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
-// import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
+import 'package:universal_ble/universal_ble.dart';
 
 class BleUart {
   // Nordic nRF
@@ -13,11 +10,16 @@ class BleUart {
   static const txUuid = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
   static const notifyUuid = "6e400004-b5a3-f393-e0a9-e50e24dcca9e";
 
-  BluetoothDevice device;
-  late BluetoothService service;
-  late BluetoothCharacteristic rxCharacteristic;
-  late BluetoothCharacteristic txCharacteristic;
-  late BluetoothCharacteristic notifyCharacteristic;
+  /// The poi sends packets of up to 512 bytes, so the link needs an MTU
+  /// large enough to carry them. Only Android leaves the negotiation to
+  /// the app.
+  static const requestedMtu = 512;
+
+  final BleDevice device;
+  late BleService service;
+  late BleCharacteristic rxCharacteristic;
+  late BleCharacteristic txCharacteristic;
+  late BleCharacteristic notifyCharacteristic;
 
   late Future<bool> isIntialized;
 
@@ -26,75 +28,71 @@ class BleUart {
   }
 
   Future<bool> init() async {
-    if (await device.connectionState.first.timeout(
-          Duration(seconds: 1),
-          onTimeout: () => .disconnected,
-        ) ==
-        .connected) {
+    if (await _isConnected()) {
       await device.disconnect();
     }
 
     try {
-      await device
-          .connect(
-            timeout: const Duration(seconds: 5),
-            autoConnect: false,
-          )
-          .timeout(
-            Duration(milliseconds: 5250),
-            onTimeout: () => throw Exception("Connection Timeout"),
-          );
+      await _connect();
     } catch (e) {
       // Retry once
-      await device
-          .connect(
-            timeout: const Duration(seconds: 5),
-            autoConnect: false,
-          )
-          .timeout(
-            Duration(milliseconds: 5250),
-            onTimeout: () => throw Exception("Connection Timeout"),
-          );
+      await _connect();
     }
 
-    List<BluetoothService> services = await device.discoverServices(timeout: 5);
-    service = services.firstWhere(
-      (BluetoothService service) => service.uuid.toString() == serviceUuid,
-    );
+    if (!kIsWeb && defaultTargetPlatform == .android) {
+      try {
+        await device.requestMtu(requestedMtu);
+      } catch (e) {
+        debugPrint("MTU request failed: $e");
+      }
+    }
 
-    rxCharacteristic = service.characteristics.firstWhere(
-      (characteristic) => characteristic.uuid.toString() == rxUuid,
-    );
-    txCharacteristic = service.characteristics.firstWhere(
-      (characteristic) => characteristic.uuid.toString() == txUuid,
-    );
-    notifyCharacteristic = service.characteristics.firstWhere(
-      (characteristic) => characteristic.uuid.toString() == notifyUuid,
-    );
+    service = await device.getService(serviceUuid, preferCached: false);
+    rxCharacteristic = service.getCharacteristic(rxUuid);
+    txCharacteristic = service.getCharacteristic(txUuid);
+    notifyCharacteristic = service.getCharacteristic(notifyUuid);
 
     // No longer using notifications!
-    // bool notificationsEnabled = await notifyCharacteristic.setNotifyValue(true);
-    // if (notificationsEnabled == false) {
-    //   throw Exception("Unable to enable message notification");
-    // }
+    // await notifyCharacteristic.notifications.subscribe();
     return true;
   }
 
+  Future<bool> _isConnected() async {
+    try {
+      return await device.connectionState.timeout(
+            const Duration(seconds: 1),
+            onTimeout: () => .disconnected,
+          ) ==
+          .connected;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> _connect() {
+    return device
+        .connect(timeout: const Duration(seconds: 5))
+        .timeout(
+          const Duration(milliseconds: 5250),
+          onTimeout: () => throw Exception("Connection Timeout"),
+        );
+  }
+
   Future<void> write(List<int> value, {bool withoutResponse = false}) {
-    return rxCharacteristic.write(value, withoutResponse: withoutResponse);
+    return rxCharacteristic.write(value, withResponse: !withoutResponse);
   }
 
-  Future<void> read(List<int> value, {bool withoutResponse = false}) {
-    return rxCharacteristic.write(value, withoutResponse: withoutResponse);
+  Future<Uint8List> read() {
+    return txCharacteristic.read();
   }
 
-  // Stream<List<int>> getDataStream() {
-  //   return notifyCharacteristic.value;
+  // Stream<Uint8List> getDataStream() {
+  //   return notifyCharacteristic.onValueReceived;
   // }
 
-  Future disconnect() async {
+  Future<void> disconnect() async {
     try {
-      return await device.disconnect();
+      await device.disconnect();
     } catch (e) {
       debugPrint("$e");
     }
