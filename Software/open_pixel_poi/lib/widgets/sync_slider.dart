@@ -4,64 +4,48 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../hardware/models/comm_code.dart';
-import '../hardware/models/confirmtation.dart';
 import '../model.dart';
 
-String defaultSuffixgenerator(double value) {
+String defaultSuffixGenerator(double value) {
   return "${value.toInt()}%";
 }
-class SyncSlider extends StatefulWidget {
-  String title;
-  CommCode code;
-  int Function() getter;
-  Function(int) setter;
-  double maxValue;
-  double minValue;
-  double scaler;
-  String Function(double) suffixGenerator;
 
-  SyncSlider(this.title, this.code, this.getter, this.setter, {this.maxValue = 100.0, this.minValue = 0.0, this.scaler = 2.55, this.suffixGenerator = defaultSuffixgenerator}){
-    if(getter()/scaler > maxValue){
-      setter(0);
-    }
-    if(getter()/scaler < minValue){
-      setter(0);
-    }
-  }
+class SyncSlider extends StatefulWidget {
+  final String title;
+  final CommCode code;
+  final int Function() getter;
+  final Function(int) setter;
+  final double maxValue;
+  final double minValue;
+  final double scaler;
+  final String Function(double) suffixGenerator;
+
+  const SyncSlider(
+    this.title,
+    this.code,
+    this.getter,
+    this.setter, {
+    super.key,
+    this.maxValue = 100.0,
+    this.minValue = 0.0,
+    this.scaler = 2.55,
+    this.suffixGenerator = defaultSuffixGenerator,
+  });
 
   @override
-  _SyncSliderState createState() => _SyncSliderState(title, code, getter, setter, maxValue, minValue, scaler, suffixGenerator);
+  State<SyncSlider> createState() => _SyncSliderState();
 }
 
 class _SyncSliderState extends State<SyncSlider> {
-  String title;
-  CommCode code;
-  int Function() getter;
-  Function(int) setter;
-  double maxValue;
-  double minValue;
-  double scaler;
-  String Function(double) suffixGenerator;
-
-  late double temp;
-
-  _SyncSliderState(this.title, this.code, this.getter, this.setter, this.maxValue, this.minValue, this.scaler, this.suffixGenerator){
-    temp = (getter()~/scaler).toDouble();
-  }
+  late double temp = (widget.getter() ~/ widget.scaler).toDouble();
 
   @override
-  void didUpdateWidget(SyncSlider oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    this.title = widget.title;
-    // Default constructor values don't seem to be applied -_-
-    // this.code = widget.code;
-    // this.getter = widget.getter;
-    // this.setter = widget.setter;
-    // this.strip = widget.strip;
-    // this.maxValue = widget.maxValue;
-    // this.maxValue = widget.minValue;
-    // this.scaler = widget.scaler;
-    // this.suffix = widget.suffix;
+  void initState() {
+    super.initState();
+    final scaled = widget.getter() / widget.scaler;
+    if (scaled > widget.maxValue || scaled < widget.minValue) {
+      widget.setter(0);
+    }
   }
 
   @override
@@ -70,24 +54,27 @@ class _SyncSliderState extends State<SyncSlider> {
       padding: const EdgeInsets.only(top: 8.0),
       child: ListTile(
         title: Text(
-          title,
-          style: TextStyle(
+          widget.title,
+          style: const TextStyle(
             color: Colors.blue,
           ),
         ),
         subtitle: Slider(
           value: temp,
-          max: maxValue,
-          min: minValue,
-          divisions: max(maxValue.toInt().abs() + minValue.toInt().abs(), 1),
-          label: suffixGenerator(temp),
+          max: widget.maxValue,
+          min: widget.minValue,
+          divisions: max(
+            widget.maxValue.toInt().abs() + widget.minValue.toInt().abs(),
+            1,
+          ),
+          label: widget.suffixGenerator(temp),
           onChanged: (double value) {
             setState(() {
               temp = value;
             });
           },
           onChangeEnd: (double value) {
-            setInt((value * scaler).round(), context);
+            setInt((value * widget.scaler).round(), context);
           },
         ),
       ),
@@ -96,29 +83,22 @@ class _SyncSliderState extends State<SyncSlider> {
 
   void setInt(int value, BuildContext context) async {
     Model model = Provider.of<Model>(context, listen: false);
-    int previous = getter();
-    try{
-      print("Set int ${code.name}");
+    int previous = widget.getter();
+    try {
+      debugPrint("Set int ${widget.code.name}");
       setState(() {
-        setter(value);
+        widget.setter(value);
       });
-      for(var poi in model.connectedPoi!){
-        await poi.sendInt8(value, code);
+      for (var poi in model.connectedPoi!) {
+        await poi.sendInt8(value, widget.code);
       }
-      // TODO: Ignoring confirmations for now
-      // await Future.delayed(Duration(milliseconds: 100));
-      // Confirmation response = await model.hardware!.readResponse().timeout(Duration(seconds: 3));
-      // if(!response.success){
-      //   throw Exception("Device returned err :-O");
-      // }
-    }catch (e, s){
+    } catch (e, s) {
       // revert!
       setState(() {
-        setter(previous);
+        widget.setter(previous);
       });
-      print(e);
-      print(s);
+      debugPrint("$e");
+      debugPrint("$s");
     }
   }
-
 }

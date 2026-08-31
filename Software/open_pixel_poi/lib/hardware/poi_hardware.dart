@@ -1,22 +1,25 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
-import 'package:open_pixel_poi/database/dbimage.dart';
+import 'package:open_pixel_poi/database/db_image.dart';
 import 'package:open_pixel_poi/hardware/models/fw_version.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../pages/pattern_creators/create_sequence.dart';
 import './models/comm_code.dart';
 import 'ble_uart.dart';
-import 'models/confirmtation.dart';
+import 'models/confirmation.dart';
 import 'models/led_pattern.dart';
 import 'parse_util.dart';
 
 class PoiHardware {
-  BLEUart uart;
+  BleUart uart;
   late List<int> _buffer;
-  BehaviorSubject<BluetoothConnectionState> state = BehaviorSubject<BluetoothConnectionState>();
+  BehaviorSubject<BluetoothConnectionState> state =
+      BehaviorSubject<BluetoothConnectionState>();
   BehaviorSubject<double> largeSendProgress = BehaviorSubject<double>.seeded(0);
   late StreamSubscription<BluetoothConnectionState> subscription;
   bool isConncted = false;
@@ -24,14 +27,14 @@ class PoiHardware {
   PoiHardware(this.uart) {
     subscription = uart.device.connectionState.listen((event) {
       state.add(event);
-      isConncted = event == BluetoothConnectionState.connected;
+      isConncted = event == .connected;
     });
   }
 
   Future<bool> _sendIt(List<int> message, [bool confirmation = true]) {
-    if(message.length < 509 && confirmation){
+    if (message.length < 509 && confirmation) {
       return _writePacketWithConfirmation(_buildRequest(message));
-    }else {
+    } else {
       return _writePackets(_buildRequest(message));
     }
   }
@@ -39,7 +42,9 @@ class PoiHardware {
   Future<bool> _writePackets(List<int> request) async {
     int maxPacketsize = 509;
     int packets = (request.length / maxPacketsize).ceil();
-    print("Write: request length = ${request.length}, splitting into $packets packets");
+    debugPrint(
+      "Write: request length = ${request.length}, splitting into $packets packets",
+    );
     largeSendProgress.add(0);
 
     int sentSize = 0;
@@ -52,16 +57,17 @@ class PoiHardware {
 
         sentPackets++;
         sentSize += packet.length;
-        print("Write batch: ${sentPackets / packets}% packet# = $sentPackets, length = ${packet.length}, sent = $sentSize, remaining = ${request.length -
-            packet.length} data = $packet");
+        debugPrint(
+          "Write batch: ${sentPackets / packets}% packet# = $sentPackets, length = ${packet.length}, sent = $sentSize, remaining = ${request.length - packet.length} data = $packet",
+        );
         request.removeRange(0, packet.length);
         largeSendProgress.add(sentPackets / packets);
         consecutiveFailures = 0;
-      } catch (e, s){
+      } catch (e) {
         consecutiveFailures++;
-        print("Failure, consecutive failures = $consecutiveFailures");
-        print("Error: $e");
-        if(consecutiveFailures > 2){
+        debugPrint("Failure, consecutive failures = $consecutiveFailures");
+        debugPrint("Error: $e");
+        if (consecutiveFailures > 2) {
           return true;
         }
         await Future.delayed(const Duration(milliseconds: 250));
@@ -71,17 +77,24 @@ class PoiHardware {
   }
 
   Future<bool> _writePacketWithConfirmation(List<int> request) async {
-    print("Write single packet:length = ${request.length}, data = $request");
-    if(request.length > 512){
+    debugPrint(
+      "Write single packet:length = ${request.length}, data = $request",
+    );
+    if (request.length > 512) {
       return true;
     }
-    return await uart.write(request).then((value) {
-      print("Write Success!");
-      return false;
-    }, onError: (value) {
-      print("Write Fail! $value");
-      return true;
-    });
+    return await uart
+        .write(request)
+        .then(
+          (value) {
+            debugPrint("Write Success!");
+            return false;
+          },
+          onError: (value) {
+            debugPrint("Write Fail! $value");
+            return true;
+          },
+        );
   }
 
   List<int> _buildRequest(List<int> message) {
@@ -102,20 +115,23 @@ class PoiHardware {
   }
 
   Future<dynamic> readResponse() async {
-    try{
+    try {
       await uart.txCharacteristic.read();
-    }catch(e){
+    } catch (e) {
       Confirmation(false);
     }
 
     _buffer = List<int>.empty(growable: true);
     _buffer.addAll(uart.txCharacteristic.lastValue);
-    print("onRecievePacket: From TX Characteristic " + uart.txCharacteristic.lastValue.toString());
+    debugPrint(
+      "onRecievePacket: From TX Characteristic ${uart.txCharacteristic.lastValue}",
+    );
 
-
-    if (_buffer.isEmpty || _buffer[0] != 0xD0 || _buffer[_buffer.length -1] != 0xD1) {
+    if (_buffer.isEmpty ||
+        _buffer[0] != 0xD0 ||
+        _buffer[_buffer.length - 1] != 0xD1) {
       // Not the start of a message, ignore this packet
-      print("onRecievePacket: Invalid packet, discarding " + _buffer.toString());
+      debugPrint("onRecievePacket: Invalid packet, discarding $_buffer");
       _buffer = List.empty();
       return;
     }
@@ -123,29 +139,33 @@ class PoiHardware {
     // Check packet length
     int packetLength = (_buffer[1] << 8) + _buffer[2];
     if (_buffer.length != packetLength) {
-      print("onRecievePacket: Invalid packet length ($packetLength), discarding");
+      debugPrint(
+        "onRecievePacket: Invalid packet length ($packetLength), discarding",
+      );
       _buffer = List.empty();
       return;
     }
 
-    List<int> message = _buffer.sublist(3, _buffer.length -1);
-    print("onRecievePacket: Found message: " + message.toString());
+    List<int> message = _buffer.sublist(3, _buffer.length - 1);
+    debugPrint("onRecievePacket: Found message: $message");
     _buffer = List.empty();
     return onRecieveMessage(message);
   }
 
   dynamic onRecieveMessage(List<int> message) {
     CommCode commCode = CommCode.values[message.removeAt(0)];
-    print("Message recieved: code = $commCode, message = $message");
+    debugPrint("Message recieved: code = $commCode, message = $message");
     switch (commCode) {
-      case CommCode.CC_SUCCESS:
+      case .success:
         return Confirmation(true);
-      case CommCode.CC_ERROR:
+      case .error:
         return Confirmation(false);
-      case CommCode.CC_GET_FW_VERSION:
+      case .getFwVersion:
         return FWVersion(message[0]);
-     default:
-        print("Unhandled message recieved: code = $commCode, message = $message");
+      default:
+        debugPrint(
+          "Unhandled message recieved: code = $commCode, message = $message",
+        );
         return null;
     }
   }
@@ -156,18 +176,21 @@ class PoiHardware {
     ParseUtil.putInt8(message, code.index);
     return _sendIt(message, confirmation);
   }
+
   Future<bool> sendBool(bool value, CommCode code, [bool confirmation = true]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
     ParseUtil.putBoolean(message, value);
     return _sendIt(message, confirmation);
   }
+
   Future<bool> sendInt8(int value, CommCode code, [bool confirmation = true]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
     ParseUtil.putInt8(message, value);
     return _sendIt(message, confirmation);
   }
+
   Future<bool> sendInt8s(int value, CommCode code, [bool confirmation = true]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
@@ -175,40 +198,57 @@ class PoiHardware {
     message.insert(0, code.index);
     return _sendIt(message, confirmation);
   }
-  Future<bool> sendInt8Array(List<int> values, CommCode code, [bool confirmation = true]) {
+
+  Future<bool> sendInt8Array(
+    List<int> values,
+    CommCode code, [
+    bool confirmation = true,
+  ]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
-    for(int value in values){
+    for (int value in values) {
       ParseUtil.putInt8(message, value);
     }
     return _sendIt(message, confirmation);
   }
+
   Future<bool> sendInt16(int value, CommCode code, [bool confirmation = true]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
     ParseUtil.putInt16(message, value);
     return _sendIt(message, confirmation);
   }
-  Future<bool> sendInt16Array(List<int> values, CommCode code, [bool confirmation = true]) {
+
+  Future<bool> sendInt16Array(
+    List<int> values,
+    CommCode code, [
+    bool confirmation = true,
+  ]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
-    for(int value in values){
+    for (int value in values) {
       ParseUtil.putInt16(message, value);
     }
     return _sendIt(message, confirmation);
   }
-  Future<bool> sendString(String value, CommCode code, [bool confirmation = true]) {
+
+  Future<bool> sendString(
+    String value,
+    CommCode code, [
+    bool confirmation = true,
+  ]) {
     List<int> message = [];
     ParseUtil.putInt8(message, code.index);
     ParseUtil.putString(message, value);
     return _sendIt(message, confirmation);
   }
-  Future<bool> sendPattern(LEDPattern pattern) {
+
+  Future<bool> sendPattern(LedPattern pattern) {
     List<int> message = [];
-    ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
+    ParseUtil.putInt8(message, CommCode.setPattern.index);
     ParseUtil.putInt8(message, pattern.columnHeight);
     ParseUtil.putInt16(message, pattern.columnCount);
-    for(int i = 0; i < pattern.columnHeight * pattern.columnCount; i++){
+    for (int i = 0; i < pattern.columnHeight * pattern.columnCount; i++) {
       ParseUtil.putInt8(message, pattern.leds[i].red);
       ParseUtil.putInt8(message, pattern.leds[i].green);
       ParseUtil.putInt8(message, pattern.leds[i].blue);
@@ -218,7 +258,7 @@ class PoiHardware {
 
   Future<bool> sendPattern2(DBImage pattern) {
     List<int> message = [];
-    ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
+    ParseUtil.putInt8(message, CommCode.setPattern.index);
     ParseUtil.putInt8(message, pattern.height);
     ParseUtil.putInt16(message, pattern.count);
     ParseUtil.putInt8List(message, pattern.bytes);
@@ -227,9 +267,9 @@ class PoiHardware {
 
   Future<bool> sendSequence(List<SegmentValues> segments) {
     List<int> message = [];
-    ParseUtil.putInt8(message, CommCode.CC_SET_SEQUENCER.index);
+    ParseUtil.putInt8(message, CommCode.setSequencer.index);
     ParseUtil.putInt16(message, segments.length * 7);
-    for(SegmentValues segment in segments){
+    for (SegmentValues segment in segments) {
       ParseUtil.putInt8(message, segment.pattern - 1);
       ParseUtil.putInt8(message, segment.bank - 1);
       ParseUtil.putInt8(message, segment.brightness);

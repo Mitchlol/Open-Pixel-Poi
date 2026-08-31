@@ -1,40 +1,31 @@
-import 'dart:math' as Math;
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../hardware/models/rgb_value.dart';
-import '../model.dart';
 
 class LabeledButtonSelect extends StatefulWidget {
-  String title;
-  int min, max;
-  int? initial;
-  Key? key;
-  Function(int) onValueChanged;
+  final String title;
+  final int min, max;
+  final int? initial;
+  final Function(int) onValueChanged;
 
-  LabeledButtonSelect(this.title, this.min, this.max, this.onValueChanged, [this.initial, this.key]){
-    if (this.initial == null) {
-      this.initial = this.min;
-    }
-  }
+  const LabeledButtonSelect(
+    this.title,
+    this.min,
+    this.max,
+    this.onValueChanged, [
+    this.initial,
+    Key? key,
+  ]) : super(key: key);
 
   @override
-  _LabeledButtonSelectState createState() => _LabeledButtonSelectState(title, min, max, onValueChanged, initial!, key);
+  State<LabeledButtonSelect> createState() => _LabeledButtonSelectState();
 }
 
 class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
-  String title;
-  Function(int) onValueChanged;
+  static const List<int> _steps = [-1000, -100, -10, -1, 1, 10, 100, 1000];
 
-  int min, max, initial;
-  late int value;
-  Key? key;
+  late int value = widget.initial ?? widget.min;
 
-  _LabeledButtonSelectState(this.title, this.min, this.max, this.onValueChanged, this.initial, this.key){
-    value = initial;
-  }
+  // Bigger steps get taller buttons: 30 for 1, up to 60 for 1000.
+  double _heightFor(int step) => 20.0 + step.abs().toString().length * 10.0;
 
   @override
   Widget build(BuildContext context) {
@@ -42,181 +33,37 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
       padding: const EdgeInsets.only(top: 8.0),
       child: ListTile(
         title: Text(
-          "$title: $value",
-          style: TextStyle(
+          "${widget.title}: $value",
+          style: const TextStyle(
             color: Colors.blue,
           ),
         ),
         subtitle: Row(
           children: [
-            Expanded(
-              child: SizedBox(
-                height: 60,
-                child: ElevatedButton(
-                  child: const Text(
-                    "-",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+            for (final (index, step) in _steps.indexed) ...[
+              if (index != 0) const VerticalDivider(width: 8.0),
+              Expanded(
+                child: SizedBox(
+                  height: _heightFor(step),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        value = (value + step).clamp(widget.min, widget.max);
+                        widget.onValueChanged(value);
+                      });
+                    },
+                    child: Text(
+                      step < 0 ? "-" : "+",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: .bold,
+                      ),
                     ),
                   ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.max(min, value - 1000);
-                      onValueChanged(value);
-                    });
-                  },
                 ),
               ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  child: const Text(
-                    "-",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.max(min, value - 100);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  child: const Text(
-                    "-",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.max(min, value - 10);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 30,
-                child: ElevatedButton(
-                  child: const Text(
-                    "-",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.max(min, value - 1);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 30,
-                child: ElevatedButton(
-                  child: const Text(
-                    "+",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.min(max, value + 1);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  child: const Text(
-                    "+",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.min(max, value + 10);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  child: const Text(
-                    "+",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.min(max, value + 100);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-            const VerticalDivider(width: 8.0),
-            Expanded(
-              child: SizedBox(
-                height: 60,
-                child: ElevatedButton(
-                  child: const Text(
-                    "+",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      value = Math.min(max, value + 1000);
-                      onValueChanged(value);
-                    });
-                  },
-                ),
-              ),
-            ),
-          ]
+            ],
+          ],
         ),
       ),
     );
