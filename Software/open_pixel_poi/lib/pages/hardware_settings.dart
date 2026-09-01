@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:open_pixel_poi/hardware/models/confirmtation.dart';
+import 'package:open_pixel_poi/hardware/models/confirmation.dart';
 import 'package:provider/provider.dart';
 
 import '../../model.dart';

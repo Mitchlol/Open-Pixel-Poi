@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
-import 'package:open_pixel_poi/database/dbimage.dart';
+import 'package:open_pixel_poi/database/db_image.dart';
 import 'package:open_pixel_poi/hardware/models/fw_version.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../pages/pattern_creators/create_sequence.dart';
 import './models/comm_code.dart';
 import 'ble_uart.dart';
-import 'models/confirmtation.dart';
+import 'models/confirmation.dart';
 import 'models/led_pattern.dart';
 import 'parse_util.dart';
 
 class PoiHardware {
-  BLEUart uart;
+  BleUart uart;
   late List<int> _buffer;
   BehaviorSubject<BluetoothConnectionState> state = BehaviorSubject<BluetoothConnectionState>();
   BehaviorSubject<double> largeSendProgress = BehaviorSubject<double>.seeded(0);
@@ -203,7 +203,7 @@ class PoiHardware {
     ParseUtil.putString(message, value);
     return _sendIt(message, confirmation);
   }
-  Future<bool> sendPattern(LEDPattern pattern) {
+  Future<bool> sendPattern(LedPattern pattern) {
     List<int> message = [];
     ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
     ParseUtil.putInt8(message, pattern.columnHeight);

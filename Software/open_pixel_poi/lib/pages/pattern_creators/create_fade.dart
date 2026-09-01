@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
@@ -22,7 +22,7 @@ class CreateFadePage extends StatefulWidget {
 class _CreateFadeState extends State<CreateFadePage> {
   bool flagFirst = true;
   late int fadeSize = 10;
-  List<RGBValue> colors = List<RGBValue>.empty(growable: true);
+  List<RgbValue> colors = List<RgbValue>.empty(growable: true);
   bool saving = false;
   final ScrollController _scrollController = ScrollController();
 
@@ -70,7 +70,7 @@ class _CreateFadeState extends State<CreateFadePage> {
                 colors[index].red.toDouble(),
                 colors[index].green.toDouble(),
                 colors[index].blue.toDouble(),
-                    (RGBValue color) => colors[index] = color,
+                    (RgbValue color) => colors[index] = color,
               );
             },
           ),
@@ -174,11 +174,11 @@ class _CreateFadeState extends State<CreateFadePage> {
 
   void addSegment(){
     var random = Random();
-    colors.add(RGBValue([random.nextInt(2) * 255, random.nextInt(2) * 255, random.nextInt(2) * 255]));
+    colors.add(RgbValue([random.nextInt(2) * 255, random.nextInt(2) * 255, random.nextInt(2) * 255]));
     fadeSize = colors.length * 5;
   }
 
-  Uint8List createFade(RGBValue start, RGBValue end, width){
+  Uint8List createFade(RgbValue start, RgbValue end, width){
     var rgbList = Uint8List(width * 3);
     int rgbOffset = 0;
     double percent = 0.0;

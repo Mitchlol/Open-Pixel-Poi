@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
+import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
 
@@ -19,8 +19,8 @@ class CreateMergePage extends StatefulWidget {
 
 class _CreateMergeState extends State<CreateMergePage> {
   bool saving = false;
-  Tuple2<Widget, DBImage>? topImage;
-  Tuple2<Widget, DBImage>? bottomImage;
+  PatternEntry? topImage;
+  PatternEntry? bottomImage;
 
   String blendMode = "Normal";
   List<String> blendModes = ["Normal", "Hard Normal", "Lighten", "Darken", "Add", "Multiply", "Average"];
@@ -48,9 +48,9 @@ class _CreateMergeState extends State<CreateMergePage> {
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select top Image"),
-              content: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+              content: FutureBuilder<List<PatternEntry>>(
                 future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                   if (snapshot.hasData) {
                     return SizedBox(
                       width: double.maxFinite,
@@ -72,7 +72,7 @@ class _CreateMergeState extends State<CreateMergePage> {
                                 children: [
                                   SizedBox(
                                     height: 80,
-                                    child: snapshot.data![index].item1,
+                                    child: snapshot.data![index].preview,
                                   ),
                                   const SizedBox(
                                     width: 100,
@@ -126,14 +126,14 @@ class _CreateMergeState extends State<CreateMergePage> {
                 ),
                 SizedBox(
                   height: 80,
-                  child: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+                  child: FutureBuilder<List<PatternEntry>>(
                     future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                       if (topImage != null){
-                        return topImage!.item1;
+                        return topImage!.preview;
                       }else if (snapshot.hasData && snapshot.data!.length >= 2) {
                         topImage = snapshot.data![0];
-                        return snapshot.data!.first.item1;
+                        return snapshot.data!.first.preview;
                       }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
                         tooFewImagesError(context);
                         return Container();
@@ -162,9 +162,9 @@ class _CreateMergeState extends State<CreateMergePage> {
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select bottom Image"),
-              content: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+              content: FutureBuilder<List<PatternEntry>>(
                 future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                   if (snapshot.hasData) {
                     return SizedBox(
                       width: double.maxFinite,
@@ -186,7 +186,7 @@ class _CreateMergeState extends State<CreateMergePage> {
                                 children: [
                                   SizedBox(
                                     height: 80,
-                                    child: snapshot.data![index].item1,
+                                    child: snapshot.data![index].preview,
                                   ),
                                   const SizedBox(
                                     width: 100,
@@ -240,14 +240,14 @@ class _CreateMergeState extends State<CreateMergePage> {
                 ),
                 SizedBox(
                   height: 80,
-                  child: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+                  child: FutureBuilder<List<PatternEntry>>(
                     future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                       if (bottomImage != null){
-                        return bottomImage!.item1;
+                        return bottomImage!.preview;
                       }else if (snapshot.hasData && snapshot.data!.length >= 2) {
                         bottomImage = snapshot.data![1];
-                        return snapshot.data![1].item1;
+                        return snapshot.data![1].preview;
                       }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
                         tooFewImagesError(context);
                         return Container();
@@ -375,11 +375,11 @@ class _CreateMergeState extends State<CreateMergePage> {
   Future<void> makeAndStorePattern(BuildContext context) async{
     var model = Provider.of<Model>(context, listen: false);
 
-    var topWidth = topImage!.item2.count;
-    var bottomWidth = bottomImage!.item2.count;
+    var topWidth = topImage!.dbImage.count;
+    var bottomWidth = bottomImage!.dbImage.count;
 
     // Taller of the 2 images
-    int desiredHeight = max(topImage!.item2.height, bottomImage!.item2.height);
+    int desiredHeight = max(topImage!.dbImage.height, bottomImage!.dbImage.height);
 
     // Find least common multiple
     int x = topWidth, y = bottomWidth;
@@ -393,15 +393,15 @@ class _CreateMergeState extends State<CreateMergePage> {
 
     int desiredWidth = min(40000~/desiredHeight, lcm);
 
-    var images = await model.patternDB.getImgImages([topImage!.item2, bottomImage!.item2]);
+    var images = await model.patternDB.getImgImages([topImage!.dbImage, bottomImage!.dbImage]);
     var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
 
     for(var column = 0; column < desiredWidth; column++){
       for(var row = 0; row < desiredHeight; row++){
         var columnOffset = column * desiredHeight * 3;
         var rowOffset = row * 3;
-        var top = images[0].getPixel(column % topWidth, row % topImage!.item2.height);
-        var bottom = images[1].getPixel(column % bottomWidth, row % bottomImage!.item2.height);
+        var top = images[0].getPixel(column % topWidth, row % topImage!.dbImage.height);
+        var bottom = images[1].getPixel(column % bottomWidth, row % bottomImage!.dbImage.height);
         if (blendMode == "Lighten") {
           rgbList[columnOffset + rowOffset + 0] = (top.r > bottom.r ? top.r : bottom.r).toInt();
           rgbList[columnOffset + rowOffset + 1] = (top.g > bottom.g ? top.g : bottom.g).toInt();
