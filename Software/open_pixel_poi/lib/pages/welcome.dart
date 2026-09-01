@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../hardware/ble_uart.dart';
 import '../hardware/models/fw_version.dart';
 import '../model.dart';
+import '../widgets/status_message.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -87,62 +88,16 @@ class _WelcomeState extends State<WelcomePage> {
   }
 
   Widget getWelcome() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Welcome to your poi!",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-              "Press scan below to search for your poi, this may launch a permission request.",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return const StatusMessage(
+      title: "Welcome to your poi!",
+      subtitle: "Press scan below to search for your poi, this may launch a permission request.",
     );
   }
 
   Widget getEmpty() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "No bluetooth devices found!",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-              "Please make sure bluetooth and location are enabled, and your poi is powered on.",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return const StatusMessage(
+      title: "No bluetooth devices found!",
+      subtitle: "Please make sure bluetooth and location are enabled, and your poi is powered on.",
     );
   }
 
@@ -208,53 +163,11 @@ class _WelcomeState extends State<WelcomePage> {
   }
 
   Widget getConnecting() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Connecting...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
-    );
+    return const StatusMessage(title: "Connecting...", showProgress: true);
   }
 
   Widget getDisconnecting() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Disconnecting...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
-    );
+    return const StatusMessage(title: "Disconnecting...", showProgress: true);
   }
 
   Widget getButtons(bool isRefreshing, List<ScanResult> scanResults) {

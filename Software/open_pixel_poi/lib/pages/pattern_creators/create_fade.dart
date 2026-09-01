@@ -9,6 +9,9 @@ import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../scroll_utils.dart';
+import '../../widgets/big_button.dart';
+import '../../widgets/status_message.dart';
 import '../../widgets/labeled_slider.dart';
 
 class CreateFadePage extends StatefulWidget {
@@ -35,15 +38,9 @@ class _CreateFadeState extends State<CreateFadePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Fade Pattern Creator"),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? getSaving() : getForm(),
+      body: saving ? const StatusMessage.saving() : getForm(),
     );
   }
 
@@ -76,104 +73,32 @@ class _CreateFadeState extends State<CreateFadePage> {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Row(
-              crossAxisAlignment: .stretch,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        addSegment();
-                      });
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _scrollController.animateTo(
-                          _scrollController
-                              .position
-                              .maxScrollExtent, // Scroll to the bottom
-                          duration: Duration(
-                            milliseconds: 300,
-                          ), // Duration of the animation
-                          curve: Curves.easeOut, // Smooth easing curve
-                        );
-                      });
-                    },
-                    child: const Text(
-                      "+ Color",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                    onPressed: () async {
-                      saving = true;
-                      await makeAndStorePattern(context);
-                      if (mounted) {
-                        Navigator.pop(context, true);
-                      }
-                      saving = false;
-                    },
-                  ),
-                ),
-              ],
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton(
+              "+ Color",
+              onPressed: () {
+                setState(() {
+                  addSegment();
+                });
+                _scrollController.animateToBottomAfterBuild();
+              },
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getSaving() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Saving...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
+            BigButton(
+              "Save",
+              onPressed: () async {
+                saving = true;
+                await makeAndStorePattern(context);
+                if (mounted) {
+                  Navigator.pop(context, true);
+                }
+                saving = false;
+              },
             ),
-            SizedBox(
-              height: 30,
-            ),
-            CircularProgressIndicator(),
           ],
         ),
-      ),
+      ],
     );
   }
 

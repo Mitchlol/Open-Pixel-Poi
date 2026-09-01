@@ -8,6 +8,9 @@ import '../../database/db_image.dart';
 import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../widgets/pattern_picker.dart';
+import '../../widgets/big_button.dart';
+import '../../widgets/status_message.dart';
 
 class CreateMergePage extends StatefulWidget {
   const CreateMergePage({super.key});
@@ -37,272 +40,31 @@ class _CreateMergeState extends State<CreateMergePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Merge Two Images"),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? getSaving() : getForm(),
+      body: saving ? const StatusMessage.saving() : getForm(),
     );
   }
 
   Widget getForm() {
     return ListView(
       children: [
-        InkWell(
-          onTap: () => showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text("Select top Image"),
-              content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB
-                    .getImages(context),
-                builder:
-                    (
-                      BuildContext context,
-                      AsyncSnapshot<List<PatternEntry>> snapshot,
-                    ) {
-                      if (snapshot.hasData) {
-                        return SizedBox(
-                          width: double.maxFinite,
-                          height: double.maxFinite,
-                          child: ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  topImage = snapshot.data![index];
-                                  Navigator.pop(context, 'Cancel');
-                                  setState(() {});
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    mainAxisAlignment: .center,
-                                    crossAxisAlignment: .start,
-                                    children: [
-                                      SizedBox(
-                                        height: 80,
-                                        child: snapshot.data![index].preview,
-                                      ),
-                                      const SizedBox(
-                                        width: 100,
-                                        height: 8,
-                                      ),
-                                      const Divider(
-                                        height: 1,
-                                        thickness: 1,
-                                        indent: 0,
-                                        endIndent: 0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        tooFewImagesError(context);
-                        return Container();
-                      } else {
-                        return Container();
-                      }
-                    },
-              ),
-              actionsPadding: const EdgeInsets.all(0.0),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text('Cancel'),
-                ),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: .center,
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "Top Image",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                  child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB
-                        .getImages(context),
-                    builder:
-                        (
-                          BuildContext context,
-                          AsyncSnapshot<List<PatternEntry>> snapshot,
-                        ) {
-                          if (topImage != null) {
-                            return topImage!.preview;
-                          } else if (snapshot.hasData &&
-                              snapshot.data!.length >= 2) {
-                            topImage = snapshot.data![0];
-                            return snapshot.data!.first.preview;
-                          } else if (snapshot.hasError ||
-                              (snapshot.hasData && snapshot.data!.length < 2)) {
-                            tooFewImagesError(context);
-                            return Container();
-                          } else {
-                            return Container();
-                          }
-                        },
-                  ),
-                ),
-                const SizedBox(
-                  width: 100,
-                  height: 8,
-                ),
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-              ],
-            ),
-          ),
+        PatternPicker(
+          label: "Top Image",
+          selected: topImage,
+          onSelected: (entry) => setState(() => topImage = entry),
+          onDefaultAssigned: (entry) => topImage = entry,
+          tooFewImagesMessage:
+              'You must have at least 2 images stored to make merged image.',
         ),
-        InkWell(
-          onTap: () => showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text("Select bottom Image"),
-              content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB
-                    .getImages(context),
-                builder:
-                    (
-                      BuildContext context,
-                      AsyncSnapshot<List<PatternEntry>> snapshot,
-                    ) {
-                      if (snapshot.hasData) {
-                        return SizedBox(
-                          width: double.maxFinite,
-                          height: double.maxFinite,
-                          child: ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  bottomImage = snapshot.data![index];
-                                  Navigator.pop(context, 'Cancel');
-                                  setState(() {});
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    mainAxisAlignment: .center,
-                                    crossAxisAlignment: .start,
-                                    children: [
-                                      SizedBox(
-                                        height: 80,
-                                        child: snapshot.data![index].preview,
-                                      ),
-                                      const SizedBox(
-                                        width: 100,
-                                        height: 8,
-                                      ),
-                                      const Divider(
-                                        height: 1,
-                                        thickness: 1,
-                                        indent: 0,
-                                        endIndent: 0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        tooFewImagesError(context);
-                        return Container();
-                      } else {
-                        return Container();
-                      }
-                    },
-              ),
-              actionsPadding: const EdgeInsets.all(0.0),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text('Cancel'),
-                ),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: .center,
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "Bottom Image",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                  child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB
-                        .getImages(context),
-                    builder:
-                        (
-                          BuildContext context,
-                          AsyncSnapshot<List<PatternEntry>> snapshot,
-                        ) {
-                          if (bottomImage != null) {
-                            return bottomImage!.preview;
-                          } else if (snapshot.hasData &&
-                              snapshot.data!.length >= 2) {
-                            bottomImage = snapshot.data![1];
-                            return snapshot.data![1].preview;
-                          } else if (snapshot.hasError ||
-                              (snapshot.hasData && snapshot.data!.length < 2)) {
-                            tooFewImagesError(context);
-                            return Container();
-                          } else {
-                            return Container();
-                          }
-                        },
-                  ),
-                ),
-                const SizedBox(
-                  width: 100,
-                  height: 8,
-                ),
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-              ],
-            ),
-          ),
+        PatternPicker(
+          label: "Bottom Image",
+          selected: bottomImage,
+          onSelected: (entry) => setState(() => bottomImage = entry),
+          onDefaultAssigned: (entry) => bottomImage = entry,
+          defaultIndex: 1,
+          tooFewImagesMessage:
+              'You must have at least 2 images stored to make merged image.',
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
@@ -332,76 +94,23 @@ class _CreateMergeState extends State<CreateMergePage> {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Row(
-              crossAxisAlignment: .stretch,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                    onPressed: () async {
-                      saving = true;
-                      await makeAndStorePattern(context);
-                      if (mounted) {
-                        Navigator.pop(context, true);
-                      }
-                      saving = false;
-                    },
-                  ),
-                ),
-              ],
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton(
+              "Save",
+              onPressed: () async {
+                saving = true;
+                await makeAndStorePattern(context);
+                if (mounted) {
+                  Navigator.pop(context, true);
+                }
+                saving = false;
+              },
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getSaving() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Saving...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CircularProgressIndicator(),
           ],
         ),
-      ),
+      ],
     );
   }
 
@@ -516,18 +225,5 @@ class _CreateMergeState extends State<CreateMergePage> {
       bytes: rgbList,
     );
     await model.patternDB.insertImage(pattern);
-  }
-
-  void tooFewImagesError(BuildContext context) {
-    const snackBar = SnackBar(
-      content: Text(
-        'You must have at least 2 images stored to make merged image.',
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    if (context.mounted) {
-      // Do we actually want this check?
-      Navigator.pop(context);
-    }
   }
 }

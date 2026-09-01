@@ -7,9 +7,7 @@ import 'package:open_pixel_poi/pages/pattern_creators/create_rotate.dart';
 import 'package:open_pixel_poi/pages/pattern_creators/create_sequence.dart';
 import 'package:open_pixel_poi/pages/pattern_creators/create_strobe.dart';
 import 'package:open_pixel_poi/pages/pattern_creators/create_text.dart';
-import 'package:provider/provider.dart';
 
-import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
 import 'pattern_creators/create_solid_color.dart';
 
@@ -26,13 +24,7 @@ class _CreateState extends State<CreatePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Create Custom Pattern"),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
       body: ListView(
         children: [

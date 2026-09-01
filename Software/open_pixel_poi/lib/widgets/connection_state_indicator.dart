@@ -6,6 +6,23 @@ import 'package:provider/provider.dart';
 import '../hardware/ble_uart.dart';
 import '../model.dart';
 
+/// One [ConnectionStateIndicator] per connected poi, for use in app bars.
+class ConnectionStateIndicators extends StatelessWidget {
+  const ConnectionStateIndicators({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final connectedPoi = Provider.of<Model>(context).connectedPoi!;
+    return Row(
+      mainAxisSize: .min,
+      children: [
+        for (var i = 0; i < connectedPoi.length; i++)
+          ConnectionStateIndicator(i),
+      ],
+    );
+  }
+}
+
 class ConnectionStateIndicator extends StatefulWidget {
   final int connectedPoiIndex;
 

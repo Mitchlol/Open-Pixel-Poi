@@ -8,6 +8,9 @@ import '../../database/db_image.dart';
 import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../widgets/pattern_picker.dart';
+import '../../widgets/big_button.dart';
+import '../../widgets/status_message.dart';
 import '../../widgets/labeled_slider.dart';
 
 class CreateRotatePage extends StatefulWidget {
@@ -27,15 +30,9 @@ class _CreateRotateState extends State<CreateRotatePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Rotate image 90 degrees"),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? getSaving() : getForm(),
+      body: saving ? const StatusMessage.saving() : getForm(),
     );
   }
 
@@ -52,202 +49,31 @@ class _CreateRotateState extends State<CreateRotatePage> {
           }),
           25,
         ),
-        InkWell(
-          onTap: () => showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text("Select Image"),
-              content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB
-                    .getImages(context),
-                builder:
-                    (
-                      BuildContext context,
-                      AsyncSnapshot<List<PatternEntry>> snapshot,
-                    ) {
-                      if (snapshot.hasData) {
-                        return SizedBox(
-                          width: double.maxFinite,
-                          height: double.maxFinite,
-                          child: ListView.builder(
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  image = snapshot.data![index];
-                                  Navigator.pop(context, 'Cancel');
-                                  setState(() {});
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    mainAxisAlignment: .center,
-                                    crossAxisAlignment: .start,
-                                    children: [
-                                      SizedBox(
-                                        height: 80,
-                                        child: snapshot.data![index].preview,
-                                      ),
-                                      const SizedBox(
-                                        width: 100,
-                                        height: 8,
-                                      ),
-                                      const Divider(
-                                        height: 1,
-                                        thickness: 1,
-                                        indent: 0,
-                                        endIndent: 0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        tooFewImagesError(context);
-                        return Container();
-                      } else {
-                        return Container();
-                      }
-                    },
-              ),
-              actionsPadding: const EdgeInsets.all(0.0),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text('Cancel'),
-                ),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: .center,
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "Image",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                  child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB
-                        .getImages(context),
-                    builder:
-                        (
-                          BuildContext context,
-                          AsyncSnapshot<List<PatternEntry>> snapshot,
-                        ) {
-                          if (image != null) {
-                            return image!.preview;
-                          } else if (snapshot.hasData &&
-                              snapshot.data!.length >= 2) {
-                            image = snapshot.data![0];
-                            return snapshot.data!.first.preview;
-                          } else if (snapshot.hasError ||
-                              (snapshot.hasData && snapshot.data!.length < 2)) {
-                            tooFewImagesError(context);
-                            return Container();
-                          } else {
-                            return Container();
-                          }
-                        },
-                  ),
-                ),
-                const SizedBox(
-                  width: 100,
-                  height: 8,
-                ),
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-              ],
-            ),
-          ),
+        PatternPicker(
+          label: "Image",
+          selected: image,
+          onSelected: (entry) => setState(() => image = entry),
+          onDefaultAssigned: (entry) => image = entry,
+          tooFewImagesMessage:
+              'You must have at least 1 image stored to rotate.',
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Row(
-              crossAxisAlignment: .stretch,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                    onPressed: () async {
-                      saving = true;
-                      await makeAndStorePattern(context);
-                      if (mounted) {
-                        Navigator.pop(context, true);
-                      }
-                      saving = false;
-                    },
-                  ),
-                ),
-              ],
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton(
+              "Save",
+              onPressed: () async {
+                saving = true;
+                await makeAndStorePattern(context);
+                if (mounted) {
+                  Navigator.pop(context, true);
+                }
+                saving = false;
+              },
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getSaving() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Saving...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CircularProgressIndicator(),
           ],
         ),
-      ),
+      ],
     );
   }
 
@@ -276,16 +102,5 @@ class _CreateRotateState extends State<CreateRotatePage> {
       bytes: rgbList,
     );
     await model.patternDB.insertImage(pattern);
-  }
-
-  void tooFewImagesError(BuildContext context) {
-    const snackBar = SnackBar(
-      content: Text('You must have at least 1 image stored to rotate.'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    if (context.mounted) {
-      // Do we actually want this check?
-      Navigator.pop(context);
-    }
   }
 }

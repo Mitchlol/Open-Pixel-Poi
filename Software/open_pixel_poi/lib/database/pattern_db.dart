@@ -52,25 +52,7 @@ class PatternDB {
           fileBytes.lengthInBytes,
         );
         img.Image image = img.decodeBmp(bytesList)!;
-
-        List<int> imageBytes = List.empty(growable: true);
-        for (var w = 0; w < image.width; w++) {
-          for (var h = 0; h < image.height; h++) {
-            var pixel = image.getPixel(w, h);
-            imageBytes.add(pixel.r.toInt());
-            imageBytes.add(pixel.g.toInt());
-            imageBytes.add(pixel.b.toInt());
-          }
-        }
-
-        var pattern = DBImage(
-          id: null,
-          height: image.height,
-          count: image.width,
-          bytes: Uint8List.fromList(imageBytes),
-        );
-
-        await insertImage(pattern);
+        await insertImage(DBImage.fromImg(image));
       }
     }
   }
