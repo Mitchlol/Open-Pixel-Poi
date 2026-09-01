@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:open_pixel_poi/hardware/poi_hardware.dart';
 import 'package:open_pixel_poi/pages/home.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_ble/universal_ble.dart';
 
+import '../hardware/ble_scanner.dart';
 import '../hardware/ble_uart.dart';
 import '../hardware/models/fw_version.dart';
 import '../model.dart';
@@ -24,6 +25,13 @@ class _WelcomeState extends State<WelcomePage> {
   bool isConnecting = false;
   bool isDisconnecting = false;
   List<String> checkedMacAddresses = List.empty(growable: true);
+  final BleScanner scanner = BleScanner();
+
+  @override
+  void dispose() {
+    scanner.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +41,19 @@ class _WelcomeState extends State<WelcomePage> {
         title: const Text("Open Pixel Poi"),
       ),
       body: StreamBuilder<Object>(
-        stream: FlutterBluePlus.isScanning,
+        stream: scanner.isScanning,
         builder: (context, snapshot) {
           bool isScanning = false;
           if (snapshot.data != null && snapshot.data == true) {
             isScanning = true;
           }
-          return StreamBuilder<List<ScanResult>>(
-            stream: FlutterBluePlus.scanResults,
+          return StreamBuilder<List<BleDevice>>(
+            stream: scanner.results,
             builder: (context, snapshot) {
-              List<ScanResult>? scanResults = snapshot.data;
+              List<BleDevice>? scanResults = snapshot.data;
               if (scanResults != null) {
                 scanResults = scanResults
-                    .where(
-                      (result) =>
-                          result.advertisementData.connectable &&
-                          result.device.platformName.isNotEmpty,
-                    )
+                    .where((device) => (device.name ?? "").isNotEmpty)
                     .toList();
               } else {
                 scanResults = List.empty();
@@ -97,11 +101,10 @@ class _WelcomeState extends State<WelcomePage> {
                       connect(
                         selectedDevices
                             .where(
-                              (scanResult) => checkedMacAddresses.contains(
-                                scanResult.device.remoteId.str,
+                              (device) => checkedMacAddresses.contains(
+                                device.deviceId,
                               ),
                             )
-                            .map((e) => e.device)
                             .toList(),
                       );
                     },
@@ -146,7 +149,7 @@ class _WelcomeState extends State<WelcomePage> {
         setState(() {
           isDisconnecting = true;
         });
-        if (await hardware.uart.device.connectionState.first == .connected) {
+        if (await hardware.uart.device.connectionState == .connected) {
           await hardware.uart.disconnect();
           await Future.delayed(Duration(milliseconds: 2000));
         }
@@ -158,15 +161,10 @@ class _WelcomeState extends State<WelcomePage> {
     }
     // Scan
     hasScanned = true;
-    FlutterBluePlus.startScan(
-      withKeywords: ["Pixel Poi"],
-      webOptionalServices: [Guid(BleUart.serviceUuid)],
-      timeout: Duration(seconds: 5),
-      androidUsesFineLocation: false,
-    );
+    scanner.start();
   }
 
-  void connect(List<BluetoothDevice> devices) async {
+  void connect(List<BleDevice> devices) async {
     final messenger = ScaffoldMessenger.of(context);
     final model = Provider.of<Model>(context, listen: false);
     // Clear stale state
@@ -177,7 +175,7 @@ class _WelcomeState extends State<WelcomePage> {
         setState(() {
           isDisconnecting = true;
         });
-        if (await hardware.uart.device.connectionState.first == .connected) {
+        if (await hardware.uart.device.connectionState == .connected) {
           await hardware.uart.disconnect();
         }
         await hardware.subscription.cancel();
@@ -259,7 +257,7 @@ class _WelcomeState extends State<WelcomePage> {
 }
 
 class _ScanResultList extends StatelessWidget {
-  final List<ScanResult> scanResults;
+  final List<BleDevice> scanResults;
   final List<String> checkedMacAddresses;
   final ValueChanged<String> onToggled;
 
@@ -276,17 +274,17 @@ class _ScanResultList extends StatelessWidget {
       itemCount: scanResults.length,
       scrollDirection: .vertical,
       itemBuilder: (BuildContext context, int index) {
-        final device = scanResults[index].device;
+        final device = scanResults[index];
         return Card(
           child: ListTile(
             leading: Checkbox(
-              value: checkedMacAddresses.contains(device.remoteId.str),
-              onChanged: (checked) => onToggled(device.remoteId.str),
+              value: checkedMacAddresses.contains(device.deviceId),
+              onChanged: (checked) => onToggled(device.deviceId),
             ),
-            title: Text('Name: ${device.platformName}'),
-            subtitle: Text('Address: ${device.remoteId.str}'),
+            title: Text('Name: ${device.name}'),
+            subtitle: Text('Address: ${device.deviceId}'),
             trailing: Icon(Icons.bluetooth),
-            onTap: () => onToggled(device.remoteId.str),
+            onTap: () => onToggled(device.deviceId),
           ),
         );
       },

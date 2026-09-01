@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-// import 'package:flutter_blue_plus_windows/flutter_blue_plus_windows.dart';
 import 'package:open_pixel_poi/database/db_image.dart';
 import 'package:open_pixel_poi/hardware/models/fw_version.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:universal_ble/universal_ble.dart';
 
 import '../pages/pattern_creators/create_sequence.dart';
 import './models/comm_code.dart';
@@ -18,16 +16,16 @@ import 'parse_util.dart';
 class PoiHardware {
   BleUart uart;
   late List<int> _buffer;
-  BehaviorSubject<BluetoothConnectionState> state =
-      BehaviorSubject<BluetoothConnectionState>();
+  BehaviorSubject<BleConnectionState> state =
+      BehaviorSubject<BleConnectionState>.seeded(.connected);
   BehaviorSubject<double> largeSendProgress = BehaviorSubject<double>.seeded(0);
-  late StreamSubscription<BluetoothConnectionState> subscription;
-  bool isConncted = false;
+  late StreamSubscription<bool> subscription;
+  bool isConncted = true;
 
   PoiHardware(this.uart) {
-    subscription = uart.device.connectionState.listen((event) {
-      state.add(event);
-      isConncted = event == .connected;
+    subscription = uart.device.connectionStream.listen((connected) {
+      state.add(connected ? .connected : .disconnected);
+      isConncted = connected;
     });
   }
 
@@ -115,17 +113,16 @@ class PoiHardware {
   }
 
   Future<dynamic> readResponse() async {
+    List<int> value = [];
     try {
-      await uart.txCharacteristic.read();
+      value = await uart.read();
     } catch (e) {
       Confirmation(false);
     }
 
     _buffer = List<int>.empty(growable: true);
-    _buffer.addAll(uart.txCharacteristic.lastValue);
-    debugPrint(
-      "onRecievePacket: From TX Characteristic ${uart.txCharacteristic.lastValue}",
-    );
+    _buffer.addAll(value);
+    debugPrint("onRecievePacket: From TX Characteristic $value");
 
     if (_buffer.isEmpty ||
         _buffer[0] != 0xD0 ||

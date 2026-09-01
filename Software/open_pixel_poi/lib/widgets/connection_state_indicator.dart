@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:open_pixel_poi/hardware/poi_hardware.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_ble/universal_ble.dart';
 
 import '../hardware/ble_uart.dart';
 import '../model.dart';
@@ -38,7 +38,7 @@ class _ConnectionStateIndicatorState extends State<ConnectionStateIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<BluetoothConnectionState>(
+    return StreamBuilder<BleConnectionState>(
       stream: Provider.of<Model>(context)
           .connectedPoi![widget.connectedPoiIndex]
           .state,
