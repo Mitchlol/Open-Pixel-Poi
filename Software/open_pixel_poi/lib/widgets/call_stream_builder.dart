@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 
-typedef CallStreamBuilderWidgetBuilder<T> = Widget Function(BuildContext context, Function call, bool isLoading, T value);
+typedef CallStreamBuilderWidgetBuilder<T> = Widget Function(
+  BuildContext context,
+  Function call,
+  bool isLoading,
+  T value,
+);
 
 class CallStreamBuilder<T> extends StatefulWidget {
-  static const Duration DEFAULT_DURATION = Duration(seconds: 4);
+  static const Duration defaultTimeout = Duration(seconds: 4);
 
   final CallStreamBuilderWidgetBuilder<T> builder;
   final Function call;
@@ -14,32 +19,38 @@ class CallStreamBuilder<T> extends StatefulWidget {
   final Duration timeout;
   final bool autoLoad;
 
-  CallStreamBuilder({required this.builder, required this.call, required this.stream, this.timeout = DEFAULT_DURATION, this.autoLoad = false, super.key})
-      : assert(builder != null), assert(call != null), assert(stream != null);
+  const CallStreamBuilder({
+    required this.builder,
+    required this.call,
+    required this.stream,
+    this.timeout = defaultTimeout,
+    this.autoLoad = false,
+    super.key,
+  });
 
   @override
-  _CallStreamBuilder createState() => _CallStreamBuilder<T>(builder, call, stream, timeout, autoLoad);
+  State<CallStreamBuilder<T>> createState() => _CallStreamBuilderState<T>();
 }
 
-class _CallStreamBuilder<T> extends State<CallStreamBuilder<T>> {
-  final Widget Function(BuildContext, Function, bool, T) buildFunction;
-  final Function callFunction;
-  final Stream<T> responseStream;
-  final Duration timeout;
+class _CallStreamBuilderState<T> extends State<CallStreamBuilder<T>> {
   late T responseValue;
-  late bool isLoading;
-  late CancelableOperation cancelableOperation;
-  late StreamSubscription subscription;
-  late bool autoLoad;
+  bool isLoading = false;
+  CancelableOperation<void>? cancelableOperation;
+  late final StreamSubscription<T> subscription;
+  late bool autoLoad = widget.autoLoad;
 
-  _CallStreamBuilder(this.buildFunction, this.callFunction, this.responseStream, this.timeout, this.autoLoad) {
-    this.isLoading = false;
-    subscription = responseStream.listen((event) {
+  @override
+  void initState() {
+    super.initState();
+    subscription = widget.stream.listen((event) {
       setState(() {
         responseValue = event;
         isLoading = false;
-        if (cancelableOperation != null && !cancelableOperation.isCanceled && !cancelableOperation.isCompleted) {
-          cancelableOperation.cancel();
+        final operation = cancelableOperation;
+        if (operation != null &&
+            !operation.isCanceled &&
+            !operation.isCompleted) {
+          operation.cancel();
         }
       });
     });
@@ -51,7 +62,7 @@ class _CallStreamBuilder<T> extends State<CallStreamBuilder<T>> {
       autoLoad = false;
       callWrapper();
     }
-    return buildFunction(context, callWrapper, isLoading, responseValue);
+    return widget.builder(context, callWrapper, isLoading, responseValue);
   }
 
   @override
@@ -63,14 +74,14 @@ class _CallStreamBuilder<T> extends State<CallStreamBuilder<T>> {
   void callWrapper() {
     setState(() {
       isLoading = true;
-      // TODO: See if this breaks anything
-      // responseValue = null;
-      cancelableOperation = CancelableOperation.fromFuture(Future.delayed(timeout).then((value) {
-        setState(() {
-          isLoading = false;
-        });
-      }));
+      cancelableOperation = CancelableOperation.fromFuture(
+        Future<void>.delayed(widget.timeout).then((value) {
+          setState(() {
+            isLoading = false;
+          });
+        }),
+      );
     });
-    callFunction();
+    widget.call();
   }
 }

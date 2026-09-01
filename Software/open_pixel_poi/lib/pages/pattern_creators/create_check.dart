@@ -11,12 +11,11 @@ import '../../model.dart';
 import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 
-
 class CreateCheckPage extends StatefulWidget {
   const CreateCheckPage({super.key});
 
   @override
-  _CreateCheckState createState() => _CreateCheckState();
+  State<CreateCheckPage> createState() => _CreateCheckState();
 }
 
 class _CreateCheckState extends State<CreateCheckPage> {
@@ -28,19 +27,25 @@ class _CreateCheckState extends State<CreateCheckPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(flagFirst){
+    if (flagFirst) {
       flagFirst = false;
       var random = Random();
-      colorOne = RgbValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
+      colorOne = RgbValue([
+        random.nextInt(256),
+        random.nextInt(256),
+        random.nextInt(256),
+      ]);
       colorTwo = RgbValue([0, 0, 0]);
     }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Check Pattern Creator"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -51,27 +56,27 @@ class _CreateCheckState extends State<CreateCheckPage> {
     return ListView(
       children: [
         LabeledSlider(
-            "Check size",
-            1,
-            55,
-            1,
-                (int value) => setState(() {
-                  gridSize = value;
-                }),
+          "Check size",
+          1,
+          55,
+          1,
+          (int value) => setState(() {
+            gridSize = value;
+          }),
         ),
         ColorPicker(
           "Primary Color",
           colorOne.red.toDouble(),
           colorOne.green.toDouble(),
           colorOne.blue.toDouble(),
-              (RgbValue color) => colorOne = color,
+          (RgbValue color) => colorOne = color,
         ),
         ColorPicker(
           "Other Color",
           colorTwo.red.toDouble(),
           colorTwo.green.toDouble(),
           colorTwo.blue.toDouble(),
-              (RgbValue color) => colorTwo = color,
+          (RgbValue color) => colorTwo = color,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -79,7 +84,7 @@ class _CreateCheckState extends State<CreateCheckPage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -88,7 +93,7 @@ class _CreateCheckState extends State<CreateCheckPage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -100,13 +105,13 @@ class _CreateCheckState extends State<CreateCheckPage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if(context.mounted) { // Do we actually want this check?
+                      if (mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -116,7 +121,7 @@ class _CreateCheckState extends State<CreateCheckPage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -126,14 +131,14 @@ class _CreateCheckState extends State<CreateCheckPage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -146,17 +151,18 @@ class _CreateCheckState extends State<CreateCheckPage> {
     );
   }
 
-  Future<void> makeAndStorePattern(BuildContext context) async{
+  Future<void> makeAndStorePattern(BuildContext context) async {
     var rgbList = Uint8List(((gridSize * 2) * (gridSize * 2)) * 3);
-    for(int column = 0; column < gridSize * 2; column++){
-      for(int row = 0; row < gridSize * 2; row++){
+    for (int column = 0; column < gridSize * 2; column++) {
+      for (int row = 0; row < gridSize * 2; row++) {
         var pixelOffset = (column * (gridSize * 2)) + row;
         var rgbOffset = pixelOffset * 3;
-        if((column < gridSize && row < gridSize) || (column >= gridSize && row >= gridSize)){
+        if ((column < gridSize && row < gridSize) ||
+            (column >= gridSize && row >= gridSize)) {
           rgbList[rgbOffset] = colorOne.red;
           rgbList[rgbOffset + 1] = colorOne.green;
           rgbList[rgbOffset + 2] = colorOne.blue;
-        }else{
+        } else {
           rgbList[rgbOffset] = colorTwo.red;
           rgbList[rgbOffset + 1] = colorTwo.green;
           rgbList[rgbOffset + 2] = colorTwo.blue;
