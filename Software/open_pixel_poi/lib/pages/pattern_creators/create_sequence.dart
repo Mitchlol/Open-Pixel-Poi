@@ -274,7 +274,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
   Future<void> triggerSequence(BuildContext context) async {
     Provider.of<Model>(context, listen: false)
         .connectedPoi!
-        .forEach((poi) => poi.sendCommCode(CommCode.startSequencer, false));
+        .forEach((poi) => poi.sendCommCode(CommCode.CC_START_SEQUENCER, false));
   }
 
   Future<bool> setSequence(BuildContext context) async{

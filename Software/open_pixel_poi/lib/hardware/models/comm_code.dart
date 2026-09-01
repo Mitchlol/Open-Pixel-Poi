@@ -1,23 +1,25 @@
+// ignore_for_file: constant_identifier_names
+
 enum CommCode {
-  success, // 0
-  error, // 1
-  setBrightness, // 2
-  setSpeed, // 3
-  setPattern, // 4
-  setPatternSlot, // 5
-  setPatternAll, // 6
-  setBank, // 7
-  setBankAll, // 8
-  getFwVersion, // 9
-  setHardwareVersion, // 10
-  setLedType, // 11
-  setLedCount, // 12
-  setDeviceName, // 13
-  setSequencer, // 14
-  startSequencer, // 15
-  setBrightnessOption, // 16
-  setBrightnessOptions, // 17
-  setSpeedOption, // 18
-  setSpeedOptions, // 19
-  setPatternShuffleDuration, // 20
+  CC_SUCCESS,                     // 0
+  CC_ERROR,                       // 1
+  CC_SET_BRIGHTNESS,              // 2
+  CC_SET_SPEED,                   // 3
+  CC_SET_PATTERN,                 // 4
+  CC_SET_PATTERN_SLOT,            // 5
+  CC_SET_PATTERN_ALL,             // 6
+  CC_SET_BANK,                    // 7
+  CC_SET_BANK_ALL,                // 8
+  CC_GET_FW_VERSION,              // 9
+  CC_SET_HARDWARE_VERSION,        // 10
+  CC_SET_LED_TYPE,                // 11
+  CC_SET_LED_COUNT,               // 12
+  CC_SET_DEVICE_NAME,             // 13
+  CC_SET_SEQUENCER,               // 14
+  CC_START_SEQUENCER,             // 15
+  CC_SET_BRIGHTNESS_OPTION,       // 16
+  CC_SET_BRIGHTNESS_OPTIONS,      // 17
+  CC_SET_SPEED_OPTION,            // 18
+  CC_SET_SPEED_OPTIONS,           // 19
+  CC_SET_PATTERN_SHUFFLE_DURATION,// 20
 }

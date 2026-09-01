@@ -362,7 +362,7 @@ class _WelcomeState extends State<WelcomePage> {
     // Check the firmware version of each connected device
     print("Check firmware version");
     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-      await poi.sendInt8(0, CommCode.getFwVersion, true);
+      await poi.sendInt8(0, CommCode.CC_GET_FW_VERSION, true);
       FWVersion? version = await poi.readResponse();
       if((version?.version??0) != 2){
         setState(() {

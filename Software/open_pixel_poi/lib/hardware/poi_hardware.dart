@@ -138,11 +138,11 @@ class PoiHardware {
     CommCode commCode = CommCode.values[message.removeAt(0)];
     print("Message recieved: code = $commCode, message = $message");
     switch (commCode) {
-      case CommCode.success:
+      case CommCode.CC_SUCCESS:
         return Confirmation(true);
-      case CommCode.error:
+      case CommCode.CC_ERROR:
         return Confirmation(false);
-      case CommCode.getFwVersion:
+      case CommCode.CC_GET_FW_VERSION:
         return FWVersion(message[0]);
      default:
         print("Unhandled message recieved: code = $commCode, message = $message");
@@ -205,7 +205,7 @@ class PoiHardware {
   }
   Future<bool> sendPattern(LedPattern pattern) {
     List<int> message = [];
-    ParseUtil.putInt8(message, CommCode.setPattern.index);
+    ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
     ParseUtil.putInt8(message, pattern.columnHeight);
     ParseUtil.putInt16(message, pattern.columnCount);
     for(int i = 0; i < pattern.columnHeight * pattern.columnCount; i++){
@@ -218,7 +218,7 @@ class PoiHardware {
 
   Future<bool> sendPattern2(DBImage pattern) {
     List<int> message = [];
-    ParseUtil.putInt8(message, CommCode.setPattern.index);
+    ParseUtil.putInt8(message, CommCode.CC_SET_PATTERN.index);
     ParseUtil.putInt8(message, pattern.height);
     ParseUtil.putInt16(message, pattern.count);
     ParseUtil.putInt8List(message, pattern.bytes);
@@ -227,7 +227,7 @@ class PoiHardware {
 
   Future<bool> sendSequence(List<SegmentValues> segments) {
     List<int> message = [];
-    ParseUtil.putInt8(message, CommCode.setSequencer.index);
+    ParseUtil.putInt8(message, CommCode.CC_SET_SEQUENCER.index);
     ParseUtil.putInt16(message, segments.length * 7);
     for(SegmentValues segment in segments){
       ParseUtil.putInt8(message, segment.pattern - 1);

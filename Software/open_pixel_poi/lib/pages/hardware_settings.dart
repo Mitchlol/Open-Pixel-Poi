@@ -140,7 +140,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendInt8(patternShuffleDuration, CommCode.setPatternShuffleDuration, true).timeout(Duration(seconds: 5));
+                      await poi.sendInt8(patternShuffleDuration, CommCode.CC_SET_PATTERN_SHUFFLE_DURATION, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting shuffle duration.'));
@@ -246,7 +246,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendInt16Array(animationSpeeds, CommCode.setSpeedOptions, true).timeout(Duration(seconds: 5));
+                      await poi.sendInt16Array(animationSpeeds, CommCode.CC_SET_SPEED_OPTIONS, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting speed options.'));
@@ -352,7 +352,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendInt8Array(brightnesses, CommCode.setBrightnessOptions, true).timeout(Duration(seconds: 5));
+                      await poi.sendInt8Array(brightnesses, CommCode.CC_SET_BRIGHTNESS_OPTIONS, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting brightness options.'));
@@ -416,7 +416,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendString(deviceName, CommCode.setDeviceName, true).timeout(Duration(seconds: 5));
+                      await poi.sendString(deviceName, CommCode.CC_SET_DEVICE_NAME, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting device name.'));
@@ -484,7 +484,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendInt8(ledCount, CommCode.setLedCount, true).timeout(Duration(seconds: 5));
+                      await poi.sendInt8(ledCount, CommCode.CC_SET_LED_COUNT, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting pixel count.'));
@@ -553,7 +553,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendInt8(ledType, CommCode.setLedType, true).timeout(Duration(seconds: 5));
+                      await poi.sendInt8(ledType, CommCode.CC_SET_LED_TYPE, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting pixel count.'));
@@ -629,7 +629,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                       saving = true;
                     });
                     for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
-                      await poi.sendInt8(hardwareVersion, CommCode.setHardwareVersion, true).timeout(Duration(seconds: 5));
+                      await poi.sendInt8(hardwareVersion, CommCode.CC_SET_HARDWARE_VERSION, true).timeout(Duration(seconds: 5));
                       Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
                       if((confirmation?.success??0) != true){
                         const snackBar = SnackBar(content: Text('Error setting hardware version.'));
