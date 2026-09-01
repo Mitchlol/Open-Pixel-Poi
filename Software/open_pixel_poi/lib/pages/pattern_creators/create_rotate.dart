@@ -32,48 +32,49 @@ class _CreateRotateState extends State<CreateRotatePage> {
         title: const Text("Rotate image 90 degrees"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return ListView(
-      children: [
-        LabeledSlider(
-          "Rotated Image Height Limit",
-          1,
-          100,
-          1,
-          (int value) => setState(() {
-            outputImageHeightLimit = value;
-          }),
-          25,
-        ),
-        PatternPicker(
-          label: "Image",
-          selected: image,
-          onSelected: (entry) => setState(() => image = entry),
-          onDefaultAssigned: (entry) => image = entry,
-          tooFewImagesMessage:
-              'You must have at least 1 image stored to rotate.',
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
+      body: saving
+          ? const StatusMessage.saving()
+          : ListView(
+              children: [
+                LabeledSlider(
+                  "Rotated Image Height Limit",
+                  1,
+                  100,
+                  1,
+                  (int value) => setState(() {
+                    outputImageHeightLimit = value;
+                  }),
+                  25,
+                ),
+                PatternPicker(
+                  label: "Image",
+                  selected: image,
+                  onSelected: (entry) => setState(() => image = entry),
+                  onDefaultAssigned: (entry) => image = entry,
+                  tooFewImagesMessage:
+                      'You must have at least 1 image stored to rotate.',
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        await makeAndStorePattern(context);
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
     );
   }
 

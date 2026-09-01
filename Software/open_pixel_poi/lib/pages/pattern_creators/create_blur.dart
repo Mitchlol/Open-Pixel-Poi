@@ -30,37 +30,39 @@ class _CreateBlurState extends State<CreateBlurPage> {
         title: const Text("Blur image"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return ListView(
-      children: [
-        PatternPicker(
-          label: "Image",
-          selected: image,
-          onSelected: (entry) => setState(() => image = entry),
-          onDefaultAssigned: (entry) => image = entry,
-          tooFewImagesMessage: 'You must have at least 1 image stored to blur.',
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
+      body: saving
+          ? const StatusMessage.saving()
+          : ListView(
+              children: [
+                PatternPicker(
+                  label: "Image",
+                  selected: image,
+                  onSelected: (entry) => setState(() => image = entry),
+                  onDefaultAssigned: (entry) => image = entry,
+                  tooFewImagesMessage:
+                      'You must have at least 1 image stored to blur.',
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        await makeAndStorePattern(context);
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
     );
   }
 

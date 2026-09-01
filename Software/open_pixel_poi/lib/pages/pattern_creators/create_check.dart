@@ -44,53 +44,54 @@ class _CreateCheckState extends State<CreateCheckPage> {
         title: const Text("Check Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return ListView(
-      children: [
-        LabeledSlider(
-          "Check size",
-          1,
-          55,
-          1,
-          (int value) => setState(() {
-            gridSize = value;
-          }),
-        ),
-        ColorPicker(
-          "Primary Color",
-          colorOne.red.toDouble(),
-          colorOne.green.toDouble(),
-          colorOne.blue.toDouble(),
-          (RgbValue color) => colorOne = color,
-        ),
-        ColorPicker(
-          "Other Color",
-          colorTwo.red.toDouble(),
-          colorTwo.green.toDouble(),
-          colorTwo.blue.toDouble(),
-          (RgbValue color) => colorTwo = color,
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
+      body: saving
+          ? const StatusMessage.saving()
+          : ListView(
+              children: [
+                LabeledSlider(
+                  "Check size",
+                  1,
+                  55,
+                  1,
+                  (int value) => setState(() {
+                    gridSize = value;
+                  }),
+                ),
+                ColorPicker(
+                  "Primary Color",
+                  colorOne.red.toDouble(),
+                  colorOne.green.toDouble(),
+                  colorOne.blue.toDouble(),
+                  (RgbValue color) => colorOne = color,
+                ),
+                ColorPicker(
+                  "Other Color",
+                  colorTwo.red.toDouble(),
+                  colorTwo.green.toDouble(),
+                  colorTwo.blue.toDouble(),
+                  (RgbValue color) => colorTwo = color,
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        await makeAndStorePattern(context);
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
     );
   }
 
