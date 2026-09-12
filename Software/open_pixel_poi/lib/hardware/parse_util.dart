@@ -4,7 +4,7 @@ import 'dart:math';
 
 class ParseUtil {
   static String takeString(List<int> data, [int stringEndIndex = 0]) {
-    if(stringEndIndex == 0) {
+    if (stringEndIndex == 0) {
       stringEndIndex = data.indexWhere((it) => it == 0);
     }
     String string = utf8.decode(data.sublist(0, stringEndIndex));
@@ -12,6 +12,7 @@ class ParseUtil {
     data.removeAt(0);
     return string;
   }
+
   static int takeInt8(List<int> data) {
     return data.removeAt(0);
   }

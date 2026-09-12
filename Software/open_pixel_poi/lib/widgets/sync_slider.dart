@@ -10,6 +10,7 @@ import '../model.dart';
 String defaultSuffixgenerator(double value) {
   return "${value.toInt()}%";
 }
+
 class SyncSlider extends StatefulWidget {
   String title;
   CommCode code;
@@ -20,17 +21,35 @@ class SyncSlider extends StatefulWidget {
   double scaler;
   String Function(double) suffixGenerator;
 
-  SyncSlider(this.title, this.code, this.getter, this.setter, {this.maxValue = 100.0, this.minValue = 0.0, this.scaler = 2.55, this.suffixGenerator = defaultSuffixgenerator}){
-    if(getter()/scaler > maxValue){
+  SyncSlider(
+    this.title,
+    this.code,
+    this.getter,
+    this.setter, {
+    this.maxValue = 100.0,
+    this.minValue = 0.0,
+    this.scaler = 2.55,
+    this.suffixGenerator = defaultSuffixgenerator,
+  }) {
+    if (getter() / scaler > maxValue) {
       setter(0);
     }
-    if(getter()/scaler < minValue){
+    if (getter() / scaler < minValue) {
       setter(0);
     }
   }
 
   @override
-  _SyncSliderState createState() => _SyncSliderState(title, code, getter, setter, maxValue, minValue, scaler, suffixGenerator);
+  _SyncSliderState createState() => _SyncSliderState(
+    title,
+    code,
+    getter,
+    setter,
+    maxValue,
+    minValue,
+    scaler,
+    suffixGenerator,
+  );
 }
 
 class _SyncSliderState extends State<SyncSlider> {
@@ -45,8 +64,17 @@ class _SyncSliderState extends State<SyncSlider> {
 
   late double temp;
 
-  _SyncSliderState(this.title, this.code, this.getter, this.setter, this.maxValue, this.minValue, this.scaler, this.suffixGenerator){
-    temp = (getter()~/scaler).toDouble();
+  _SyncSliderState(
+    this.title,
+    this.code,
+    this.getter,
+    this.setter,
+    this.maxValue,
+    this.minValue,
+    this.scaler,
+    this.suffixGenerator,
+  ) {
+    temp = (getter() ~/ scaler).toDouble();
   }
 
   @override
@@ -97,12 +125,12 @@ class _SyncSliderState extends State<SyncSlider> {
   void setInt(int value, BuildContext context) async {
     Model model = Provider.of<Model>(context, listen: false);
     int previous = getter();
-    try{
+    try {
       print("Set int ${code.name}");
       setState(() {
         setter(value);
       });
-      for(var poi in model.connectedPoi!){
+      for (var poi in model.connectedPoi!) {
         await poi.sendInt8(value, code);
       }
       // TODO: Ignoring confirmations for now
@@ -111,7 +139,7 @@ class _SyncSliderState extends State<SyncSlider> {
       // if(!response.success){
       //   throw Exception("Device returned err :-O");
       // }
-    }catch (e, s){
+    } catch (e, s) {
       // revert!
       setState(() {
         setter(previous);
@@ -120,5 +148,4 @@ class _SyncSliderState extends State<SyncSlider> {
       print(s);
     }
   }
-
 }

@@ -22,7 +22,13 @@ class _ColorPickerState extends State<ColorPicker> {
 
   double red, green, blue;
 
-  _ColorPickerState(this.title, this.red, this.green, this.blue, this.onValueChanged);
+  _ColorPickerState(
+    this.title,
+    this.red,
+    this.green,
+    this.blue,
+    this.onValueChanged,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +55,9 @@ class _ColorPickerState extends State<ColorPicker> {
                     });
                   },
                   onChangeEnd: (double value) {
-                    onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
+                    onValueChanged(
+                      RgbValue([red.toInt(), green.toInt(), blue.toInt()]),
+                    );
                   },
                 ),
               ),
@@ -69,7 +77,9 @@ class _ColorPickerState extends State<ColorPicker> {
                     });
                   },
                   onChangeEnd: (double value) {
-                    onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
+                    onValueChanged(
+                      RgbValue([red.toInt(), green.toInt(), blue.toInt()]),
+                    );
                   },
                 ),
               ),
@@ -89,7 +99,9 @@ class _ColorPickerState extends State<ColorPicker> {
                     });
                   },
                   onChangeEnd: (double value) {
-                    onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
+                    onValueChanged(
+                      RgbValue([red.toInt(), green.toInt(), blue.toInt()]),
+                    );
                   },
                 ),
               ),
@@ -102,7 +114,11 @@ class _ColorPickerState extends State<ColorPicker> {
         child: Container(
           decoration: BoxDecoration(
             color: Color.fromARGB(
-                255, red.toInt(), green.toInt(), blue.toInt()),
+              255,
+              red.toInt(),
+              green.toInt(),
+              blue.toInt(),
+            ),
             border: Border.all(color: Colors.black),
           ),
         ),

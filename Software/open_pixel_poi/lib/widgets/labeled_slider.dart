@@ -12,7 +12,15 @@ class LabeledSlider extends StatefulWidget {
   Key? key;
   Function(int) onValueChanged;
 
-  LabeledSlider(this.title, this.min, this.max, this.step, this.onValueChanged, [this.initial, this.key]){
+  LabeledSlider(
+    this.title,
+    this.min,
+    this.max,
+    this.step,
+    this.onValueChanged, [
+    this.initial,
+    this.key,
+  ]) {
     if (this.initial == null) {
       this.initial = this.min;
     }
@@ -30,7 +38,15 @@ class _LabeledSliderState extends State<LabeledSlider> {
   late int value;
   Key? key;
 
-  _LabeledSliderState(this.title, this.min, this.max, this.step, this.onValueChanged, this.initial, this.key){
+  _LabeledSliderState(
+    this.title,
+    this.min,
+    this.max,
+    this.step,
+    this.onValueChanged,
+    this.initial,
+    this.key,
+  ) {
     value = initial;
   }
 
@@ -50,7 +66,7 @@ class _LabeledSliderState extends State<LabeledSlider> {
           value: value.toDouble(),
           max: max.toDouble(),
           min: min.toDouble(),
-          divisions: ((max - min)/step).round(),
+          divisions: ((max - min) / step).round(),
           // label: "$value",
           onChanged: (double newValue) {
             setState(() {
