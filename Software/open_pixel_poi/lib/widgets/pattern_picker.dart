@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../database/pattern_db.dart';
 import '../model.dart';
+import 'pattern_preview_image.dart';
 
 /// Lets the user pick one of the stored patterns.
 ///
@@ -32,7 +33,7 @@ class PatternPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imagesFuture = Provider.of<Model>(context).patternDB.getImages(context);
+    final imagesFuture = Provider.of<Model>(context).patternDB.getImages();
     return InkWell(
       onTap: () => showDialog<void>(
         context: context,
@@ -60,7 +61,7 @@ class PatternPicker extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: PatternPreview(
-                                child: snapshot.data![index].preview,
+                                child: PatternPreviewImage(bytes: snapshot.data![index].previewBytes),
                               ),
                             ),
                           );
@@ -109,11 +110,11 @@ class PatternPicker extends StatelessWidget {
                       AsyncSnapshot<List<PatternEntry>> snapshot,
                     ) {
                       if (selected != null) {
-                        return selected!.preview;
+                        return PatternPreviewImage(bytes: selected!.previewBytes);
                       } else if (snapshot.hasData && snapshot.data!.length >= minImages) {
                         final entry = snapshot.data![defaultIndex];
                         onDefaultAssigned(entry);
-                        return entry.preview;
+                        return PatternPreviewImage(bytes: entry.previewBytes);
                       } else if (snapshot.hasError || (snapshot.hasData && snapshot.data!.length < minImages)) {
                         _tooFewImagesError(context);
                         return Container();
