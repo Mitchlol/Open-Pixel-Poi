@@ -8,6 +8,7 @@ import '../../database/db_image.dart';
 import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../widgets/pattern_preview_image.dart';
 
 class CreateMergePage extends StatefulWidget {
   const CreateMergePage({super.key});
@@ -58,7 +59,7 @@ class _CreateMergeState extends State<CreateMergePage> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select top Image"),
               content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB.getImages(context),
+                future: Provider.of<Model>(context).patternDB.getImages(),
                 builder:
                     (
                       BuildContext context,
@@ -85,7 +86,9 @@ class _CreateMergeState extends State<CreateMergePage> {
                                     children: [
                                       SizedBox(
                                         height: 80,
-                                        child: snapshot.data![index].preview,
+                                        child: PatternPreviewImage(
+                                          bytes: snapshot.data![index].previewBytes,
+                                        ),
                                       ),
                                       const SizedBox(
                                         width: 100,
@@ -140,17 +143,21 @@ class _CreateMergeState extends State<CreateMergePage> {
                 SizedBox(
                   height: 80,
                   child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB.getImages(context),
+                    future: Provider.of<Model>(context).patternDB.getImages(),
                     builder:
                         (
                           BuildContext context,
                           AsyncSnapshot<List<PatternEntry>> snapshot,
                         ) {
                           if (topImage != null) {
-                            return topImage!.preview;
+                            return PatternPreviewImage(
+                              bytes: topImage!.previewBytes,
+                            );
                           } else if (snapshot.hasData && snapshot.data!.length >= 2) {
                             topImage = snapshot.data![0];
-                            return snapshot.data!.first.preview;
+                            return PatternPreviewImage(
+                              bytes: snapshot.data!.first.previewBytes,
+                            );
                           } else if (snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)) {
                             tooFewImagesError(context);
                             return Container();
@@ -180,7 +187,7 @@ class _CreateMergeState extends State<CreateMergePage> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select bottom Image"),
               content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB.getImages(context),
+                future: Provider.of<Model>(context).patternDB.getImages(),
                 builder:
                     (
                       BuildContext context,
@@ -207,7 +214,9 @@ class _CreateMergeState extends State<CreateMergePage> {
                                     children: [
                                       SizedBox(
                                         height: 80,
-                                        child: snapshot.data![index].preview,
+                                        child: PatternPreviewImage(
+                                          bytes: snapshot.data![index].previewBytes,
+                                        ),
                                       ),
                                       const SizedBox(
                                         width: 100,
@@ -262,17 +271,21 @@ class _CreateMergeState extends State<CreateMergePage> {
                 SizedBox(
                   height: 80,
                   child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB.getImages(context),
+                    future: Provider.of<Model>(context).patternDB.getImages(),
                     builder:
                         (
                           BuildContext context,
                           AsyncSnapshot<List<PatternEntry>> snapshot,
                         ) {
                           if (bottomImage != null) {
-                            return bottomImage!.preview;
+                            return PatternPreviewImage(
+                              bytes: bottomImage!.previewBytes,
+                            );
                           } else if (snapshot.hasData && snapshot.data!.length >= 2) {
                             bottomImage = snapshot.data![1];
-                            return snapshot.data![1].preview;
+                            return PatternPreviewImage(
+                              bytes: snapshot.data![1].previewBytes,
+                            );
                           } else if (snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)) {
                             tooFewImagesError(context);
                             return Container();

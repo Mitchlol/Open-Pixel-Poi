@@ -8,6 +8,7 @@ import '../../database/db_image.dart';
 import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../widgets/pattern_preview_image.dart';
 import '../../widgets/labeled_slider.dart';
 
 class CreateRotatePage extends StatefulWidget {
@@ -58,7 +59,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select Image"),
               content: FutureBuilder<List<PatternEntry>>(
-                future: Provider.of<Model>(context).patternDB.getImages(context),
+                future: Provider.of<Model>(context).patternDB.getImages(),
                 builder:
                     (
                       BuildContext context,
@@ -85,7 +86,9 @@ class _CreateRotateState extends State<CreateRotatePage> {
                                     children: [
                                       SizedBox(
                                         height: 80,
-                                        child: snapshot.data![index].preview,
+                                        child: PatternPreviewImage(
+                                          bytes: snapshot.data![index].previewBytes,
+                                        ),
                                       ),
                                       const SizedBox(
                                         width: 100,
@@ -140,17 +143,21 @@ class _CreateRotateState extends State<CreateRotatePage> {
                 SizedBox(
                   height: 80,
                   child: FutureBuilder<List<PatternEntry>>(
-                    future: Provider.of<Model>(context).patternDB.getImages(context),
+                    future: Provider.of<Model>(context).patternDB.getImages(),
                     builder:
                         (
                           BuildContext context,
                           AsyncSnapshot<List<PatternEntry>> snapshot,
                         ) {
                           if (image != null) {
-                            return image!.preview;
+                            return PatternPreviewImage(
+                              bytes: image!.previewBytes,
+                            );
                           } else if (snapshot.hasData && snapshot.data!.length >= 2) {
                             image = snapshot.data![0];
-                            return snapshot.data!.first.preview;
+                            return PatternPreviewImage(
+                              bytes: snapshot.data!.first.previewBytes,
+                            );
                           } else if (snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)) {
                             tooFewImagesError(context);
                             return Container();
