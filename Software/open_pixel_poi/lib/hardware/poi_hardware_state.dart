@@ -3,5 +3,5 @@ import 'models/settings.dart';
 
 class PoiHardwareState{
   Settings settings = Settings([1,1]);
-  List<LEDPattern> ledPattern = [];
+  List<LedPattern> ledPattern = [];
 }

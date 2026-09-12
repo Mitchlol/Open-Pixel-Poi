@@ -3,10 +3,10 @@ import 'dart:ui';
 import '../parse_util.dart';
 
 
-class RGBValue{
+class RgbValue{
   int red = 0, green = 0, blue = 0;
 
-  RGBValue(List<int> data){
+  RgbValue(List<int> data){
     red = ParseUtil.takeInt8(data);
     green = ParseUtil.takeInt8(data);
     blue = ParseUtil.takeInt8(data);

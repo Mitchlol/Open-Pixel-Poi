@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
@@ -25,7 +25,7 @@ class _CreateTextState extends State<CreateTextPage> {
   bool flagFirst = true;
   int textHeight = 25;
   String text = "";
-  late RGBValue textColor, backgroundColor;
+  late RgbValue textColor, backgroundColor;
   bool saving = false;
 
   @override
@@ -33,8 +33,8 @@ class _CreateTextState extends State<CreateTextPage> {
     if(flagFirst){
       flagFirst = false;
       var random = Random();
-      textColor = RGBValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
-      backgroundColor = RGBValue([0,0,0]);
+      textColor = RgbValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
+      backgroundColor = RgbValue([0,0,0]);
     }
     return Scaffold(
       appBar: AppBar(
@@ -99,7 +99,7 @@ class _CreateTextState extends State<CreateTextPage> {
           textColor.red.toDouble(),
           textColor.green.toDouble(),
           textColor.blue.toDouble(),
-              (RGBValue color) {
+              (RgbValue color) {
                 textColor = color;
           },
         ),
@@ -108,7 +108,7 @@ class _CreateTextState extends State<CreateTextPage> {
           backgroundColor.red.toDouble(),
           backgroundColor.green.toDouble(),
           backgroundColor.blue.toDouble(),
-              (RGBValue color) {
+              (RgbValue color) {
                 backgroundColor = color;
           },
         ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:open_pixel_poi/widgets/labeled_button_select.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/comm_code.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';

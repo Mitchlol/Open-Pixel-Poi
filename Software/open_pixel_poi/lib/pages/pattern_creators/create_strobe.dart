@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
@@ -21,7 +21,7 @@ class CreateStrobePage extends StatefulWidget {
 
 class SegmentValues{
   int width = 10;
-  late RGBValue color;
+  late RgbValue color;
 }
 
 class _CreateStrobeState extends State<CreateStrobePage> {
@@ -88,7 +88,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                       segmentValues[index].color.red.toDouble(),
                       segmentValues[index].color.green.toDouble(),
                       segmentValues[index].color.blue.toDouble(),
-                      (RGBValue color) => segmentValues[index].color = color,
+                      (RgbValue color) => segmentValues[index].color = color,
                     ),
                   ],
                 ),
@@ -195,7 +195,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
 
   void addSegment(){
     var random = Random();
-    RGBValue color = RGBValue([random.nextInt(2) * 255, random.nextInt(2) * 255, random.nextInt(2) * 255]);
+    RgbValue color = RgbValue([random.nextInt(2) * 255, random.nextInt(2) * 255, random.nextInt(2) * 255]);
     segmentValues.add(SegmentValues());
     segmentValues.last.color = color;
   }

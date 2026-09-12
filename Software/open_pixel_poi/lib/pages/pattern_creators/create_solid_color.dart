@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
 import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
@@ -20,7 +20,7 @@ class CreateSolidColorPage extends StatefulWidget {
 
 class _CreateSolidColorState extends State<CreateSolidColorPage> {
   bool flagFirst = true;
-  late RGBValue pickedColor;
+  late RgbValue pickedColor;
   bool saving = false;
 
   @override
@@ -28,7 +28,7 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
     if(flagFirst){
       flagFirst = false;
       var random = Random();
-      pickedColor = RGBValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
+      pickedColor = RgbValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
     }
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +51,7 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
           pickedColor.red.toDouble(),
           pickedColor.green.toDouble(),
           pickedColor.blue.toDouble(),
-              (RGBValue color) {
+              (RgbValue color) {
             pickedColor = color;
           },
         ),

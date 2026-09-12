@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../hardware/models/comm_code.dart';
-import '../hardware/models/confirmtation.dart';
+import '../hardware/models/confirmation.dart';
 import '../model.dart';
 
 String defaultSuffixgenerator(double value) {

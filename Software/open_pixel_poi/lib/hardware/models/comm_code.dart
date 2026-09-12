@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 enum CommCode {
   CC_SUCCESS,                     // 0
   CC_ERROR,                       // 1

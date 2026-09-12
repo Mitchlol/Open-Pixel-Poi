@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
+import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
 import '../../widgets/labeled_slider.dart';
@@ -21,7 +21,7 @@ class CreateRotatePage extends StatefulWidget {
 class _CreateRotateState extends State<CreateRotatePage> {
   bool saving = false;
   int outputImageHeightLimit = 25;
-  Tuple2<Widget, DBImage>? image;
+  PatternEntry? image;
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +56,9 @@ class _CreateRotateState extends State<CreateRotatePage> {
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select Image"),
-              content: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+              content: FutureBuilder<List<PatternEntry>>(
                 future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                   if (snapshot.hasData) {
                     return SizedBox(
                       width: double.maxFinite,
@@ -80,7 +80,7 @@ class _CreateRotateState extends State<CreateRotatePage> {
                                 children: [
                                   SizedBox(
                                     height: 80,
-                                    child: snapshot.data![index].item1,
+                                    child: snapshot.data![index].preview,
                                   ),
                                   const SizedBox(
                                     width: 100,
@@ -134,14 +134,14 @@ class _CreateRotateState extends State<CreateRotatePage> {
                 ),
                 SizedBox(
                   height: 80,
-                  child: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+                  child: FutureBuilder<List<PatternEntry>>(
                     future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                       if (image != null){
-                        return image!.item1;
+                        return image!.preview;
                       }else if (snapshot.hasData && snapshot.data!.length >= 2) {
                         image = snapshot.data![0];
-                        return snapshot.data!.first.item1;
+                        return snapshot.data!.first.preview;
                       }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
                         tooFewImagesError(context);
                         return Container();
@@ -241,16 +241,16 @@ class _CreateRotateState extends State<CreateRotatePage> {
   Future<void> makeAndStorePattern(BuildContext context) async{
     var model = Provider.of<Model>(context, listen: false);
 
-    int desiredWidth = max(2, image!.item2.height);
-    int desiredHeight = min(outputImageHeightLimit, image!.item2.count);
-    var imgImage = (await model.patternDB.getImgImages([image!.item2]))[0];
+    int desiredWidth = max(2, image!.dbImage.height);
+    int desiredHeight = min(outputImageHeightLimit, image!.dbImage.count);
+    var imgImage = (await model.patternDB.getImgImages([image!.dbImage]))[0];
     var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
 
     for(var column = 0; column < desiredWidth; column++){
       for(var row = 0; row < desiredHeight; row++){
         var columnOffset = column * desiredHeight * 3;
         var rowOffset = row * 3;
-        var pixel = imgImage.getPixel(row, column % image!.item2.height);
+        var pixel = imgImage.getPixel(row, column % image!.dbImage.height);
         rgbList[columnOffset + rowOffset + 0] = pixel.r.toInt();
         rgbList[columnOffset + rowOffset + 1] = pixel.g.toInt();
         rgbList[columnOffset + rowOffset + 2] = pixel.b.toInt();

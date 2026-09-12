@@ -8,7 +8,7 @@ import '../model.dart';
 class ColorPicker extends StatefulWidget {
   String title;
   double red, green, blue;
-  Function(RGBValue) onValueChanged;
+  Function(RgbValue) onValueChanged;
 
   ColorPicker(this.title, this.red, this.green, this.blue, this.onValueChanged);
 
@@ -18,7 +18,7 @@ class ColorPicker extends StatefulWidget {
 
 class _ColorPickerState extends State<ColorPicker> {
   String title;
-  Function(RGBValue) onValueChanged;
+  Function(RgbValue) onValueChanged;
 
   double red, green, blue;
 
@@ -49,7 +49,7 @@ class _ColorPickerState extends State<ColorPicker> {
                     });
                   },
                   onChangeEnd: (double value) {
-                    onValueChanged(RGBValue([red.toInt(), green.toInt(), blue.toInt()]));
+                    onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
                   },
                 ),
               ),
@@ -69,7 +69,7 @@ class _ColorPickerState extends State<ColorPicker> {
                     });
                   },
                   onChangeEnd: (double value) {
-                    onValueChanged(RGBValue([red.toInt(), green.toInt(), blue.toInt()]));
+                    onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
                   },
                 ),
               ),
@@ -89,7 +89,7 @@ class _ColorPickerState extends State<ColorPicker> {
                     });
                   },
                   onChangeEnd: (double value) {
-                    onValueChanged(RGBValue([red.toInt(), green.toInt(), blue.toInt()]));
+                    onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
                   },
                 ),
               ),

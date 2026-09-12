@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 import 'dart:math';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dbimage.dart';
+import 'db_image.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -11,11 +11,12 @@ import 'package:path/path.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tuple/tuple.dart';
+
+typedef PatternEntry = ({Widget preview, DBImage dbImage});
 
 class PatternDB {
   late Future<Database> databaseFuture;
-  List<Tuple2<Widget, DBImage>>? inMemoryCache;
+  List<PatternEntry>? inMemoryCache;
 
   PatternDB(){
     getDB(); // Loads async without await, but user needs to scan for bluetooth so we have time.
@@ -185,27 +186,22 @@ class PatternDB {
     return imgimages;
   }
 
-  Future<List<Tuple2<Widget, DBImage>>> getImages(BuildContext context) async {
+  Future<List<PatternEntry>> getImages(BuildContext context) async {
     if(inMemoryCache != null){
       return Future.value(inMemoryCache);
     }
     var dbImages = await getDBImages();
     List<img.Image> imgImages = await getRepeatingImgImages(dbImages);
-    List<Tuple2<Widget, DBImage>> imageWidgets = List.empty(growable: true);
+    List<PatternEntry> imageWidgets = List.empty(growable: true);
     for (var imgImage in imgImages) {
-      imageWidgets.add(Tuple2(
-          Image.memory(
-            img.encodeJpg(imgImage),
-            // width: imgImage.width.toDouble(),
-            // height: imgImage.height.toDouble(),
-            // scale: 1.0,
-            // width: 400,
-            // height: 20,
-            // repeat: ImageRepeat.repeat,
-            alignment: Alignment.topLeft,
-            fit: BoxFit.fitHeight,
-          ),
-          dbImages[imgImages.indexOf(imgImage)]));
+      imageWidgets.add((
+        preview: Image.memory(
+          img.encodeJpg(imgImage),
+          alignment: Alignment.topLeft,
+          fit: BoxFit.fitHeight,
+        ),
+        dbImage: dbImages[imgImages.indexOf(imgImage)],
+      ));
     }
     inMemoryCache = imageWidgets;
     return imageWidgets;

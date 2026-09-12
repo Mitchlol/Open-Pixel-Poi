@@ -12,14 +12,14 @@ class ConnectionStateIndicator extends StatefulWidget {
   ConnectionStateIndicator(this.connectedPoiIndex, {super.key});
 
   @override
-  State<StatefulWidget> createState() => _CSIState(connectedPoiIndex);
+  State<StatefulWidget> createState() => _ConnectionStateIndicatorState(connectedPoiIndex);
 }
 
-class _CSIState extends State<ConnectionStateIndicator> {
+class _ConnectionStateIndicatorState extends State<ConnectionStateIndicator> {
   int connectedPoiIndex;
   bool isChanging = false;
 
-  _CSIState(this.connectedPoiIndex);
+  _ConnectionStateIndicatorState(this.connectedPoiIndex);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _CSIState extends State<ConnectionStateIndicator> {
     setState(() {
       isChanging = true;
     });
-    BLEUart bleUart = BLEUart(Provider.of<Model>(context, listen: false).connectedPoi![connectedPoiIndex].uart.device);
+    BleUart bleUart = BleUart(Provider.of<Model>(context, listen: false).connectedPoi![connectedPoiIndex].uart.device);
     bleUart.isIntialized.then((value) {
       Provider.of<Model>(context, listen: false).connectedPoi![connectedPoiIndex] = PoiHardware(bleUart);
       setState(() {

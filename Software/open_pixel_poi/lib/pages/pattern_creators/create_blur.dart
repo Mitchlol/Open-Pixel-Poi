@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
-import '../../database/dbimage.dart';
+import '../../database/db_image.dart';
+import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
 
@@ -20,7 +20,7 @@ class CreateBlurPage extends StatefulWidget {
 
 class _CreateBlurState extends State<CreateBlurPage> {
   bool saving = false;
-  Tuple2<Widget, DBImage>? image;
+  PatternEntry? image;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +45,9 @@ class _CreateBlurState extends State<CreateBlurPage> {
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text("Select Image"),
-              content: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+              content: FutureBuilder<List<PatternEntry>>(
                 future: Provider.of<Model>(context).patternDB.getImages(context),
-                builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                   if (snapshot.hasData) {
                     return SizedBox(
                       width: double.maxFinite,
@@ -69,7 +69,7 @@ class _CreateBlurState extends State<CreateBlurPage> {
                                 children: [
                                   SizedBox(
                                     height: 80,
-                                    child: snapshot.data![index].item1,
+                                    child: snapshot.data![index].preview,
                                   ),
                                   const SizedBox(
                                     width: 100,
@@ -123,14 +123,14 @@ class _CreateBlurState extends State<CreateBlurPage> {
                 ),
                 SizedBox(
                   height: 80,
-                  child: FutureBuilder<List<Tuple2<Widget, DBImage>>>(
+                  child: FutureBuilder<List<PatternEntry>>(
                     future: Provider.of<Model>(context).patternDB.getImages(context),
-                    builder: (BuildContext context, AsyncSnapshot<List<Tuple2<Widget, DBImage>>> snapshot) {
+                    builder: (BuildContext context, AsyncSnapshot<List<PatternEntry>> snapshot) {
                       if (image != null){
-                        return image!.item1;
+                        return image!.preview;
                       }else if (snapshot.hasData && snapshot.data!.length >= 2) {
                         image = snapshot.data![0];
-                        return snapshot.data!.first.item1;
+                        return snapshot.data!.first.preview;
                       }else if(snapshot.hasError || (snapshot.hasData && snapshot.data!.length < 2)){
                         tooFewImagesError(context);
                         return Container();
@@ -230,9 +230,9 @@ class _CreateBlurState extends State<CreateBlurPage> {
   Future<void> makeAndStorePattern(BuildContext context) async{
     var model = Provider.of<Model>(context, listen: false);
 
-    int desiredWidth = image!.item2.count;
-    int desiredHeight = image!.item2.height;
-    var imgImage = (await model.patternDB.getImgImages([image!.item2]))[0];
+    int desiredWidth = image!.dbImage.count;
+    int desiredHeight = image!.dbImage.height;
+    var imgImage = (await model.patternDB.getImgImages([image!.dbImage]))[0];
     var rgbList = Uint8List((desiredWidth*desiredHeight)*3);
 
     for(var column = 0; column < desiredWidth; column++){
@@ -240,15 +240,15 @@ class _CreateBlurState extends State<CreateBlurPage> {
         var columnOffset = column * desiredHeight * 3;
         var rowOffset = row * 3;
 
-        var pixel1 = row == 0 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column-1) % image!.item2.count, (row-1) % image!.item2.height);
-        var pixel2 = imgImage.getPixel((column-1) % image!.item2.count, (row) % image!.item2.height);
-        var pixel3 = row == desiredHeight-1 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column-1) % image!.item2.count, (row+1) % image!.item2.height);
-        var pixel4 = row == 0 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column) % image!.item2.count, (row-1) % image!.item2.height);
-        var pixel5 = imgImage.getPixel((column) % image!.item2.count, (row) % image!.item2.height);
-        var pixel6 = row == desiredHeight-1 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column) % image!.item2.count, (row+1) % image!.item2.height);
-        var pixel7 = row == 0 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column+1) % image!.item2.count, (row-1) % image!.item2.height);
-        var pixel8 = imgImage.getPixel((column+1) % image!.item2.count, (row) % image!.item2.height);
-        var pixel9 = row == desiredHeight-1 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column+1) % image!.item2.count, (row+1) % image!.item2.height);
+        var pixel1 = row == 0 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column-1) % image!.dbImage.count, (row-1) % image!.dbImage.height);
+        var pixel2 = imgImage.getPixel((column-1) % image!.dbImage.count, (row) % image!.dbImage.height);
+        var pixel3 = row == desiredHeight-1 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column-1) % image!.dbImage.count, (row+1) % image!.dbImage.height);
+        var pixel4 = row == 0 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column) % image!.dbImage.count, (row-1) % image!.dbImage.height);
+        var pixel5 = imgImage.getPixel((column) % image!.dbImage.count, (row) % image!.dbImage.height);
+        var pixel6 = row == desiredHeight-1 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column) % image!.dbImage.count, (row+1) % image!.dbImage.height);
+        var pixel7 = row == 0 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column+1) % image!.dbImage.count, (row-1) % image!.dbImage.height);
+        var pixel8 = imgImage.getPixel((column+1) % image!.dbImage.count, (row) % image!.dbImage.height);
+        var pixel9 = row == desiredHeight-1 ? ColorRgb8(0, 0, 0) : imgImage.getPixel((column+1) % image!.dbImage.count, (row+1) % image!.dbImage.height);
 
         rgbList[columnOffset + rowOffset + 0] = ((pixel1.r + pixel2.r + pixel3.r + pixel4.r + pixel5.r + pixel6.r + pixel7.r + pixel8.r + pixel9.r)/9).toInt();
         rgbList[columnOffset + rowOffset + 1] = ((pixel1.g + pixel2.g + pixel3.g + pixel4.g + pixel5.g + pixel6.g + pixel7.g + pixel8.g + pixel9.g)/9).toInt();
