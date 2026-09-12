@@ -11,7 +11,6 @@ import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 import '../../widgets/labeled_slider.dart';
 
-
 class CreateFadePage extends StatefulWidget {
   const CreateFadePage({super.key});
 
@@ -28,7 +27,7 @@ class _CreateFadeState extends State<CreateFadePage> {
 
   @override
   Widget build(BuildContext context) {
-    if(flagFirst){
+    if (flagFirst) {
       flagFirst = false;
       addSegment();
       addSegment();
@@ -37,9 +36,11 @@ class _CreateFadeState extends State<CreateFadePage> {
       appBar: AppBar(
         title: const Text("Fade Pattern Creator"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -54,7 +55,7 @@ class _CreateFadeState extends State<CreateFadePage> {
           colors.length * 5,
           (400 / colors.length).toInt() * colors.length,
           colors.length,
-              (int value) => setState(() {
+          (int value) => setState(() {
             fadeSize = value;
           }),
           colors.length * 5,
@@ -66,11 +67,11 @@ class _CreateFadeState extends State<CreateFadePage> {
             itemCount: colors.length,
             itemBuilder: (BuildContext context, int index) {
               return ColorPicker(
-                "Color ${index+1}",
+                "Color ${index + 1}",
                 colors[index].red.toDouble(),
                 colors[index].green.toDouble(),
                 colors[index].blue.toDouble(),
-                    (RgbValue color) => colors[index] = color,
+                (RgbValue color) => colors[index] = color,
               );
             },
           ),
@@ -105,7 +106,9 @@ class _CreateFadeState extends State<CreateFadePage> {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _scrollController.animateTo(
                           _scrollController.position.maxScrollExtent, // Scroll to the bottom
-                          duration: Duration(milliseconds: 300), // Duration of the animation
+                          duration: Duration(
+                            milliseconds: 300,
+                          ), // Duration of the animation
                           curve: Curves.easeOut, // Smooth easing curve
                         );
                       });
@@ -132,7 +135,8 @@ class _CreateFadeState extends State<CreateFadePage> {
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if(context.mounted) { // Do we actually want this check?
+                      if (context.mounted) {
+                        // Do we actually want this check?
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -142,7 +146,7 @@ class _CreateFadeState extends State<CreateFadePage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -172,17 +176,23 @@ class _CreateFadeState extends State<CreateFadePage> {
     );
   }
 
-  void addSegment(){
+  void addSegment() {
     var random = Random();
-    colors.add(RgbValue([random.nextInt(2) * 255, random.nextInt(2) * 255, random.nextInt(2) * 255]));
+    colors.add(
+      RgbValue([
+        random.nextInt(2) * 255,
+        random.nextInt(2) * 255,
+        random.nextInt(2) * 255,
+      ]),
+    );
     fadeSize = colors.length * 5;
   }
 
-  Uint8List createFade(RgbValue start, RgbValue end, width){
+  Uint8List createFade(RgbValue start, RgbValue end, width) {
     var rgbList = Uint8List(width * 3);
     int rgbOffset = 0;
     double percent = 0.0;
-    for(int pixel = 0; pixel < width; pixel++){
+    for (int pixel = 0; pixel < width; pixel++) {
       rgbOffset = pixel * 3;
       percent = (width - pixel) / width;
       rgbList[rgbOffset] = ((start.red * percent) + (end.red * (1 - percent))).toInt();
@@ -192,11 +202,18 @@ class _CreateFadeState extends State<CreateFadePage> {
     return rgbList;
   }
 
-  Future<void> makeAndStorePattern(BuildContext context) async{
+  Future<void> makeAndStorePattern(BuildContext context) async {
     var rgbList = Uint8List(fadeSize * 3);
-    int subwidth = (fadeSize/colors.length).toInt();
-    for(int i = 0; i < colors.length; i++){
-      rgbList.setAll(i * subwidth * 3, createFade(colors[i], i == (colors.length - 1) ? colors[0] : colors[i+1], subwidth));
+    int subwidth = (fadeSize / colors.length).toInt();
+    for (int i = 0; i < colors.length; i++) {
+      rgbList.setAll(
+        i * subwidth * 3,
+        createFade(
+          colors[i],
+          i == (colors.length - 1) ? colors[0] : colors[i + 1],
+          subwidth,
+        ),
+      );
     }
     var pattern = DBImage(
       id: null,

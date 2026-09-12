@@ -13,7 +13,6 @@ import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
 import 'pattern_creators/create_solid_color.dart';
 
-
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
 
@@ -28,9 +27,11 @@ class _CreateState extends State<CreatePage> {
       appBar: AppBar(
         title: const Text("Create Custom Pattern"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: ListView(
@@ -49,18 +50,26 @@ class _CreateState extends State<CreatePage> {
     );
   }
 
-  Widget getCreatorButton(String label, dynamic Function() constructor){
+  Widget getCreatorButton(String label, dynamic Function() constructor) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         width: double.infinity,
         height: 60,
         child: ElevatedButton(
-          child: Text(label, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          child: Text(
+            label,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           onPressed: () async {
-            var result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return constructor();
-            }));
+            var result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return constructor();
+                },
+              ),
+            );
             if (result != null && result && context.mounted) {
               Navigator.pop(context);
             }

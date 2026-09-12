@@ -11,7 +11,6 @@ import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 import '../../widgets/labeled_slider.dart';
 
-
 class CreateStrobePage extends StatefulWidget {
   const CreateStrobePage({super.key});
 
@@ -19,13 +18,12 @@ class CreateStrobePage extends StatefulWidget {
   _CreateStrobeState createState() => _CreateStrobeState();
 }
 
-class SegmentValues{
+class SegmentValues {
   int width = 10;
   late RgbValue color;
 }
 
 class _CreateStrobeState extends State<CreateStrobePage> {
-
   bool flagFirst = true;
   List<SegmentValues> segmentValues = [];
   bool saving = false;
@@ -33,7 +31,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
 
   @override
   Widget build(BuildContext context) {
-    if(flagFirst){
+    if (flagFirst) {
       flagFirst = false;
       addSegment();
       addSegment();
@@ -42,9 +40,11 @@ class _CreateStrobeState extends State<CreateStrobePage> {
       appBar: AppBar(
         title: const Text("Strobe Pattern Creator"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -66,7 +66,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                   children: [
                     ListTile(
                       title: Text(
-                        "Strobe Segment: ${index+1}",
+                        "Strobe Segment: ${index + 1}",
                         style: TextStyle(
                           fontSize: 24,
                           color: Colors.blue,
@@ -126,7 +126,9 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _scrollController.animateTo(
                           _scrollController.position.maxScrollExtent, // Scroll to the bottom
-                          duration: Duration(milliseconds: 300), // Duration of the animation
+                          duration: Duration(
+                            milliseconds: 300,
+                          ), // Duration of the animation
                           curve: Curves.easeOut, // Smooth easing curve
                         );
                       });
@@ -153,7 +155,8 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                     onPressed: () async {
                       saving = true;
                       bool success = await makeAndStorePattern(context);
-                      if(success && context.mounted) { // Do we actually want this check?
+                      if (success && context.mounted) {
+                        // Do we actually want this check?
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -163,7 +166,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -193,28 +196,36 @@ class _CreateStrobeState extends State<CreateStrobePage> {
     );
   }
 
-  void addSegment(){
+  void addSegment() {
     var random = Random();
-    RgbValue color = RgbValue([random.nextInt(2) * 255, random.nextInt(2) * 255, random.nextInt(2) * 255]);
+    RgbValue color = RgbValue([
+      random.nextInt(2) * 255,
+      random.nextInt(2) * 255,
+      random.nextInt(2) * 255,
+    ]);
     segmentValues.add(SegmentValues());
     segmentValues.last.color = color;
   }
 
-  Future<bool> makeAndStorePattern(BuildContext context) async{
+  Future<bool> makeAndStorePattern(BuildContext context) async {
     int width = segmentValues.fold(0, (sum, next) => sum + next.width);
-    if(width > 400){
-      const snackBar = SnackBar(content: Text('Patten too wide. Sum of segment lengths must 400 or less.'));
+    if (width > 400) {
+      const snackBar = SnackBar(
+        content: Text(
+          'Patten too wide. Sum of segment lengths must 400 or less.',
+        ),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return false;
     }
 
     var rgbList = Uint8List(width * 3);
     var rgbOffset = 0;
-    for(int segment = 0; segment < segmentValues.length; segment++){
-      if(segment != 0) {
-        rgbOffset += segmentValues[segment-1].width * 3;
+    for (int segment = 0; segment < segmentValues.length; segment++) {
+      if (segment != 0) {
+        rgbOffset += segmentValues[segment - 1].width * 3;
       }
-      for(int i = 0; i < segmentValues[segment].width; i += 1){
+      for (int i = 0; i < segmentValues[segment].width; i += 1) {
         rgbList[rgbOffset + (i * 3) + 0] = segmentValues[segment].color.red;
         rgbList[rgbOffset + (i * 3) + 1] = segmentValues[segment].color.green;
         rgbList[rgbOffset + (i * 3) + 2] = segmentValues[segment].color.blue;
