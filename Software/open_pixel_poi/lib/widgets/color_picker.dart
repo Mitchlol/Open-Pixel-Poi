@@ -29,33 +29,6 @@ class _ColorPickerState extends State<ColorPicker> {
     widget.onValueChanged(RgbValue([red.toInt(), green.toInt(), blue.toInt()]));
   }
 
-  Widget _channelSlider(
-    String label,
-    double value,
-    void Function(double) onChanged,
-  ) {
-    return Row(
-      children: [
-        Text(label),
-        Expanded(
-          child: Slider(
-            value: value,
-            max: 255.0,
-            divisions: 255,
-            onChanged: (double newValue) {
-              setState(() {
-                onChanged(newValue);
-              });
-            },
-            onChangeEnd: (double newValue) {
-              _notify();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -67,9 +40,24 @@ class _ColorPickerState extends State<ColorPicker> {
       ),
       subtitle: Column(
         children: [
-          _channelSlider("R:", red, (value) => red = value),
-          _channelSlider("G:", green, (value) => green = value),
-          _channelSlider("B:", blue, (value) => blue = value),
+          _ChannelSlider(
+            label: "R:",
+            value: red,
+            onChanged: (value) => setState(() => red = value),
+            onChangeEnd: _notify,
+          ),
+          _ChannelSlider(
+            label: "G:",
+            value: green,
+            onChanged: (value) => setState(() => green = value),
+            onChangeEnd: _notify,
+          ),
+          _ChannelSlider(
+            label: "B:",
+            value: blue,
+            onChanged: (value) => setState(() => blue = value),
+            onChangeEnd: _notify,
+          ),
         ],
       ),
       trailing: SizedBox(
@@ -86,6 +74,40 @@ class _ColorPickerState extends State<ColorPicker> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ChannelSlider extends StatelessWidget {
+  final String label;
+  final double value;
+  final ValueChanged<double> onChanged;
+  final VoidCallback onChangeEnd;
+
+  const _ChannelSlider({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+    required this.onChangeEnd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(label),
+        Expanded(
+          child: Slider(
+            value: value,
+            max: 255.0,
+            divisions: 255,
+            onChanged: onChanged,
+            onChangeEnd: (double value) {
+              onChangeEnd();
+            },
+          ),
+        ),
+      ],
     );
   }
 }
