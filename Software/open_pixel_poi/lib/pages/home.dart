@@ -8,6 +8,7 @@ import '../hardware/models/comm_code.dart';
 import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
 import '../widgets/pattern_import_button.dart';
+import '../widgets/pattern_preview_image.dart';
 import './create.dart';
 import 'hardware_settings.dart';
 
@@ -688,7 +689,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         subtitle: FutureBuilder<List<PatternEntry>>(
-          future: Provider.of<Model>(context).patternDB.getImages(context),
+          future: Provider.of<Model>(context).patternDB.getImages(),
           builder:
               (
                 BuildContext context,
@@ -788,7 +789,9 @@ class _HomePageState extends State<HomePage> {
                                 scrollDirection: Axis.horizontal,
                                 child: SizedBox(
                                   height: 80,
-                                  child: tuple.preview,
+                                  child: PatternPreviewImage(
+                                    bytes: tuple.previewBytes,
+                                  ),
                                 ),
                               ),
                               const SizedBox(
