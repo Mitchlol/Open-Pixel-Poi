@@ -2,9 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../database/db_image.dart';
 import '../database/pattern_db.dart';
-import '../hardware/models/comm_code.dart';
+import '../hardware/poi_hardware.dart';
 import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
 import '../widgets/pattern_import_button.dart';
@@ -72,14 +71,14 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: .min,
                   children: const [
                     Text(
                       "Transmitting Pattern...",
-                      textAlign: TextAlign.center,
+                      textAlign: .center,
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     SizedBox(
@@ -154,132 +153,65 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  static const _buttonTextStyle = TextStyle(fontSize: 24, fontWeight: .bold);
+  static const _cardTitleStyle = TextStyle(
+    color: Colors.blue,
+    fontSize: 24,
+    fontWeight: .bold,
+  );
+
+  void _forEachPoi(void Function(PoiHardware poi) action) {
+    for (final poi in Provider.of<Model>(
+      context,
+      listen: false,
+    ).connectedPoi!) {
+      action(poi);
+    }
+  }
+
+  Widget _commandButton(String label, void Function(PoiHardware poi) action) {
+    return ElevatedButton(
+      onPressed: () => _forEachPoi(action),
+      child: Text(label, style: _buttonTextStyle),
+    );
+  }
+
+  Widget _buttonRow(List<Widget> buttons) {
+    return Row(
+      mainAxisAlignment: .spaceBetween,
+      children: [
+        for (final (index, button) in buttons.indexed) ...[
+          if (index != 0) const VerticalDivider(width: 8.0),
+          button,
+        ],
+      ],
+    );
+  }
+
   Widget getBrightnessButtons(BuildContext buildContext) {
     return Card(
       elevation: 5,
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListTile(
-          title: const Text(
-            "Brightness Level",
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: const Text("Brightness Level", style: _cardTitleStyle),
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text(
-                      "1",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
+              for (final options in const [
+                [0, 1, 2],
+                [3, 4, 5],
+              ])
+                _buttonRow([
+                  for (final option in options)
+                    _commandButton(
+                      "${option + 1}",
                       (poi) => poi.sendInt8(
-                        0,
-                        CommCode.CC_SET_BRIGHTNESS_OPTION,
+                        option,
+                        .CC_SET_BRIGHTNESS_OPTION,
                         false,
                       ),
                     ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "2",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        1,
-                        CommCode.CC_SET_BRIGHTNESS_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "3",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        2,
-                        CommCode.CC_SET_BRIGHTNESS_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text(
-                      "4",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        3,
-                        CommCode.CC_SET_BRIGHTNESS_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "5",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        4,
-                        CommCode.CC_SET_BRIGHTNESS_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "6",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        5,
-                        CommCode.CC_SET_BRIGHTNESS_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ]),
             ],
           ),
         ),
@@ -293,126 +225,20 @@ class _HomePageState extends State<HomePage> {
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListTile(
-          title: const Text(
-            "Animation Speed (FPS)",
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: const Text("Animation Speed (FPS)", style: _cardTitleStyle),
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text(
-                      "1",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+              for (final options in const [
+                [0, 1, 2],
+                [3, 4, 5],
+              ])
+                _buttonRow([
+                  for (final option in options)
+                    _commandButton(
+                      "${option + 1}",
+                      (poi) => poi.sendInt8(option, .CC_SET_SPEED_OPTION, false),
                     ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        0,
-                        CommCode.CC_SET_SPEED_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "2",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        1,
-                        CommCode.CC_SET_SPEED_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "3",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        2,
-                        CommCode.CC_SET_SPEED_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text(
-                      "4",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        3,
-                        CommCode.CC_SET_SPEED_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "5",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        4,
-                        CommCode.CC_SET_SPEED_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "6",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(
-                        5,
-                        CommCode.CC_SET_SPEED_OPTION,
-                        false,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ]),
             ],
           ),
         ),
@@ -428,215 +254,41 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             ListTile(
-              title: const Text(
-                "Pattern Bank",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              title: const Text("Pattern Bank", style: _cardTitleStyle),
+              subtitle: _buttonRow([
+                for (final bank in const [0, 1, 2])
+                  _commandButton(
+                    "${bank + 1}",
+                    (poi) => poi.sendInt8(bank, .CC_SET_BANK, false),
+                  ),
+                _commandButton(
+                  "∞",
+                  (poi) => poi.sendCommCode(.CC_SET_BANK_ALL, false),
                 ),
-              ),
-              subtitle: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: const Text(
-                      "1",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(0, CommCode.CC_SET_BANK, false),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "2",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(1, CommCode.CC_SET_BANK, false),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "3",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendInt8(2, CommCode.CC_SET_BANK, false),
-                    ),
-                  ),
-                  const VerticalDivider(width: 8.0),
-                  ElevatedButton(
-                    child: const Text(
-                      "∞",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () => Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-                      (poi) => poi.sendCommCode(CommCode.CC_SET_BANK_ALL, false),
-                    ),
-                  ),
-                ],
-              ),
+              ]),
             ),
             ListTile(
-              title: const Text(
-                "Pattern Slot",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              title: const Text("Pattern Slot", style: _cardTitleStyle),
               subtitle: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        child: const Text(
-                          "1",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () =>
-                            Provider.of<Model>(
-                              context,
-                              listen: false,
-                            ).connectedPoi!.forEach(
-                              (poi) => poi.sendInt8(
-                                0,
-                                CommCode.CC_SET_PATTERN_SLOT,
-                                false,
-                              ),
-                            ),
+                  _buttonRow([
+                    for (final slot in const [0, 1, 2])
+                      _commandButton(
+                        "${slot + 1}",
+                        (poi) => poi.sendInt8(slot, .CC_SET_PATTERN_SLOT, false),
                       ),
-                      const VerticalDivider(width: 8.0),
-                      ElevatedButton(
-                        child: const Text(
-                          "2",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () =>
-                            Provider.of<Model>(
-                              context,
-                              listen: false,
-                            ).connectedPoi!.forEach(
-                              (poi) => poi.sendInt8(
-                                1,
-                                CommCode.CC_SET_PATTERN_SLOT,
-                                false,
-                              ),
-                            ),
+                  ]),
+                  _buttonRow([
+                    for (final slot in const [3, 4])
+                      _commandButton(
+                        "${slot + 1}",
+                        (poi) => poi.sendInt8(slot, .CC_SET_PATTERN_SLOT, false),
                       ),
-                      const VerticalDivider(width: 8.0),
-                      ElevatedButton(
-                        child: const Text(
-                          "3",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () =>
-                            Provider.of<Model>(
-                              context,
-                              listen: false,
-                            ).connectedPoi!.forEach(
-                              (poi) => poi.sendInt8(
-                                2,
-                                CommCode.CC_SET_PATTERN_SLOT,
-                                false,
-                              ),
-                            ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        child: const Text(
-                          "4",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () =>
-                            Provider.of<Model>(
-                              context,
-                              listen: false,
-                            ).connectedPoi!.forEach(
-                              (poi) => poi.sendInt8(
-                                3,
-                                CommCode.CC_SET_PATTERN_SLOT,
-                                false,
-                              ),
-                            ),
-                      ),
-                      const VerticalDivider(width: 8.0),
-                      ElevatedButton(
-                        child: const Text(
-                          "5",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () =>
-                            Provider.of<Model>(
-                              context,
-                              listen: false,
-                            ).connectedPoi!.forEach(
-                              (poi) => poi.sendInt8(
-                                4,
-                                CommCode.CC_SET_PATTERN_SLOT,
-                                false,
-                              ),
-                            ),
-                      ),
-                      const VerticalDivider(width: 8.0),
-                      ElevatedButton(
-                        child: const Text(
-                          "∞",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () =>
-                            Provider.of<Model>(
-                              context,
-                              listen: false,
-                            ).connectedPoi!.forEach(
-                              (poi) => poi.sendCommCode(
-                                CommCode.CC_SET_PATTERN_ALL,
-                                false,
-                              ),
-                            ),
-                      ),
-                    ],
-                  ),
+                    _commandButton(
+                      "∞",
+                      (poi) => poi.sendCommCode(.CC_SET_PATTERN_ALL, false),
+                    ),
+                  ]),
                 ],
               ),
             ),
@@ -651,14 +303,14 @@ class _HomePageState extends State<HomePage> {
       elevation: 5,
       child: ListTile(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: .spaceBetween,
           children: [
             const Text(
               'Patterns',
               style: TextStyle(
                 color: Colors.blue,
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             Row(
@@ -703,13 +355,14 @@ class _HomePageState extends State<HomePage> {
                     widgets.add(
                       InkWell(
                         onTap: () async {
+                          final connectedPoi = Provider.of<Model>(
+                            context,
+                            listen: false,
+                          ).connectedPoi!.where((poi) => poi.isConncted).toList();
                           setState(() {
                             loading.value = true;
                           });
-                          for (var poi in Provider.of<Model>(
-                            context,
-                            listen: false,
-                          ).connectedPoi!.where((poi) => poi.isConncted)) {
+                          for (var poi in connectedPoi) {
                             if (!kIsWeb) {
                               // Calling connect seems to bring device to the front of a magic queue and operate faster, and properly
                               await poi.uart.device
@@ -782,10 +435,10 @@ class _HomePageState extends State<HomePage> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8, bottom: 8),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: .center,
                             children: [
                               SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
+                                scrollDirection: .horizontal,
                                 child: SizedBox(
                                   height: 80,
                                   child: tuple.preview,

@@ -15,7 +15,7 @@ class CreateStrobePage extends StatefulWidget {
   const CreateStrobePage({super.key});
 
   @override
-  _CreateStrobeState createState() => _CreateStrobeState();
+  State<CreateStrobePage> createState() => _CreateStrobeState();
 }
 
 class SegmentValues {
@@ -102,7 +102,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -111,7 +111,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                       "Cancel",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -137,7 +137,7 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                       "+ Color",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -149,14 +149,13 @@ class _CreateStrobeState extends State<CreateStrobePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       saving = true;
                       bool success = await makeAndStorePattern(context);
-                      if (success && context.mounted) {
-                        // Do we actually want this check?
+                      if (success && mounted) {
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -176,14 +175,14 @@ class _CreateStrobeState extends State<CreateStrobePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
