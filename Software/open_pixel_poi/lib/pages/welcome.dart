@@ -34,25 +34,30 @@ class _WelcomeState extends State<WelcomePage> {
         title: const Text("Open Pixel Poi"),
       ),
       body: StreamBuilder<Object>(
-          stream: FlutterBluePlus.isScanning,
-          builder: (context, snapshot) {
-            bool isScanning = false;
-            if (snapshot.data != null && snapshot.data == true) {
-              isScanning = true;
-            }
-            return StreamBuilder<List<ScanResult>>(
-                stream: FlutterBluePlus.scanResults,
-                builder: (context, snapshot) {
-                  List<ScanResult>? scanResults = snapshot.data;
-                  if (scanResults != null) {
-                    scanResults =
-                        scanResults.where((result) => result.advertisementData.connectable && result.device.platformName.isNotEmpty).toList();
-                  } else {
-                    scanResults = List.empty();
-                  }
-                  return getBody(isScanning, scanResults);
-                });
-          }),
+        stream: FlutterBluePlus.isScanning,
+        builder: (context, snapshot) {
+          bool isScanning = false;
+          if (snapshot.data != null && snapshot.data == true) {
+            isScanning = true;
+          }
+          return StreamBuilder<List<ScanResult>>(
+            stream: FlutterBluePlus.scanResults,
+            builder: (context, snapshot) {
+              List<ScanResult>? scanResults = snapshot.data;
+              if (scanResults != null) {
+                scanResults = scanResults
+                    .where(
+                      (result) => result.advertisementData.connectable && result.device.platformName.isNotEmpty,
+                    )
+                    .toList();
+              } else {
+                scanResults = List.empty();
+              }
+              return getBody(isScanning, scanResults);
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -156,26 +161,42 @@ class _WelcomeState extends State<WelcomePage> {
         return Card(
           child: ListTile(
             leading: Checkbox(
-              value: checkedMacAddresses.contains(scanResults[index].device.remoteId.str),
+              value: checkedMacAddresses.contains(
+                scanResults[index].device.remoteId.str,
+              ),
               onChanged: (checked) {
                 setState(() {
-                  if (checkedMacAddresses.contains(scanResults[index].device.remoteId.str)) {
-                    checkedMacAddresses.remove(scanResults[index].device.remoteId.str);
+                  if (checkedMacAddresses.contains(
+                    scanResults[index].device.remoteId.str,
+                  )) {
+                    checkedMacAddresses.remove(
+                      scanResults[index].device.remoteId.str,
+                    );
                   } else {
-                    checkedMacAddresses.add(scanResults[index].device.remoteId.str);
+                    checkedMacAddresses.add(
+                      scanResults[index].device.remoteId.str,
+                    );
                   }
                 });
               },
             ),
             title: Text('Name: ${scanResults[index].device.platformName}'),
-            subtitle: Text('Address: ${scanResults[index].device.remoteId.str}'),
+            subtitle: Text(
+              'Address: ${scanResults[index].device.remoteId.str}',
+            ),
             trailing: Icon(Icons.bluetooth),
             onTap: () {
               setState(() {
-                if (checkedMacAddresses.contains(scanResults[index].device.remoteId.str)) {
-                  checkedMacAddresses.remove(scanResults[index].device.remoteId.str);
+                if (checkedMacAddresses.contains(
+                  scanResults[index].device.remoteId.str,
+                )) {
+                  checkedMacAddresses.remove(
+                    scanResults[index].device.remoteId.str,
+                  );
                 } else {
-                  checkedMacAddresses.add(scanResults[index].device.remoteId.str);
+                  checkedMacAddresses.add(
+                    scanResults[index].device.remoteId.str,
+                  );
                 }
               });
             },
@@ -246,18 +267,27 @@ class _WelcomeState extends State<WelcomePage> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: isRefreshing || isConnecting || isDisconnecting ? null : () {
-                  scan();
-                },
-                onLongPress: isRefreshing || isConnecting || isDisconnecting ? null : () {
-                  Provider.of<Model>(context, listen: false).connectedPoi = [];
-                  Navigator.push(
-                    _key.currentContext!,
-                    MaterialPageRoute(builder: (context) {
-                      return HomePage();
-                    }),
-                  );
-                },
+                onPressed: isRefreshing || isConnecting || isDisconnecting
+                    ? null
+                    : () {
+                        scan();
+                      },
+                onLongPress: isRefreshing || isConnecting || isDisconnecting
+                    ? null
+                    : () {
+                        Provider.of<Model>(
+                          context,
+                          listen: false,
+                        ).connectedPoi = [];
+                        Navigator.push(
+                          _key.currentContext!,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return HomePage();
+                            },
+                          ),
+                        );
+                      },
                 child: isRefreshing
                     ? CircularProgressIndicator()
                     : const Text(
@@ -269,18 +299,23 @@ class _WelcomeState extends State<WelcomePage> {
                       ),
               ),
             ),
-            if(checkedMacAddresses.isNotEmpty)
-              const VerticalDivider(width: 8.0),
+            if (checkedMacAddresses.isNotEmpty) const VerticalDivider(width: 8.0),
             if (checkedMacAddresses.isNotEmpty)
               Expanded(
                 child: ElevatedButton(
                   onPressed: isConnecting || isDisconnecting
                       ? null
                       : () {
-                          connect(scanResults
-                              .where((scanResult) => checkedMacAddresses.contains(scanResult.device.remoteId.str))
-                              .map((e) => e.device)
-                              .toList());
+                          connect(
+                            scanResults
+                                .where(
+                                  (scanResult) => checkedMacAddresses.contains(
+                                    scanResult.device.remoteId.str,
+                                  ),
+                                )
+                                .map((e) => e.device)
+                                .toList(),
+                          );
                         },
                   child: isConnecting || isDisconnecting
                       ? CircularProgressIndicator()
@@ -320,7 +355,12 @@ class _WelcomeState extends State<WelcomePage> {
     }
     // Scan
     hasScanned = true;
-    FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], webOptionalServices: [Guid(BleUart.serviceUuid)], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
+    FlutterBluePlus.startScan(
+      withKeywords: ["Pixel Poi"],
+      webOptionalServices: [Guid(BleUart.serviceUuid)],
+      timeout: Duration(seconds: 5),
+      androidUsesFineLocation: false,
+    );
     // FlutterBluePlus.startScan(withKeywords: ["Pixel Poi"], timeout: Duration(seconds: 5), androidUsesFineLocation: false);
   }
 
@@ -349,37 +389,59 @@ class _WelcomeState extends State<WelcomePage> {
     Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi = List.empty(growable: true);
     for (var device in devices) {
       BleUart bleUart = BleUart(device);
-      await bleUart.isIntialized.then((value) {
-        print("BleUart Initialized");
-        Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi!.add(PoiHardware(bleUart));
-      }, onError: (error) {
-        print("error = $error");
-        const snackBar = SnackBar(content: Text('Unable to connect, please make sure selected device is a Open Pixel Poi.'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        return;
-      });
+      await bleUart.isIntialized.then(
+        (value) {
+          print("BleUart Initialized");
+          Provider.of<Model>(
+            _key.currentContext!,
+            listen: false,
+          ).connectedPoi!.add(PoiHardware(bleUart));
+        },
+        onError: (error) {
+          print("error = $error");
+          const snackBar = SnackBar(
+            content: Text(
+              'Unable to connect, please make sure selected device is a Open Pixel Poi.',
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          return;
+        },
+      );
     }
     // Check the firmware version of each connected device
     print("Check firmware version");
-    for(PoiHardware poi in Provider.of<Model>(context, listen: false).connectedPoi!){
+    for (PoiHardware poi in Provider.of<Model>(
+      context,
+      listen: false,
+    ).connectedPoi!) {
       await poi.sendInt8(0, CommCode.CC_GET_FW_VERSION, true);
       FWVersion? version = await poi.readResponse();
-      if((version?.version??0) != 2){
+      if ((version?.version ?? 0) != 2) {
         setState(() {
           isConnecting = false;
         });
-        const snackBar = SnackBar(content: Text('Outdated firmware on you Open Pixel Poi, please update your firmware. (Or use an old version of the app.)'));
+        const snackBar = SnackBar(
+          content: Text(
+            'Outdated firmware on you Open Pixel Poi, please update your firmware. (Or use an old version of the app.)',
+          ),
+        );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return;
       }
     }
     // Start app
-    if (Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi!.isNotEmpty) {
+    if (Provider.of<Model>(
+      _key.currentContext!,
+      listen: false,
+    ).connectedPoi!.isNotEmpty) {
       Navigator.push(
         _key.currentContext!,
-        MaterialPageRoute(builder: (context) {
-          return HomePage();
-        }),
+        MaterialPageRoute(
+          builder: (context) {
+            return HomePage();
+          },
+        ),
       );
       await Future.delayed(const Duration(seconds: 1), () {
         setState(() {

@@ -14,7 +14,14 @@ class LabeledButtonSelect extends StatefulWidget {
   Key? key;
   Function(int) onValueChanged;
 
-  LabeledButtonSelect(this.title, this.min, this.max, this.onValueChanged, [this.initial, this.key]){
+  LabeledButtonSelect(
+    this.title,
+    this.min,
+    this.max,
+    this.onValueChanged, [
+    this.initial,
+    this.key,
+  ]) {
     if (this.initial == null) {
       this.initial = this.min;
     }
@@ -32,7 +39,14 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
   late int value;
   Key? key;
 
-  _LabeledButtonSelectState(this.title, this.min, this.max, this.onValueChanged, this.initial, this.key){
+  _LabeledButtonSelectState(
+    this.title,
+    this.min,
+    this.max,
+    this.onValueChanged,
+    this.initial,
+    this.key,
+  ) {
     value = initial;
   }
 
@@ -216,7 +230,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
                 ),
               ),
             ),
-          ]
+          ],
         ),
       ),
     );

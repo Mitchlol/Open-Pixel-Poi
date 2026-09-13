@@ -13,7 +13,6 @@ import '../../model.dart';
 import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 
-
 class CreateTextPage extends StatefulWidget {
   const CreateTextPage({super.key});
 
@@ -30,19 +29,25 @@ class _CreateTextState extends State<CreateTextPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(flagFirst){
+    if (flagFirst) {
       flagFirst = false;
       var random = Random();
-      textColor = RgbValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
-      backgroundColor = RgbValue([0,0,0]);
+      textColor = RgbValue([
+        random.nextInt(256),
+        random.nextInt(256),
+        random.nextInt(256),
+      ]);
+      backgroundColor = RgbValue([0, 0, 0]);
     }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Text Pattern Creator"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -78,20 +83,23 @@ class _CreateTextState extends State<CreateTextPage> {
         ),
         ListTile(
           title: Text(
-          "Text:",
+            "Text:",
             style: TextStyle(
               fontSize: 24,
               color: Colors.blue,
             ),
           ),
           subtitle: TextField(
-            decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Your text'),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Your text',
+            ),
             onChanged: (newValue) => text = newValue,
             textCapitalization: TextCapitalization.characters,
             inputFormatters: [
-              FilteringTextInputFormatter(RegExp("[0-9A-Z ]"), allow: true)
+              FilteringTextInputFormatter(RegExp("[0-9A-Z ]"), allow: true),
             ],
-            maxLength: textHeight == 55 ? 13 :  25,
+            maxLength: textHeight == 55 ? 13 : 25,
           ),
         ),
         ColorPicker(
@@ -99,8 +107,8 @@ class _CreateTextState extends State<CreateTextPage> {
           textColor.red.toDouble(),
           textColor.green.toDouble(),
           textColor.blue.toDouble(),
-              (RgbValue color) {
-                textColor = color;
+          (RgbValue color) {
+            textColor = color;
           },
         ),
         ColorPicker(
@@ -108,8 +116,8 @@ class _CreateTextState extends State<CreateTextPage> {
           backgroundColor.red.toDouble(),
           backgroundColor.green.toDouble(),
           backgroundColor.blue.toDouble(),
-              (RgbValue color) {
-                backgroundColor = color;
+          (RgbValue color) {
+            backgroundColor = color;
           },
         ),
         Padding(
@@ -145,7 +153,8 @@ class _CreateTextState extends State<CreateTextPage> {
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if(context.mounted) { // Do we actually want this check?
+                      if (context.mounted) {
+                        // Do we actually want this check?
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -155,7 +164,7 @@ class _CreateTextState extends State<CreateTextPage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -185,31 +194,49 @@ class _CreateTextState extends State<CreateTextPage> {
     );
   }
 
-  Future<void> makeAndStorePattern(BuildContext context) async{
-
+  Future<void> makeAndStorePattern(BuildContext context) async {
     Uint8List fontZipFile;
     int xAdvance;
-    if(textHeight == 20){
+    if (textHeight == 20) {
       xAdvance = 18;
-      fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max20.zip"));
-    }else if(textHeight == 25){
+      fontZipFile = Uint8List.sublistView(
+        await rootBundle.load("fonts/max20.zip"),
+      );
+    } else if (textHeight == 25) {
       xAdvance = 22;
-      fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max25.zip"));
-    }else{
+      fontZipFile = Uint8List.sublistView(
+        await rootBundle.load("fonts/max25.zip"),
+      );
+    } else {
       xAdvance = 49;
-      fontZipFile = Uint8List.sublistView(await rootBundle.load("fonts/max55.zip"));
+      fontZipFile = Uint8List.sublistView(
+        await rootBundle.load("fonts/max55.zip"),
+      );
     }
-
 
     int width = (text.length * xAdvance) + (xAdvance * 1.5).toInt();
 
     final font = img.BitmapFont.fromZip(fontZipFile);
     final image = img.Image(width: width, height: textHeight);
-    img.fill(image, color: img.ColorRgb8(backgroundColor.red, backgroundColor.green, backgroundColor.blue));
-    img.drawString(image, text, font: font, x: 0, y: 0, color: img.ColorRgb8(textColor.red, textColor.green, textColor.blue));
+    img.fill(
+      image,
+      color: img.ColorRgb8(
+        backgroundColor.red,
+        backgroundColor.green,
+        backgroundColor.blue,
+      ),
+    );
+    img.drawString(
+      image,
+      text,
+      font: font,
+      x: 0,
+      y: 0,
+      color: img.ColorRgb8(textColor.red, textColor.green, textColor.blue),
+    );
 
-    var rgbList = Uint8List((width*textHeight)*3);
-    for(var column = 0; column < width; column++) {
+    var rgbList = Uint8List((width * textHeight) * 3);
+    for (var column = 0; column < width; column++) {
       for (var row = 0; row < textHeight; row++) {
         var columnOffset = column * textHeight * 3;
         var rowOffset = row * 3;
@@ -220,7 +247,6 @@ class _CreateTextState extends State<CreateTextPage> {
         rgbList[columnOffset + rowOffset + 2] = (pixel.b).toInt();
       }
     }
-
 
     var model = Provider.of<Model>(context, listen: false);
     var pattern = DBImage(

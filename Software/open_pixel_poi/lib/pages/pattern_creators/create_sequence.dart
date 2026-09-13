@@ -13,7 +13,6 @@ import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 import '../../widgets/labeled_slider.dart';
 
-
 class CreateSequencePage extends StatefulWidget {
   const CreateSequencePage({super.key});
 
@@ -21,7 +20,7 @@ class CreateSequencePage extends StatefulWidget {
   _CreateSequenceState createState() => _CreateSequenceState();
 }
 
-class SegmentValues{
+class SegmentValues {
   int bank = 1;
   int pattern = 1;
   int brightness = 25;
@@ -44,9 +43,11 @@ class _CreateSequenceState extends State<CreateSequencePage> {
       appBar: AppBar(
         title: const Text("Sequencer Controller"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -56,16 +57,17 @@ class _CreateSequenceState extends State<CreateSequencePage> {
   Widget getForm() {
     return Column(
       children: [
-        if (segments.isEmpty) Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            "Add a segment to start creating a sequence, or upload a blank sequence to clear your Poi.",
-            style: TextStyle(
-            fontSize: 24,
-            color: Colors.blue,
+        if (segments.isEmpty)
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Add a segment to start creating a sequence, or upload a blank sequence to clear your Poi.",
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.blue,
+              ),
+            ),
           ),
-          ),
-        ),
         Expanded(
           child: ListView.builder(
             controller: _scrollController,
@@ -82,20 +84,20 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Action: ${index+1}",
+                            "Action: ${index + 1}",
                             style: TextStyle(
                               fontSize: 24,
                               color: Colors.blue,
                             ),
                           ),
                           IconButton(
-                              onPressed: (){
-                                setState(() {
-                                  segments.removeAt(index);
-                                });
-                              },
-                              icon: Icon(Icons.close, color: Colors.blue)
-                          )
+                            onPressed: () {
+                              setState(() {
+                                segments.removeAt(index);
+                              });
+                            },
+                            icon: Icon(Icons.close, color: Colors.blue),
+                          ),
                         ],
                       ),
                     ),
@@ -124,7 +126,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       1,
                       100,
                       1,
-                          (int value) => setState(() {
+                      (int value) => setState(() {
                         segments[index].brightness = value;
                       }),
                       segments[index].brightness,
@@ -164,22 +166,27 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      if(segments.length < 70){
+                      if (segments.length < 70) {
                         setState(() {
                           addSegment();
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _scrollController.animateTo(
                             _scrollController.position.maxScrollExtent, // Scroll to the bottom
-                            duration: Duration(milliseconds: 300), // Duration of the animation
+                            duration: Duration(
+                              milliseconds: 300,
+                            ), // Duration of the animation
                             curve: Curves.easeOut, // Smooth easing curve
                           );
                         });
-                      }else{
-                        const snackBar = SnackBar(content: Text('Sequence length limited to 70. If this bothers you, ask mitch to implement multi-part ble messages for sequences.'));
+                      } else {
+                        const snackBar = SnackBar(
+                          content: Text(
+                            'Sequence length limited to 70. If this bothers you, ask mitch to implement multi-part ble messages for sequences.',
+                          ),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
-
                     },
                     child: const Text(
                       "Add Seg",
@@ -229,7 +236,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -259,9 +266,9 @@ class _CreateSequenceState extends State<CreateSequencePage> {
     );
   }
 
-  void addSegment(){
+  void addSegment() {
     segments.add(SegmentValues());
-    if(segments.length > 1) {
+    if (segments.length > 1) {
       var last = segments[segments.length - 2];
       segments.last.bank = last.bank;
       segments.last.pattern = last.pattern;
@@ -272,12 +279,12 @@ class _CreateSequenceState extends State<CreateSequencePage> {
   }
 
   Future<void> triggerSequence(BuildContext context) async {
-    Provider.of<Model>(context, listen: false)
-        .connectedPoi!
-        .forEach((poi) => poi.sendCommCode(CommCode.CC_START_SEQUENCER, false));
+    Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
+      (poi) => poi.sendCommCode(CommCode.CC_START_SEQUENCER, false),
+    );
   }
 
-  Future<bool> setSequence(BuildContext context) async{
+  Future<bool> setSequence(BuildContext context) async {
     for (var poi in Provider.of<Model>(context, listen: false).connectedPoi!) {
       if (context.mounted) {
         await poi.sendSequence(segments);
