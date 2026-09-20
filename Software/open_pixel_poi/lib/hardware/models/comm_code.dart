@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+// dart format off
 enum CommCode {
   CC_SUCCESS,                     // 0
   CC_ERROR,                       // 1
@@ -23,3 +24,4 @@ enum CommCode {
   CC_SET_SPEED_OPTIONS,           // 19
   CC_SET_PATTERN_SHUFFLE_DURATION,// 20
 }
+// dart format on

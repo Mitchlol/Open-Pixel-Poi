@@ -10,7 +10,6 @@ import '../../model.dart';
 import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 
-
 class CreateSolidColorPage extends StatefulWidget {
   const CreateSolidColorPage({super.key});
 
@@ -25,18 +24,24 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(flagFirst){
+    if (flagFirst) {
       flagFirst = false;
       var random = Random();
-      pickedColor = RgbValue([random.nextInt(256), random.nextInt(256), random.nextInt(256)]);
+      pickedColor = RgbValue([
+        random.nextInt(256),
+        random.nextInt(256),
+        random.nextInt(256),
+      ]);
     }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Solid Color Pattern Creator"),
         actions: [
-          ...Provider.of<Model>(context)
-              .connectedPoi!
-              .map((e) => ConnectionStateIndicator(Provider.of<Model>(context).connectedPoi!.indexOf(e)))
+          ...Provider.of<Model>(context).connectedPoi!.map(
+            (e) => ConnectionStateIndicator(
+              Provider.of<Model>(context).connectedPoi!.indexOf(e),
+            ),
+          ),
         ],
       ),
       body: saving ? getSaving() : getForm(),
@@ -51,7 +56,7 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
           pickedColor.red.toDouble(),
           pickedColor.green.toDouble(),
           pickedColor.blue.toDouble(),
-              (RgbValue color) {
+          (RgbValue color) {
             pickedColor = color;
           },
         ),
@@ -88,7 +93,8 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
                     onPressed: () async {
                       saving = true;
                       await makeAndStorePattern(context);
-                      if(context.mounted) { // Do we actually want this check?
+                      if (context.mounted) {
+                        // Do we actually want this check?
                         Navigator.pop(context, true);
                       }
                       saving = false;
@@ -98,7 +104,7 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -128,13 +134,16 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
     );
   }
 
-  Future<void> makeAndStorePattern(BuildContext context) async{
+  Future<void> makeAndStorePattern(BuildContext context) async {
     var model = Provider.of<Model>(context, listen: false);
     var pattern = DBImage(
       id: null,
       height: 1,
       count: 2, // Two pixel wide is a hack to get around single frame pattern issues for now
-      bytes: Uint8List.fromList([...pickedColor.serialize(), ...pickedColor.serialize()]),
+      bytes: Uint8List.fromList([
+        ...pickedColor.serialize(),
+        ...pickedColor.serialize(),
+      ]),
     );
     await model.patternDB.insertImage(pattern);
   }
