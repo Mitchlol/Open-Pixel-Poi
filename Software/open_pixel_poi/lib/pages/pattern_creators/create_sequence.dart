@@ -1,15 +1,8 @@
-import 'dart:math';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:open_pixel_poi/widgets/labeled_button_select.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/db_image.dart';
-import '../../hardware/models/comm_code.dart';
-import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
-import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
 import '../../widgets/labeled_slider.dart';
 
@@ -17,7 +10,7 @@ class CreateSequencePage extends StatefulWidget {
   const CreateSequencePage({super.key});
 
   @override
-  _CreateSequenceState createState() => _CreateSequenceState();
+  State<CreateSequencePage> createState() => _CreateSequenceState();
 }
 
 class SegmentValues {
@@ -81,7 +74,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                   children: [
                     ListTile(
                       title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: .spaceBetween,
                         children: [
                           Text(
                             "Action: ${index + 1}",
@@ -161,7 +154,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
             width: double.infinity,
             height: 60,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -192,7 +185,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       "Add Seg",
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -207,7 +200,7 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       "Trigger",
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                   ),
@@ -219,14 +212,14 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                       "Save",
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: .bold,
                       ),
                     ),
                     onPressed: () async {
                       setState(() {
                         saving = true;
                       });
-                      bool success = await setSequence(context);
+                      await setSequence(context);
                       setState(() {
                         saving = false;
                       });
@@ -246,14 +239,14 @@ class _CreateSequenceState extends State<CreateSequencePage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
@@ -279,13 +272,17 @@ class _CreateSequenceState extends State<CreateSequencePage> {
   }
 
   Future<void> triggerSequence(BuildContext context) async {
-    Provider.of<Model>(context, listen: false).connectedPoi!.forEach(
-      (poi) => poi.sendCommCode(CommCode.CC_START_SEQUENCER, false),
-    );
+    for (var poi in Provider.of<Model>(context, listen: false).connectedPoi!) {
+      poi.sendCommCode(.CC_START_SEQUENCER, false);
+    }
   }
 
   Future<bool> setSequence(BuildContext context) async {
-    for (var poi in Provider.of<Model>(context, listen: false).connectedPoi!) {
+    final connectedPoi = Provider.of<Model>(
+      context,
+      listen: false,
+    ).connectedPoi!;
+    for (var poi in connectedPoi) {
       if (context.mounted) {
         await poi.sendSequence(segments);
       }

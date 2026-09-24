@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'db_image.dart';
 
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
@@ -46,7 +44,7 @@ class PatternDB {
 
     List<DBImage> images = await getDBImages();
     if (images.isEmpty) {
-      print("DB Empty, inserting included images");
+      debugPrint("DB Empty, inserting included images");
       for (int i = 1; i <= 10; i++) {
         ByteData fileBytes = await rootBundle.load("patterns/pattern$i.bmp");
         Uint8List bytesList = fileBytes.buffer.asUint8List(
@@ -82,7 +80,7 @@ class PatternDB {
     await db.insert(
       'images',
       image.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: .replace,
     );
     clearInMemoryCache();
   }
@@ -230,7 +228,7 @@ class PatternDB {
         preview: Image.memory(
           img.encodeJpg(imgImage),
           alignment: Alignment.topLeft,
-          fit: BoxFit.fitHeight,
+          fit: .fitHeight,
         ),
         dbImage: dbImages[imgImages.indexOf(imgImage)],
       ));

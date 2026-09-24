@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
-import '../hardware/models/comm_code.dart';
 import '../hardware/poi_hardware.dart';
 import '../widgets/labeled_button_select.dart';
 
@@ -15,7 +14,7 @@ class HardwareSettingsPage extends StatefulWidget {
   const HardwareSettingsPage({super.key});
 
   @override
-  _HardwareSettingsState createState() => _HardwareSettingsState();
+  State<HardwareSettingsPage> createState() => _HardwareSettingsState();
 }
 
 class Utf8TextInputFormatter extends TextInputFormatter {
@@ -78,10 +77,10 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   ),
                 ),
                 Text(
-                  "1) Each setting must be saved individually.\n" +
-                      "2) Saving a setting will overwrite the current value on all connected Poi.\n" +
-                      "3) Settings marked with the 🔄 symbol require a reboot of the Poi to take effect. You can batch save multiple settings before a single reboot to activate them all.\n" +
-                      "4) Setting the wrong \"Hardware Version\" can permanently damage your Poi circuit board.",
+                  "1) Each setting must be saved individually.\n"
+                  "2) Saving a setting will overwrite the current value on all connected Poi.\n"
+                  "3) Settings marked with the 🔄 symbol require a reboot of the Poi to take effect. You can batch save multiple settings before a single reboot to activate them all.\n"
+                  "4) Setting the wrong \"Hardware Version\" can permanently damage your Poi circuit board.",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -119,7 +118,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "Pattern Shuffle Delay:",
@@ -146,32 +145,34 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: patternShuffleDuration == -1
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
+                        for (PoiHardware poi in model.connectedPoi!) {
                           await poi
                               .sendInt8(
                                 patternShuffleDuration,
-                                CommCode.CC_SET_PATTERN_SHUFFLE_DURATION,
+                                .CC_SET_PATTERN_SHUFFLE_DURATION,
                                 true,
                               )
                               .timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text('Error setting shuffle duration.'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Shuffle duration updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           patternShuffleDuration = -1;
                           saving = false;
@@ -181,7 +182,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -198,7 +199,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "Animation Speed Options FPS:",
@@ -268,32 +269,34 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: animationSpeeds.contains(0)
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
+                        for (PoiHardware poi in model.connectedPoi!) {
                           await poi
                               .sendInt16Array(
                                 animationSpeeds,
-                                CommCode.CC_SET_SPEED_OPTIONS,
+                                .CC_SET_SPEED_OPTIONS,
                                 true,
                               )
                               .timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text('Error setting speed options.'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Speed options updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           animationSpeeds = [0, 0, 0, 0, 0, 0];
                           saving = false;
@@ -303,7 +306,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -320,7 +323,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "Brightness Options Values:",
@@ -390,34 +393,36 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: brightnesses.contains(0)
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
+                        for (PoiHardware poi in model.connectedPoi!) {
                           await poi
                               .sendInt8Array(
                                 brightnesses,
-                                CommCode.CC_SET_BRIGHTNESS_OPTIONS,
+                                .CC_SET_BRIGHTNESS_OPTIONS,
                                 true,
                               )
                               .timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text(
                                 'Error setting brightness options.',
                               ),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Brightness options updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           brightnesses = [0, 0, 0, 0, 0, 0];
                           saving = false;
@@ -427,7 +432,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -444,7 +449,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "🔄Device Name:",
@@ -472,32 +477,28 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: deviceName == ""
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
-                          await poi
-                              .sendString(
-                                deviceName,
-                                CommCode.CC_SET_DEVICE_NAME,
-                                true,
-                              )
-                              .timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                        for (PoiHardware poi in model.connectedPoi!) {
+                          await poi.sendString(deviceName, .CC_SET_DEVICE_NAME, true).timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text('Error setting device name.'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Device name updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           deviceName = "";
                           saving = false;
@@ -507,7 +508,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -535,7 +536,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "🔄Pixel Count:",
@@ -562,32 +563,28 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: ledCount == -1
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
-                          await poi
-                              .sendInt8(
-                                ledCount,
-                                CommCode.CC_SET_LED_COUNT,
-                                true,
-                              )
-                              .timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                        for (PoiHardware poi in model.connectedPoi!) {
+                          await poi.sendInt8(ledCount, .CC_SET_LED_COUNT, true).timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text('Error setting pixel count.'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Pixel count updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           ledCount = -1;
                           saving = false;
@@ -597,7 +594,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -614,7 +611,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "🔄Pixel Type:",
@@ -655,26 +652,28 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: ledType == -1
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
-                          await poi.sendInt8(ledType, CommCode.CC_SET_LED_TYPE, true).timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                        for (PoiHardware poi in model.connectedPoi!) {
+                          await poi.sendInt8(ledType, .CC_SET_LED_TYPE, true).timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text('Error setting pixel count.'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Pixel type updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           ledType = -1;
                           saving = false;
@@ -684,7 +683,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -701,7 +700,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               "🔄Hardware Version:",
@@ -743,32 +742,34 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                 onPressed: hardwareVersion == -1
                     ? null
                     : () async {
+                        final model = Provider.of<Model>(
+                          context,
+                          listen: false,
+                        );
+                        final messenger = ScaffoldMessenger.of(context);
                         setState(() {
                           saving = true;
                         });
-                        for (PoiHardware poi in Provider.of<Model>(
-                          context,
-                          listen: false,
-                        ).connectedPoi!) {
+                        for (PoiHardware poi in model.connectedPoi!) {
                           await poi
                               .sendInt8(
                                 hardwareVersion,
-                                CommCode.CC_SET_HARDWARE_VERSION,
+                                .CC_SET_HARDWARE_VERSION,
                                 true,
                               )
                               .timeout(Duration(seconds: 5));
-                          Confirmation? confirmation = await poi.readResponse().timeout(Duration(seconds: 5));
+                          final confirmation = await poi.readResponse().timeout(Duration(seconds: 5)) as Confirmation?;
                           if ((confirmation?.success ?? 0) != true) {
                             const snackBar = SnackBar(
                               content: Text('Error setting hardware version.'),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            messenger.showSnackBar(snackBar);
                           }
                         }
                         const snackBar = SnackBar(
                           content: Text('Hardware version updated!'),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        messenger.showSnackBar(snackBar);
                         setState(() {
                           hardwareVersion = -1;
                           saving = false;
@@ -778,7 +779,7 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
                   "Save",
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -794,14 +795,14 @@ class _HardwareSettingsState extends State<HardwareSettingsPage> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: const [
             Text(
               "Saving...",
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
               ),
             ),
             SizedBox(
