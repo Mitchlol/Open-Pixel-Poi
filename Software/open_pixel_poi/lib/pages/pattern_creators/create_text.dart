@@ -44,93 +44,106 @@ class _CreateTextState extends State<CreateTextPage> {
         title: const Text("Text Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return ListView(
-      children: [
-        ListTile(
-          title: Text(
-            "Text Size:",
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.blue,
+      body: saving
+          ? const StatusMessage.saving()
+          : ListView(
+              children: [
+                ListTile(
+                  title: Text(
+                    "Text Size:",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  subtitle: DropdownButton<int>(
+                    isExpanded: true,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    value: textHeight,
+                    items: [
+                      DropdownMenuItem(
+                        value: 20,
+                        child: Center(child: Text("20px")),
+                      ),
+                      DropdownMenuItem(
+                        value: 25,
+                        child: Center(child: Text("25px")),
+                      ),
+                      DropdownMenuItem(
+                        value: 55,
+                        child: Center(child: Text("55px")),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        textHeight = value!;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    "Text:",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  subtitle: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Your text',
+                    ),
+                    onChanged: (newValue) => text = newValue,
+                    textCapitalization: TextCapitalization.characters,
+                    inputFormatters: [
+                      FilteringTextInputFormatter(
+                        RegExp("[0-9A-Z ]"),
+                        allow: true,
+                      ),
+                    ],
+                    maxLength: textHeight == 55 ? 13 : 25,
+                  ),
+                ),
+                ColorPicker(
+                  "Text Color",
+                  textColor.red.toDouble(),
+                  textColor.green.toDouble(),
+                  textColor.blue.toDouble(),
+                  (RgbValue color) {
+                    textColor = color;
+                  },
+                ),
+                ColorPicker(
+                  "Background Color",
+                  backgroundColor.red.toDouble(),
+                  backgroundColor.green.toDouble(),
+                  backgroundColor.blue.toDouble(),
+                  (RgbValue color) {
+                    backgroundColor = color;
+                  },
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        await makeAndStorePattern(context);
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-          subtitle: DropdownButton<int>(
-            isExpanded: true,
-            style: Theme.of(context).textTheme.headlineSmall,
-            value: textHeight,
-            items: [
-              DropdownMenuItem(value: 20, child: Center(child: Text("20px"))),
-              DropdownMenuItem(value: 25, child: Center(child: Text("25px"))),
-              DropdownMenuItem(value: 55, child: Center(child: Text("55px"))),
-            ],
-            onChanged: (value) {
-              setState(() {
-                textHeight = value!;
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: Text(
-            "Text:",
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.blue,
-            ),
-          ),
-          subtitle: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Your text',
-            ),
-            onChanged: (newValue) => text = newValue,
-            textCapitalization: TextCapitalization.characters,
-            inputFormatters: [
-              FilteringTextInputFormatter(RegExp("[0-9A-Z ]"), allow: true),
-            ],
-            maxLength: textHeight == 55 ? 13 : 25,
-          ),
-        ),
-        ColorPicker(
-          "Text Color",
-          textColor.red.toDouble(),
-          textColor.green.toDouble(),
-          textColor.blue.toDouble(),
-          (RgbValue color) {
-            textColor = color;
-          },
-        ),
-        ColorPicker(
-          "Background Color",
-          backgroundColor.red.toDouble(),
-          backgroundColor.green.toDouble(),
-          backgroundColor.blue.toDouble(),
-          (RgbValue color) {
-            backgroundColor = color;
-          },
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
     );
   }
 

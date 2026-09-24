@@ -40,39 +40,40 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
         title: const Text("Solid Color Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return ListView(
-      children: [
-        ColorPicker(
-          "Primary Color",
-          pickedColor.red.toDouble(),
-          pickedColor.green.toDouble(),
-          pickedColor.blue.toDouble(),
-          (RgbValue color) {
-            pickedColor = color;
-          },
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
+      body: saving
+          ? const StatusMessage.saving()
+          : ListView(
+              children: [
+                ColorPicker(
+                  "Primary Color",
+                  pickedColor.red.toDouble(),
+                  pickedColor.green.toDouble(),
+                  pickedColor.blue.toDouble(),
+                  (RgbValue color) {
+                    pickedColor = color;
+                  },
+                ),
+                BigButtonRow(
+                  buttons: [
+                    BigButton(
+                      "Cancel",
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    BigButton(
+                      "Save",
+                      onPressed: () async {
+                        saving = true;
+                        await makeAndStorePattern(context);
+                        if (context.mounted) {
+                          Navigator.pop(context, true);
+                        }
+                        saving = false;
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
     );
   }
 
