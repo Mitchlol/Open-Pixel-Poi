@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -63,24 +61,7 @@ class PatternImportButton extends StatelessWidget {
           "Imported image is too large, max size is 40,000 pixels (200x200/100x400/25x1600 etc..).",
         );
       }
-      List<int> imageBytes = List.empty(growable: true);
-      for (var w = 0; w < image.width; w++) {
-        for (var h = 0; h < image.height; h++) {
-          var pixel = image.getPixel(w, h);
-          imageBytes.add(pixel.r.toInt());
-          imageBytes.add(pixel.g.toInt());
-          imageBytes.add(pixel.b.toInt());
-        }
-      }
-
-      patterns.add(
-        DBImage(
-          id: null,
-          height: image.height,
-          count: image.width,
-          bytes: Uint8List.fromList(imageBytes),
-        ),
-      );
+      patterns.add(DBImage.fromImg(image));
     }
 
     for (var pattern in patterns) {
