@@ -9,6 +9,8 @@ import '../../hardware/models/rgb_value.dart';
 import '../../model.dart';
 import '../../widgets/color_picker.dart';
 import '../../widgets/connection_state_indicator.dart';
+import '../../widgets/big_button.dart';
+import '../../widgets/status_message.dart';
 
 class CreateSolidColorPage extends StatefulWidget {
   const CreateSolidColorPage({super.key});
@@ -36,15 +38,9 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Solid Color Pattern Creator"),
-        actions: [
-          ...Provider.of<Model>(context).connectedPoi!.map(
-            (e) => ConnectionStateIndicator(
-              Provider.of<Model>(context).connectedPoi!.indexOf(e),
-            ),
-          ),
-        ],
+        actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? getSaving() : getForm(),
+      body: saving ? const StatusMessage.saving() : getForm(),
     );
   }
 
@@ -60,76 +56,23 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
             pickedColor = color;
           },
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Row(
-              crossAxisAlignment: .stretch,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 8.0),
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: .bold,
-                      ),
-                    ),
-                    onPressed: () async {
-                      saving = true;
-                      await makeAndStorePattern(context);
-                      if (mounted) {
-                        Navigator.pop(context, true);
-                      }
-                      saving = false;
-                    },
-                  ),
-                ),
-              ],
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton(
+              "Save",
+              onPressed: () async {
+                saving = true;
+                await makeAndStorePattern(context);
+                if (mounted) {
+                  Navigator.pop(context, true);
+                }
+                saving = false;
+              },
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getSaving() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: .min,
-          children: const [
-            Text(
-              "Saving...",
-              textAlign: .center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: .bold,
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CircularProgressIndicator(),
           ],
         ),
-      ),
+      ],
     );
   }
 
