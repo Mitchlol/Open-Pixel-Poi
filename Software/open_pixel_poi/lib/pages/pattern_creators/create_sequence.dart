@@ -42,143 +42,18 @@ class _CreateSequenceState extends State<CreateSequencePage> {
         title: const Text("Sequencer Controller"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return Column(
-      children: [
-        if (segments.isEmpty)
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Add a segment to start creating a sequence, or upload a blank sequence to clear your Poi.",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: segments.length, // Total number of items in the list
-            itemBuilder: (context, index) {
-              // Build each item in the list
-              return Card(
-                key: ObjectKey(segments[index]),
-                elevation: 5,
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Row(
-                        mainAxisAlignment: .spaceBetween,
-                        children: [
-                          Text(
-                            "Action: ${index + 1}",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                segments.removeAt(index);
-                              });
-                            },
-                            icon: Icon(Icons.close, color: Colors.blue),
-                          ),
-                        ],
-                      ),
-                    ),
-                    LabeledSlider(
-                      "Pattern Bank",
-                      1,
-                      3,
-                      1,
-                      (int value) => setState(() {
-                        segments[index].bank = value;
-                      }),
-                      segments[index].bank,
-                    ),
-                    LabeledSlider(
-                      "Pattern",
-                      1,
-                      5,
-                      1,
-                      (int value) => setState(() {
-                        segments[index].pattern = value;
-                      }),
-                      segments[index].pattern,
-                    ),
-                    LabeledSlider(
-                      "Brightness",
-                      1,
-                      100,
-                      1,
-                      (int value) => setState(() {
-                        segments[index].brightness = value;
-                      }),
-                      segments[index].brightness,
-                    ),
-                    LabeledButtonSelect(
-                      "Speed",
-                      1,
-                      2000,
-                      (int value) => setState(() {
-                        segments[index].speed = value;
-                      }),
-                      segments[index].speed,
-                    ),
-                    LabeledButtonSelect(
-                      "Duration (milliseconds)",
-                      1,
-                      20000,
-                      (int value) => setState(() {
-                        segments[index].duration = value;
-                      }),
-                      segments[index].duration,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton(
-              "Add Seg",
-              child: const Text("Add Seg", style: _sequenceButtonStyle),
-              onPressed: () {
-                if (segments.length < 70) {
-                  setState(() {
-                    addSegment();
-                  });
-                  _scrollController.animateToBottomAfterBuild();
-                } else {
-                  const snackBar = SnackBar(
-                    content: Text(
-                      'Sequence length limited to 70. If this bothers you, ask mitch to implement multi-part ble messages for sequences.',
-                    ),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-            ),
-            BigButton(
-              "Trigger",
-              child: const Text("Trigger", style: _sequenceButtonStyle),
-              onPressed: () {
-                triggerSequence(context);
-              },
-            ),
-            BigButton(
-              "Save",
-              child: const Text("Save", style: _sequenceButtonStyle),
-              onPressed: () async {
+      body: saving
+          ? const StatusMessage.saving()
+          : _SequenceActionList(
+              segments: segments,
+              scrollController: _scrollController,
+              onSegmentChanged: () => setState(() {}),
+              onSegmentRemoved: (index) => setState(() {
+                segments.removeAt(index);
+              }),
+              onAddSegment: _addSegmentIfRoom,
+              onTrigger: () => triggerSequence(context),
+              onSave: () async {
                 setState(() {
                   saving = true;
                 });
@@ -188,10 +63,23 @@ class _CreateSequenceState extends State<CreateSequencePage> {
                 });
               },
             ),
-          ],
-        ),
-      ],
     );
+  }
+
+  void _addSegmentIfRoom() {
+    if (segments.length < 70) {
+      setState(() {
+        addSegment();
+      });
+      _scrollController.animateToBottomAfterBuild();
+    } else {
+      const snackBar = SnackBar(
+        content: Text(
+          'Sequence length limited to 70. If this bothers you, ask mitch to implement multi-part ble messages for sequences.',
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   void addSegment() {
@@ -223,5 +111,167 @@ class _CreateSequenceState extends State<CreateSequencePage> {
       }
     }
     return true;
+  }
+}
+
+class _SequenceActionList extends StatelessWidget {
+  final List<SegmentValues> segments;
+  final ScrollController scrollController;
+  final VoidCallback onSegmentChanged;
+  final ValueChanged<int> onSegmentRemoved;
+  final VoidCallback onAddSegment;
+  final VoidCallback onTrigger;
+  final VoidCallback onSave;
+
+  const _SequenceActionList({
+    required this.segments,
+    required this.scrollController,
+    required this.onSegmentChanged,
+    required this.onSegmentRemoved,
+    required this.onAddSegment,
+    required this.onTrigger,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (segments.isEmpty)
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "Add a segment to start creating a sequence, or upload a blank sequence to clear your Poi.",
+              style: TextStyle(fontSize: 24, color: Colors.blue),
+            ),
+          ),
+        Expanded(
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: segments.length,
+            itemBuilder: (context, index) => _SequenceActionCard(
+              key: ObjectKey(segments[index]),
+              number: index + 1,
+              segment: segments[index],
+              onChanged: onSegmentChanged,
+              onRemoved: () => onSegmentRemoved(index),
+            ),
+          ),
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton(
+              "Add Seg",
+              onPressed: onAddSegment,
+              child: const Text("Add Seg", style: _sequenceButtonStyle),
+            ),
+            BigButton(
+              "Trigger",
+              onPressed: onTrigger,
+              child: const Text("Trigger", style: _sequenceButtonStyle),
+            ),
+            BigButton(
+              "Save",
+              onPressed: onSave,
+              child: const Text("Save", style: _sequenceButtonStyle),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _SequenceActionCard extends StatelessWidget {
+  final int number;
+  final SegmentValues segment;
+  final VoidCallback onChanged;
+  final VoidCallback onRemoved;
+
+  const _SequenceActionCard({
+    required this.number,
+    required this.segment,
+    required this.onChanged,
+    required this.onRemoved,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      child: Column(
+        children: [
+          ListTile(
+            title: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                Text(
+                  "Action: $number",
+                  style: const TextStyle(fontSize: 24, color: Colors.blue),
+                ),
+                IconButton(
+                  onPressed: onRemoved,
+                  icon: const Icon(Icons.close, color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
+          LabeledSlider(
+            "Pattern Bank",
+            1,
+            3,
+            1,
+            (int value) {
+              segment.bank = value;
+              onChanged();
+            },
+            segment.bank,
+          ),
+          LabeledSlider(
+            "Pattern",
+            1,
+            5,
+            1,
+            (int value) {
+              segment.pattern = value;
+              onChanged();
+            },
+            segment.pattern,
+          ),
+          LabeledSlider(
+            "Brightness",
+            1,
+            100,
+            1,
+            (int value) {
+              segment.brightness = value;
+              onChanged();
+            },
+            segment.brightness,
+          ),
+          LabeledButtonSelect(
+            "Speed",
+            1,
+            2000,
+            (int value) {
+              segment.speed = value;
+              onChanged();
+            },
+            segment.speed,
+          ),
+          LabeledButtonSelect(
+            "Duration (milliseconds)",
+            1,
+            20000,
+            (int value) {
+              segment.duration = value;
+              onChanged();
+            },
+            segment.duration,
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -8,8 +8,7 @@ import '../../database/db_image.dart';
 import '../../database/pattern_db.dart';
 import '../../model.dart';
 import '../../widgets/connection_state_indicator.dart';
-import '../../widgets/pattern_picker.dart';
-import '../../widgets/big_button.dart';
+import '../../widgets/source_image_selector.dart';
 import '../../widgets/status_message.dart';
 
 class CreateBlurPage extends StatefulWidget {
@@ -30,38 +29,25 @@ class _CreateBlurState extends State<CreateBlurPage> {
         title: const Text("Blur image"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
+      body: saving
+          ? const StatusMessage.saving()
+          : SourceImageSelector(
+              image: image,
+              onImageSelected: (entry) => setState(() => image = entry),
+              onDefaultImageAssigned: (entry) => image = entry,
+              tooFewImagesMessage: 'You must have at least 1 image stored to blur.',
+              onSave: _save,
+            ),
     );
   }
 
-  Widget getForm() {
-    return ListView(
-      children: [
-        PatternPicker(
-          label: "Image",
-          selected: image,
-          onSelected: (entry) => setState(() => image = entry),
-          onDefaultAssigned: (entry) => image = entry,
-          tooFewImagesMessage: 'You must have at least 1 image stored to blur.',
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {

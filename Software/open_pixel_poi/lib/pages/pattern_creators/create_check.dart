@@ -44,54 +44,28 @@ class _CreateCheckState extends State<CreateCheckPage> {
         title: const Text("Check Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
+      body: saving
+          ? const StatusMessage.saving()
+          : _CheckSizeAndColors(
+              primaryColor: colorOne,
+              otherColor: colorTwo,
+              onCheckSizeChanged: (value) => setState(() {
+                gridSize = value;
+              }),
+              onPrimaryColorChanged: (color) => colorOne = color,
+              onOtherColorChanged: (color) => colorTwo = color,
+              onSave: _save,
+            ),
     );
   }
 
-  Widget getForm() {
-    return ListView(
-      children: [
-        LabeledSlider(
-          "Check size",
-          1,
-          55,
-          1,
-          (int value) => setState(() {
-            gridSize = value;
-          }),
-        ),
-        ColorPicker(
-          "Primary Color",
-          colorOne.red.toDouble(),
-          colorOne.green.toDouble(),
-          colorOne.blue.toDouble(),
-          (RgbValue color) => colorOne = color,
-        ),
-        ColorPicker(
-          "Other Color",
-          colorTwo.red.toDouble(),
-          colorTwo.green.toDouble(),
-          colorTwo.blue.toDouble(),
-          (RgbValue color) => colorTwo = color,
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {
@@ -121,5 +95,52 @@ class _CreateCheckState extends State<CreateCheckPage> {
 
     var model = Provider.of<Model>(context, listen: false);
     await model.patternDB.insertImage(pattern);
+  }
+}
+
+class _CheckSizeAndColors extends StatelessWidget {
+  final RgbValue primaryColor;
+  final RgbValue otherColor;
+  final ValueChanged<int> onCheckSizeChanged;
+  final ValueChanged<RgbValue> onPrimaryColorChanged;
+  final ValueChanged<RgbValue> onOtherColorChanged;
+  final VoidCallback onSave;
+
+  const _CheckSizeAndColors({
+    required this.primaryColor,
+    required this.otherColor,
+    required this.onCheckSizeChanged,
+    required this.onPrimaryColorChanged,
+    required this.onOtherColorChanged,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        LabeledSlider("Check size", 1, 55, 1, onCheckSizeChanged),
+        ColorPicker(
+          "Primary Color",
+          primaryColor.red.toDouble(),
+          primaryColor.green.toDouble(),
+          primaryColor.blue.toDouble(),
+          onPrimaryColorChanged,
+        ),
+        ColorPicker(
+          "Other Color",
+          otherColor.red.toDouble(),
+          otherColor.green.toDouble(),
+          otherColor.blue.toDouble(),
+          onOtherColorChanged,
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton("Save", onPressed: onSave),
+          ],
+        ),
+      ],
+    );
   }
 }

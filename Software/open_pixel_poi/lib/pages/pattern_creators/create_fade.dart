@@ -40,66 +40,32 @@ class _CreateFadeState extends State<CreateFadePage> {
         title: const Text("Fade Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
-    );
-  }
-
-  Widget getForm() {
-    return Column(
-      children: [
-        LabeledSlider(
-          "Fade width",
-          colors.length * 5,
-          (400 / colors.length).toInt() * colors.length,
-          colors.length,
-          (int value) => setState(() {
-            fadeSize = value;
-          }),
-          colors.length * 5,
-          Key("${colors.length}"),
-        ),
-        Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: colors.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ColorPicker(
-                "Color ${index + 1}",
-                colors[index].red.toDouble(),
-                colors[index].green.toDouble(),
-                colors[index].blue.toDouble(),
-                (RgbValue color) => colors[index] = color,
-              );
-            },
-          ),
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "+ Color",
-              onPressed: () {
+      body: saving
+          ? const StatusMessage.saving()
+          : _FadeWidthAndColorList(
+              colors: colors,
+              scrollController: _scrollController,
+              onFadeWidthChanged: (value) => setState(() {
+                fadeSize = value;
+              }),
+              onAddColor: () {
                 setState(() {
                   addSegment();
                 });
                 _scrollController.animateToBottomAfterBuild();
               },
+              onSave: _save,
             ),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
     );
+  }
+
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   void addSegment() {
@@ -150,5 +116,60 @@ class _CreateFadeState extends State<CreateFadePage> {
 
     var model = Provider.of<Model>(context, listen: false);
     await model.patternDB.insertImage(pattern);
+  }
+}
+
+class _FadeWidthAndColorList extends StatelessWidget {
+  final List<RgbValue> colors;
+  final ScrollController scrollController;
+  final ValueChanged<int> onFadeWidthChanged;
+  final VoidCallback onAddColor;
+  final VoidCallback onSave;
+
+  const _FadeWidthAndColorList({
+    required this.colors,
+    required this.scrollController,
+    required this.onFadeWidthChanged,
+    required this.onAddColor,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        LabeledSlider(
+          "Fade width",
+          colors.length * 5,
+          (400 / colors.length).toInt() * colors.length,
+          colors.length,
+          onFadeWidthChanged,
+          colors.length * 5,
+          Key("${colors.length}"),
+        ),
+        Expanded(
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: colors.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ColorPicker(
+                "Color ${index + 1}",
+                colors[index].red.toDouble(),
+                colors[index].green.toDouble(),
+                colors[index].blue.toDouble(),
+                (RgbValue color) => colors[index] = color,
+              );
+            },
+          ),
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton("+ Color", onPressed: onAddColor),
+            BigButton("Save", onPressed: onSave),
+          ],
+        ),
+      ],
+    );
   }
 }

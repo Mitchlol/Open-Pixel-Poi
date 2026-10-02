@@ -40,40 +40,23 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
         title: const Text("Solid Color Pattern Creator"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
+      body: saving
+          ? const StatusMessage.saving()
+          : _SingleColorSelector(
+              color: pickedColor,
+              onColorChanged: (color) => pickedColor = color,
+              onSave: _save,
+            ),
     );
   }
 
-  Widget getForm() {
-    return ListView(
-      children: [
-        ColorPicker(
-          "Primary Color",
-          pickedColor.red.toDouble(),
-          pickedColor.green.toDouble(),
-          pickedColor.blue.toDouble(),
-          (RgbValue color) {
-            pickedColor = color;
-          },
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {
@@ -88,5 +71,38 @@ class _CreateSolidColorState extends State<CreateSolidColorPage> {
       ]),
     );
     await model.patternDB.insertImage(pattern);
+  }
+}
+
+class _SingleColorSelector extends StatelessWidget {
+  final RgbValue color;
+  final ValueChanged<RgbValue> onColorChanged;
+  final VoidCallback onSave;
+
+  const _SingleColorSelector({
+    required this.color,
+    required this.onColorChanged,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        ColorPicker(
+          "Primary Color",
+          color.red.toDouble(),
+          color.green.toDouble(),
+          color.blue.toDouble(),
+          onColorChanged,
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton("Save", onPressed: onSave),
+          ],
+        ),
+      ],
+    );
   }
 }

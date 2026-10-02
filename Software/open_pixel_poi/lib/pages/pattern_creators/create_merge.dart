@@ -42,74 +42,30 @@ class _CreateMergeState extends State<CreateMergePage> {
         title: const Text("Merge Two Images"),
         actions: const [ConnectionStateIndicators()],
       ),
-      body: saving ? const StatusMessage.saving() : getForm(),
+      body: saving
+          ? const StatusMessage.saving()
+          : _ImageLayersAndBlendMode(
+              topImage: topImage,
+              bottomImage: bottomImage,
+              blendMode: blendMode,
+              blendModes: blendModes,
+              onTopImageSelected: (entry) => setState(() => topImage = entry),
+              onDefaultTopImageAssigned: (entry) => topImage = entry,
+              onBottomImageSelected: (entry) => setState(() => bottomImage = entry),
+              onDefaultBottomImageAssigned: (entry) => bottomImage = entry,
+              onBlendModeChanged: (mode) => setState(() => blendMode = mode),
+              onSave: _save,
+            ),
     );
   }
 
-  Widget getForm() {
-    return ListView(
-      children: [
-        PatternPicker(
-          label: "Top Image",
-          selected: topImage,
-          onSelected: (entry) => setState(() => topImage = entry),
-          onDefaultAssigned: (entry) => topImage = entry,
-          tooFewImagesMessage: 'You must have at least 2 images stored to make merged image.',
-        ),
-        PatternPicker(
-          label: "Bottom Image",
-          selected: bottomImage,
-          onSelected: (entry) => setState(() => bottomImage = entry),
-          onDefaultAssigned: (entry) => bottomImage = entry,
-          defaultIndex: 1,
-          tooFewImagesMessage: 'You must have at least 2 images stored to make merged image.',
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(
-            "Blend Mode",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.blue,
-            ),
-          ),
-        ),
-        ListTile(
-          subtitle: DropdownButton<String>(
-            isExpanded: true,
-            icon: Icon(Icons.arrow_downward, color: Colors.blue),
-            value: blendMode,
-            items: blendModes.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            onChanged: (item) {
-              setState(() {
-                blendMode = item ?? blendMode;
-              });
-            },
-          ),
-        ),
-        BigButtonRow(
-          buttons: [
-            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
-            BigButton(
-              "Save",
-              onPressed: () async {
-                saving = true;
-                await makeAndStorePattern(context);
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
-                saving = false;
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+  Future<void> _save() async {
+    saving = true;
+    await makeAndStorePattern(context);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+    saving = false;
   }
 
   Future<void> makeAndStorePattern(BuildContext context) async {
@@ -208,5 +164,80 @@ class _CreateMergeState extends State<CreateMergePage> {
       bytes: rgbList,
     );
     await model.patternDB.insertImage(pattern);
+  }
+}
+
+class _ImageLayersAndBlendMode extends StatelessWidget {
+  static const _tooFewImagesMessage = 'You must have at least 2 images stored to make merged image.';
+
+  final PatternEntry? topImage;
+  final PatternEntry? bottomImage;
+  final String blendMode;
+  final List<String> blendModes;
+  final ValueChanged<PatternEntry> onTopImageSelected;
+  final ValueChanged<PatternEntry> onDefaultTopImageAssigned;
+  final ValueChanged<PatternEntry> onBottomImageSelected;
+  final ValueChanged<PatternEntry> onDefaultBottomImageAssigned;
+  final ValueChanged<String> onBlendModeChanged;
+  final VoidCallback onSave;
+
+  const _ImageLayersAndBlendMode({
+    required this.topImage,
+    required this.bottomImage,
+    required this.blendMode,
+    required this.blendModes,
+    required this.onTopImageSelected,
+    required this.onDefaultTopImageAssigned,
+    required this.onBottomImageSelected,
+    required this.onDefaultBottomImageAssigned,
+    required this.onBlendModeChanged,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        PatternPicker(
+          label: "Top Image",
+          selected: topImage,
+          onSelected: onTopImageSelected,
+          onDefaultAssigned: onDefaultTopImageAssigned,
+          tooFewImagesMessage: _tooFewImagesMessage,
+        ),
+        PatternPicker(
+          label: "Bottom Image",
+          selected: bottomImage,
+          onSelected: onBottomImageSelected,
+          onDefaultAssigned: onDefaultBottomImageAssigned,
+          defaultIndex: 1,
+          tooFewImagesMessage: _tooFewImagesMessage,
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: Text(
+            "Blend Mode",
+            style: TextStyle(fontSize: 20, color: Colors.blue),
+          ),
+        ),
+        ListTile(
+          subtitle: DropdownButton<String>(
+            isExpanded: true,
+            icon: const Icon(Icons.arrow_downward, color: Colors.blue),
+            value: blendMode,
+            items: [
+              for (final mode in blendModes) DropdownMenuItem<String>(value: mode, child: Text(mode)),
+            ],
+            onChanged: (mode) => onBlendModeChanged(mode ?? blendMode),
+          ),
+        ),
+        BigButtonRow(
+          buttons: [
+            BigButton("Cancel", onPressed: () => Navigator.pop(context)),
+            BigButton("Save", onPressed: onSave),
+          ],
+        ),
+      ],
+    );
   }
 }
