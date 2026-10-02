@@ -23,7 +23,11 @@ class BleScanner {
     if (_isScanning.value) {
       return;
     }
-    _results.add([]);
+    // The Web Bluetooth chooser only ever returns a single device per scan,
+    // so on web earlier picks are kept to let the user add poi one at a time.
+    if (!kIsWeb) {
+      _results.add([]);
+    }
     _subscription ??= UniversalBle.scanStream.listen(_onDevice);
     _isScanning.add(true);
     try {
