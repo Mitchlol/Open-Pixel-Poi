@@ -64,10 +64,12 @@ class OpenPixelPoiConfig {
     uint8_t patternBank;
     uint8_t patternShuffleDuration;
     // Pattern
-    uint8_t frameHeight; 
+    uint8_t frameHeight;
     uint16_t frameCount;
     uint8_t *pattern = (uint8_t *) malloc(PATTERN_PIXEL_LIMIT * 3 * sizeof(uint8_t));
     uint32_t patternLength;
+    // FNV-1a hash per stored pattern (0 = unknown), indexed slot + bank * PATTERN_BANK_SIZE
+    uint32_t patternHashes[PATTERN_BANK_COUNT * PATTERN_BANK_SIZE];
     // Sequencer
     uint8_t *sequencer = (uint8_t *) malloc(1785*sizeof(uint8_t)); // 255 Instruction max (7 bits per instruction)
     uint16_t sequencerLength;
@@ -217,13 +219,92 @@ class OpenPixelPoiConfig {
         debugf("− failed to open file for writing\n");
       }else{
         debugf(" - opened file for writing: %d\n");
-        
+
         int written = file.write(pattern, patternLength);
         file.close();
         debugf(" - this much written: %d\n", written);
       }
-      
+
+      uint32_t hash = patternHashSeed();
+      hash = patternHashStep(hash, this->frameHeight);
+      hash = patternHashStep(hash, this->frameCount >> 8);
+      hash = patternHashStep(hash, this->frameCount & 0xFF);
+      for (uint32_t i=0; i<this->patternLength; i++) {
+        hash = patternHashStep(hash, this->pattern[i]);
+      }
+      setPatternHash(this->patternSlot + (this->patternBank * PATTERN_BANK_SIZE), hash);
+
       this->configLastUpdated = millis();
+    }
+
+    // FNV-1a 32 bit over frame height, frame count (big endian), and the raw
+    // pattern bytes. The app computes the same hash over its stored patterns
+    // to figure out which of them live in which slot on the poi.
+    static uint32_t patternHashSeed() {
+      return 2166136261u;
+    }
+
+    static uint32_t patternHashStep(uint32_t hash, uint8_t value) {
+      return (hash ^ value) * 16777619u;
+    }
+
+    void setPatternHash(uint8_t patternIndex, uint32_t hash) {
+      debugf("Save Pattern Hash %d = %08X\n", patternIndex, hash);
+      this->patternHashes[patternIndex] = hash;
+      String key = "p";
+      key += patternIndex;
+      key += "Hash";
+      preferences.putUInt(key.c_str(), hash);
+    }
+
+    // Hash a pattern already on flash, for patterns saved before hashes existed.
+    uint32_t computeStoredPatternHash(uint8_t patternIndex) {
+      File file = LittleFS.open(String("/pattern") + patternIndex + ".oppp");
+      if(!file || file.isDirectory()){
+        return 0;
+      }
+      String heightKey = "p";
+      heightKey += patternIndex;
+      heightKey += "Height";
+      String countKey = "p";
+      countKey += patternIndex;
+      countKey += "FCount";
+      uint8_t height = preferences.getChar(heightKey.c_str(), 5);
+      uint16_t count = preferences.getUShort(countKey.c_str(), 5);
+      uint32_t hash = patternHashSeed();
+      hash = patternHashStep(hash, height);
+      hash = patternHashStep(hash, count >> 8);
+      hash = patternHashStep(hash, count & 0xFF);
+      uint8_t buffer[256];
+      while(file.available() > 0){
+        int bytesRead = file.read(buffer, sizeof(buffer));
+        if(bytesRead <= 0){
+          break;
+        }
+        for(int i=0; i<bytesRead; i++){
+          hash = patternHashStep(hash, buffer[i]);
+        }
+      }
+      file.close();
+      return hash;
+    }
+
+    void loadPatternHashes() {
+      for (uint8_t i=0; i<PATTERN_BANK_COUNT * PATTERN_BANK_SIZE; i++){
+        String key = "p";
+        key += i;
+        key += "Hash";
+        if(preferences.isKey(key.c_str())){
+          this->patternHashes[i] = preferences.getUInt(key.c_str(), 0);
+        }else{
+          // One time backfill for patterns saved before hashes existed
+          this->patternHashes[i] = computeStoredPatternHash(i);
+          if(this->patternHashes[i] != 0){
+            preferences.putUInt(key.c_str(), this->patternHashes[i]);
+          }
+        }
+        debugf("- pattern hash %d = %08X\n", i, this->patternHashes[i]);
+      }
     }
 
     void fillDefaultPattern(){
@@ -372,6 +453,7 @@ class OpenPixelPoiConfig {
 
       startLoadingPattern();
       loadSequencer();
+      loadPatternHashes();
 
       debugf("- pattern\n");
       for (int i = 0; i < this->frameHeight * this->frameCount; i+=3 ) {
