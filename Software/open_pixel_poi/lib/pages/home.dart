@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: Text("Open Pixel Poi"),
         ),
-        actions: const [ConnectionStateIndicators()],
+        actions: const [ConnectionStateIndicators(showBattery: true)],
       ),
       body: Stack(
         children: [

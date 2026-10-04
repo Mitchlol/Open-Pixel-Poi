@@ -24,5 +24,6 @@ enum CommCode {
   CC_SET_SPEED_OPTIONS,           // 19
   CC_SET_PATTERN_SHUFFLE_DURATION,// 20
   CC_GET_STATE,                   // 21
+  CC_GET_BATTERY,                 // 22
 }
 // dart format on

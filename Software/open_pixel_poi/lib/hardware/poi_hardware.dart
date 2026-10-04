@@ -9,6 +9,7 @@ import 'package:universal_ble/universal_ble.dart';
 import '../pages/pattern_creators/create_sequence.dart';
 import './models/comm_code.dart';
 import 'ble_uart.dart';
+import 'models/battery_status.dart';
 import 'models/confirmation.dart';
 import 'models/poi_response.dart';
 import 'models/led_pattern.dart';
@@ -21,6 +22,8 @@ class PoiHardware {
   BehaviorSubject<double> largeSendProgress = BehaviorSubject<double>.seeded(0);
   late StreamSubscription<bool> subscription;
   bool isConncted = true;
+  bool isSending = false;
+  BehaviorSubject<BatteryStatus?> battery = BehaviorSubject<BatteryStatus?>.seeded(null);
 
   PoiHardware(this.uart) {
     subscription = uart.device.connectionStream.listen((connected) {
@@ -29,11 +32,16 @@ class PoiHardware {
     });
   }
 
-  Future<bool> _sendIt(List<int> message, [bool confirmation = true]) {
-    if (message.length < 509 && confirmation) {
-      return _writePacketWithConfirmation(_buildRequest(message));
-    } else {
-      return _writePackets(_buildRequest(message));
+  Future<bool> _sendIt(List<int> message, [bool confirmation = true]) async {
+    isSending = true;
+    try {
+      if (message.length < 509 && confirmation) {
+        return await _writePacketWithConfirmation(_buildRequest(message));
+      } else {
+        return await _writePackets(_buildRequest(message));
+      }
+    } finally {
+      isSending = false;
     }
   }
 
@@ -157,6 +165,8 @@ class PoiHardware {
         return Confirmation(false);
       case .CC_GET_FW_VERSION:
         return FWVersion(message[0]);
+      case .CC_GET_BATTERY:
+        return BatteryStatus.fromMessage(message);
       default:
         debugPrint(
           "Unhandled message recieved: code = $commCode, message = $message",
@@ -258,6 +268,25 @@ class PoiHardware {
     ParseUtil.putInt16(message, pattern.count);
     ParseUtil.putInt8List(message, pattern.bytes);
     return _sendIt(message);
+  }
+
+  Future<BatteryStatus?> readBattery() async {
+    if (isSending) {
+      return battery.value;
+    }
+    try {
+      final failed = await sendCommCode(.CC_GET_BATTERY).timeout(const Duration(seconds: 3));
+      if (failed) {
+        return battery.value;
+      }
+      final response = await readResponse().timeout(const Duration(seconds: 3));
+      if (response is BatteryStatus) {
+        battery.add(response);
+      }
+    } catch (e) {
+      debugPrint("Battery read failed: $e");
+    }
+    return battery.value;
   }
 
   Future<bool> sendSequence(List<SegmentValues> segments) {

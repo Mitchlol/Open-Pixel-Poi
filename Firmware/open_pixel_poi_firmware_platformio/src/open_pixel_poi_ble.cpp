@@ -74,6 +74,7 @@ enum CommCode {
   CC_SET_SPEED_OPTIONS,           // 19
   CC_SET_PATTERN_SHUFFLE_DURATION,// 20
   CC_GET_STATE,                   // 21
+  CC_GET_BATTERY,                 // 22
 };
 
 // Get State response payload (all multi byte values big endian):
@@ -91,6 +92,12 @@ enum CommCode {
 //                          slot + bank * bankSize. FNV-1a 32 over frame
 //                          height, frame count (big endian), and the raw
 //                          pattern bytes. 0 = unknown (empty slot).
+
+// Get Battery - D0 16 D1
+//   Response payload (big endian):
+//   sensorPresent          1 byte  (0 = no voltage sensor, voltage is a fixed placeholder)
+//   batteryMillivolts      2 bytes (filtered cell voltage)
+//   batteryState           1 byte  (0 = ok, 1 = low, 2 = critical, 3 = shutdown)
 
 class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallbacks{
   
@@ -157,6 +164,19 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
         response[i++] = config.patternHashes[p] & 0xFF;
       }
       response[i++] = 0xD1;
+      writeToPixelPoi(response);
+    }
+
+    void bleSendBattery(){
+      uint16_t millivolts = (uint16_t)(config.batteryVoltage * 1000 + 0.5);
+      uint8_t response[] = {
+        0xD0, 0x00, 0x09, CC_GET_BATTERY,
+        BATTERY_VOLTAGE_SENSOR ? 1 : 0,
+        (uint8_t)(millivolts >> 8),
+        (uint8_t)(millivolts & 0xFF),
+        (uint8_t)config.batteryState,
+        0xD1
+      };
       writeToPixelPoi(response);
     }
     
@@ -274,6 +294,8 @@ class OpenPixelPoiBLE : public BLEServerCallbacks, public BLECharacteristicCallb
             bleSendFWVersion();
           }else if(requestCode == CC_GET_STATE){
             bleSendState();
+          }else if(requestCode == CC_GET_BATTERY){
+            bleSendBattery();
           }else if(requestCode == CC_SET_HARDWARE_VERSION){
             config.setHardwareVersion(bleStatus[2]);
             bleSendSuccess();

@@ -209,6 +209,10 @@ class _WelcomeState extends State<WelcomePage> {
         return;
       }
     }
+    // Read the initial battery level of each connected device
+    for (PoiHardware poi in model.connectedPoi!) {
+      await poi.readBattery();
+    }
     // Start app
     if (model.connectedPoi!.isNotEmpty) {
       Navigator.push(
