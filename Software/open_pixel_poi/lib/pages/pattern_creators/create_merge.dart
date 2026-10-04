@@ -90,7 +90,7 @@ class _CreateMergeState extends State<CreateMergePage> {
     int gcd = x;
     int lcm = (topWidth * bottomWidth) ~/ gcd;
 
-    int desiredWidth = min(40000 ~/ desiredHeight, lcm);
+    int desiredWidth = min(DBImage.maxPixels ~/ desiredHeight, lcm);
 
     var images = await model.patternDB.getImgImages([
       topImage!.dbImage,

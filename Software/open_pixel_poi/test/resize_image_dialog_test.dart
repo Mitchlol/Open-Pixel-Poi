@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
@@ -36,34 +34,24 @@ void main() {
       final image = img.Image(width: 1000, height: 30);
       expect(ResizeImageDialog.maxHeightFor(image), 30);
     });
+
+    test('reports when no height can fit a too wide image', () {
+      final image = img.Image(width: DBImage.maxPixels + 1, height: 1);
+      final height = ResizeImageDialog.maxHeightFor(image);
+      expect(height, 1);
+      expect(ResizeImageDialog.fits(image, height), isFalse);
+    });
   });
 
   group('ResizeImageDialog widget', () {
     Future<Future<img.Image?>> openDialog(WidgetTester tester, img.Image image) async {
-      final completer = Completer<img.Image?>();
-      var opened = false;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              if (!opened) {
-                opened = true;
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  completer.complete(
-                    showDialog<img.Image>(
-                      context: context,
-                      builder: (context) => ResizeImageDialog(image: image),
-                    ),
-                  );
-                });
-              }
-              return const SizedBox();
-            },
-          ),
-        ),
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+      final future = showDialog<img.Image>(
+        context: tester.element(find.byType(SizedBox)),
+        builder: (context) => ResizeImageDialog(image: image),
       );
       await tester.pumpAndSettle();
-      return completer.future;
+      return future;
     }
 
     testWidgets('returns a resized image that fits on the poi', (tester) async {

@@ -33,7 +33,7 @@ class PatternImportButton extends StatelessWidget {
     );
   }
 
-  /// Returns false when every picked image was cancelled in the resize dialog.
+  /// Returns false when nothing was imported.
   Future<bool> importPattern(BuildContext context) async {
     var model = Provider.of<Model>(context, listen: false);
 
@@ -59,6 +59,12 @@ class PatternImportButton extends StatelessWidget {
       }
 
       if (image.width * image.height > DBImage.maxPixels || image.height > DBImage.maxHeight) {
+        if (!ResizeImageDialog.fits(image, ResizeImageDialog.maxHeightFor(image))) {
+          throw Exception(
+            "Imported image is too wide, it cannot be scaled down to ${DBImage.maxPixels} pixels "
+            "while keeping its aspect ratio.",
+          );
+        }
         if (!context.mounted) {
           return false;
         }
@@ -75,7 +81,7 @@ class PatternImportButton extends StatelessWidget {
     }
 
     if (patterns.isEmpty) {
-      return images.isEmpty;
+      return false;
     }
     for (var pattern in patterns) {
       await model.patternDB.insertImage(pattern);
