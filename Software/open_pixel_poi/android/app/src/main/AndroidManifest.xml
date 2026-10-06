@@ -24,6 +24,7 @@
         <activity
             android:label="Open Pixel Poi"
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""

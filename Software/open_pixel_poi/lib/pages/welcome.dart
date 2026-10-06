@@ -19,8 +19,6 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomeState extends State<WelcomePage> {
-  final GlobalKey<State> _key = GlobalKey<State>();
-
   bool hasScanned = false;
   bool isConnecting = false;
   bool isDisconnecting = false;
@@ -36,64 +34,62 @@ class _WelcomeState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        key: _key,
-        title: const Text("Open Pixel Poi"),
-      ),
-      body: StreamBuilder<Object>(
-        stream: scanner.isScanning,
-        builder: (context, snapshot) {
-          bool isScanning = false;
-          if (snapshot.data != null && snapshot.data == true) {
-            isScanning = true;
-          }
-          return StreamBuilder<List<BleDevice>>(
-            stream: scanner.results,
-            builder: (context, snapshot) {
-              List<BleDevice>? scanResults = snapshot.data;
-              if (scanResults != null) {
-                scanResults = scanResults.where((device) => (device.name ?? "").isNotEmpty).toList();
-              } else {
-                scanResults = List.empty();
-              }
-              final selectedDevices = scanResults;
-              return Column(
-                mainAxisAlignment: .center,
-                children: <Widget>[
-                  Expanded(
-                    child: _ScanStatusContent(
-                      isConnecting: isConnecting,
-                      isDisconnecting: isDisconnecting,
-                      isScanning: isScanning,
-                      hasScanned: hasScanned,
-                      scanResults: scanResults,
-                      checkedMacAddresses: checkedMacAddresses,
-                      onDeviceToggled: toggleDevice,
+      body: SafeArea(
+        child: StreamBuilder<Object>(
+          stream: scanner.isScanning,
+          builder: (context, snapshot) {
+            bool isScanning = false;
+            if (snapshot.data != null && snapshot.data == true) {
+              isScanning = true;
+            }
+            return StreamBuilder<List<BleDevice>>(
+              stream: scanner.results,
+              builder: (context, snapshot) {
+                List<BleDevice>? scanResults = snapshot.data;
+                if (scanResults != null) {
+                  scanResults = scanResults.where((device) => (device.name ?? "").isNotEmpty).toList();
+                } else {
+                  scanResults = List.empty();
+                }
+                final selectedDevices = scanResults;
+                return Column(
+                  mainAxisAlignment: .center,
+                  children: <Widget>[
+                    Expanded(
+                      child: _ScanStatusContent(
+                        isConnecting: isConnecting,
+                        isDisconnecting: isDisconnecting,
+                        isScanning: isScanning,
+                        hasScanned: hasScanned,
+                        scanResults: scanResults,
+                        checkedMacAddresses: checkedMacAddresses,
+                        onDeviceToggled: toggleDevice,
+                      ),
                     ),
-                  ),
-                  _ScanAndConnectButtons(
-                    isScanning: isScanning,
-                    isBusy: isConnecting || isDisconnecting,
-                    showConnect: checkedMacAddresses.isNotEmpty,
-                    onScan: scan,
-                    onSkipToApp: skipToApp,
-                    onConnect: () {
-                      connect(
-                        selectedDevices
-                            .where(
-                              (device) => checkedMacAddresses.contains(
-                                device.deviceId,
-                              ),
-                            )
-                            .toList(),
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+                    _ScanAndConnectButtons(
+                      isScanning: isScanning,
+                      isBusy: isConnecting || isDisconnecting,
+                      showConnect: checkedMacAddresses.isNotEmpty,
+                      onScan: scan,
+                      onSkipToApp: skipToApp,
+                      onConnect: () {
+                        connect(
+                          selectedDevices
+                              .where(
+                                (device) => checkedMacAddresses.contains(
+                                  device.deviceId,
+                                ),
+                              )
+                              .toList(),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -111,7 +107,7 @@ class _WelcomeState extends State<WelcomePage> {
   void skipToApp() {
     Provider.of<Model>(context, listen: false).connectedPoi = [];
     Navigator.push(
-      _key.currentContext!,
+      context,
       MaterialPageRoute(
         builder: (context) {
           return HomePage();
@@ -165,19 +161,17 @@ class _WelcomeState extends State<WelcomePage> {
       }
     }
     // Connect
+    if (!mounted) return;
     setState(() {
       isConnecting = true;
     });
-    Provider.of<Model>(_key.currentContext!, listen: false).connectedPoi = List.empty(growable: true);
+    model.connectedPoi = List.empty(growable: true);
     for (var device in devices) {
       BleUart bleUart = BleUart(device);
       await bleUart.isIntialized.then(
         (value) {
           debugPrint("BleUart Initialized");
-          Provider.of<Model>(
-            _key.currentContext!,
-            listen: false,
-          ).connectedPoi!.add(PoiHardware(bleUart));
+          model.connectedPoi!.add(PoiHardware(bleUart));
         },
         onError: (error) {
           debugPrint("error = $error");
@@ -192,10 +186,12 @@ class _WelcomeState extends State<WelcomePage> {
       );
     }
     // Check the firmware version of each connected device
+    if (!mounted) return;
     debugPrint("Check firmware version");
     for (PoiHardware poi in model.connectedPoi!) {
       await poi.sendInt8(0, .CC_GET_FW_VERSION, true);
       final version = await poi.readResponse() as FWVersion?;
+      if (!mounted) return;
       if ((version?.version ?? 0) != 2) {
         setState(() {
           isConnecting = false;
@@ -210,9 +206,10 @@ class _WelcomeState extends State<WelcomePage> {
       }
     }
     // Start app
+    if (!mounted) return;
     if (model.connectedPoi!.isNotEmpty) {
       Navigator.push(
-        _key.currentContext!,
+        context,
         MaterialPageRoute(
           builder: (context) {
             return HomePage();
@@ -260,10 +257,7 @@ class _ScanStatusContent extends StatelessWidget {
     } else if (isDisconnecting) {
       return const StatusMessage(title: "Disconnecting...", showProgress: true);
     } else if (!isScanning && !hasScanned) {
-      return const StatusMessage(
-        title: "Welcome to your poi!",
-        subtitle: "Press scan below to search for your poi, this may launch a permission request.",
-      );
+      return const _WelcomeMessage();
     } else if (!isScanning && scanResults.isEmpty) {
       return const StatusMessage(
         title: "No bluetooth devices found!",
@@ -348,6 +342,40 @@ class _ScanAndConnectButtons extends StatelessWidget {
             child: isBusy ? CircularProgressIndicator() : null,
           ),
       ],
+    );
+  }
+}
+
+/// Logo and greeting shown before the first scan.
+class _WelcomeMessage extends StatelessWidget {
+  const _WelcomeMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: .min,
+          children: [
+            Image.asset("assets/logo.png", height: 160),
+            const SizedBox(height: 30),
+            const Text(
+              "Welcome to Open Pixel Poi!",
+              textAlign: .center,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: .bold,
+              ),
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              "Press scan below to search for your poi, this may launch a permission request.",
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
