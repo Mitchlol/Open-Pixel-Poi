@@ -106,3 +106,39 @@ jobs:
           name: Open Pixel Poi v${{ steps.version.outputs.version }}
           files: Software/open_pixel_poi/open_pixel_poi_v${{ steps.version.outputs.version }}.apk
           make_latest: true
+
+  windows:
+    needs: android
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: Software/open_pixel_poi
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.3'
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Build Windows app
+        run: >
+          flutter build windows --release
+          --build-name=${{ needs.android.outputs.version }}
+          --build-number=${{ needs.android.outputs.build }}
+
+      - name: Package build
+        run: |
+          Compress-Archive `
+            -Path build/windows/x64/runner/Release `
+            -DestinationPath "open_pixel_poi_windows_v${{ needs.android.outputs.version }}.zip"
+
+      - name: Add to release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: v${{ needs.android.outputs.version }}
+          files: Software/open_pixel_poi/open_pixel_poi_windows_v${{ needs.android.outputs.version }}.zip
