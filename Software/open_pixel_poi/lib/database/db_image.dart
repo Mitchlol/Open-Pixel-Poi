@@ -3,6 +3,12 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
 class DBImage {
+  /// Mirrors PATTERN_PIXEL_LIMIT in the firmware config.
+  static const int maxPixels = 40000;
+
+  /// The height is sent to the poi as a single byte.
+  static const int maxHeight = 255;
+
   final int? id;
   final int height;
   final int count;
