@@ -5,10 +5,17 @@ import 'package:universal_ble/universal_ble.dart';
 
 import '../hardware/ble_uart.dart';
 import '../model.dart';
+import 'battery_indicator.dart';
 
 /// One [ConnectionStateIndicator] per connected poi, for use in app bars.
+///
+/// With [showBattery] each indicator is preceded by a [BatteryIndicator],
+/// which polls the poi, so only enable it on pages that do not read
+/// responses from the poi themselves.
 class ConnectionStateIndicators extends StatelessWidget {
-  const ConnectionStateIndicators({super.key});
+  final bool showBattery;
+
+  const ConnectionStateIndicators({this.showBattery = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +23,10 @@ class ConnectionStateIndicators extends StatelessWidget {
     return Row(
       mainAxisSize: .min,
       children: [
-        for (var i = 0; i < connectedPoi.length; i++) ConnectionStateIndicator(i),
+        for (var i = 0; i < connectedPoi.length; i++) ...[
+          if (showBattery) BatteryIndicator(i),
+          ConnectionStateIndicator(i),
+        ],
       ],
     );
   }
