@@ -13,6 +13,10 @@ class OpenPixelPoiApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: false,
       ),
+      builder: (context, child) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: SafeArea(top: false, child: child!),
+      ),
       home: const WelcomePage(),
     );
   }
