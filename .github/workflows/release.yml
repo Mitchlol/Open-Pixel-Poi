@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Software/open_pixel_poi/**'
+      - '!**.md'
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      build: ${{ steps.version.outputs.build }}
+    defaults:
+      run:
+        working-directory: Software/open_pixel_poi
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.3'
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Pick version
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pubspec=$(grep '^version:' pubspec.yaml | cut -d ' ' -f 2)
+          latest=$(gh release view --json tagName --jq .tagName 2>/dev/null || true)
+          base=$(printf '%s\n' "${pubspec%+*}" "${latest#v}" | sort -V | tail -1)
+          IFS=. read -r major minor patch <<< "$base"
+          echo "version=$major.$minor.$((patch + 1))" >> "$GITHUB_OUTPUT"
+          echo "build=$((${pubspec#*+} + GITHUB_RUN_NUMBER))" >> "$GITHUB_OUTPUT"
+
+      - name: Set up release signing
+        if: env.KEYSTORE != ''
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          echo "$KEYSTORE" | base64 -d > android/upload-keystore.jks
+          cat > android/key.properties <<PROPS
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=../upload-keystore.jks
+          PROPS
+
+      - name: Build APK
+        run: >
+          flutter build apk --release
+          --build-name=${{ steps.version.outputs.version }}
+          --build-number=${{ steps.version.outputs.build }}
+
+      - name: Rename APK
+        run: |
+          cp build/app/outputs/flutter-apk/app-release.apk \
+            "open_pixel_poi_v${{ steps.version.outputs.version }}.apk"
+
+      - name: Build app bundle
+        run: >
+          flutter build appbundle --release
+          --build-name=${{ steps.version.outputs.version }}
+          --build-number=${{ steps.version.outputs.build }}
+
+      - name: Upload to Play Console
+        if: env.PLAY_JSON != ''
+        env:
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.mitchelllustig.open_pixel_poi
+          releaseFiles: Software/open_pixel_poi/build/app/outputs/bundle/release/app-release.aab
+          track: production
+          status: draft
+
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Open Pixel Poi v${{ steps.version.outputs.version }}
+          files: Software/open_pixel_poi/open_pixel_poi_v${{ steps.version.outputs.version }}.apk
+          make_latest: true

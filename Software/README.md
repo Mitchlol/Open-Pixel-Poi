@@ -29,8 +29,10 @@ App use may require a poi [firmware update](https://mitchlol.github.io/#openpixe
 
 ## Android Releases
 ###### ⚠️Uninstall the app  before switching versions.⚠️
-- [Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v2.0.0.apk)
-- [Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_v1.0.0.apk)
+- [Latest release](https://github.com/Mitchlol/Open-Pixel-Poi/releases/latest)
+- [All releases](https://github.com/Mitchlol/Open-Pixel-Poi/releases)
+
+Download the APK from the assets of a release.
 
 ## Windows Releases
 - [Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v2.0.0.zip)
