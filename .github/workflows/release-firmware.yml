@@ -1,0 +1,74 @@
+name: Release Firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version of the firmware release, for example 3.1.0
+        required: true
+        type: string
+
+concurrency:
+  group: release-firmware
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Firmware/open_pixel_poi_firmware_platformio
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: platformio-${{ hashFiles('Firmware/open_pixel_poi_firmware_platformio/platformio.ini') }}
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        run: >
+          pio run
+          -e kit_2_2_1_20px
+          -e kit_3_0_0_25px
+          -e kit_3_0_0_55px
+
+      - name: Build filesystem
+        run: >
+          pio run -t buildfs
+          -e kit_2_2_1_20px
+          -e kit_3_0_0_25px
+          -e kit_3_0_0_55px
+
+      - name: Deploy to web branch
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          site="$RUNNER_TEMP/site"
+          mkdir "$site"
+          git -C "$site" init -b web
+          git -C "$site" config user.name "github-actions[bot]"
+          git -C "$site" config user.email "github-actions[bot]@users.noreply.github.com"
+          git -C "$site" remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          lease=()
+          if git -C "$site" fetch --depth 1 origin web; then
+            git -C "$site" checkout FETCH_HEAD -- .
+            lease=("--force-with-lease=web:$(git -C "$site" rev-parse FETCH_HEAD)")
+          fi
+          python scripts/package_release.py "$VERSION" "$site/firmware"
+          touch "$site/.nojekyll"
+          git -C "$site" add .
+          git -C "$site" commit -m "Add firmware $VERSION from ${GITHUB_SHA::7}"
+          git -C "$site" push "${lease[@]}" origin web
