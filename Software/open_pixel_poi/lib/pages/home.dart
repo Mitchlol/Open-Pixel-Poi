@@ -8,6 +8,7 @@ import '../hardware/poi_hardware.dart';
 import '../model.dart';
 import '../widgets/connection_state_indicator.dart';
 import '../widgets/pattern_import_button.dart';
+import '../widgets/pattern_preview_image.dart';
 import '../widgets/status_message.dart';
 import './create.dart';
 import 'hardware_settings.dart';
@@ -329,7 +330,7 @@ class _StoredPatternsCardState extends State<_StoredPatternsCard> {
       child: ListTile(
         title: _StoredPatternsHeader(onPatternAdded: showNewestPattern),
         subtitle: FutureBuilder<List<PatternEntry>>(
-          future: Provider.of<Model>(context).patternDB.getImages(context),
+          future: Provider.of<Model>(context).patternDB.getImages(),
           builder: (context, snapshot) {
             final List<Widget> children;
             if (snapshot.hasData) {
@@ -423,7 +424,7 @@ class _StoredPatternTile extends StatelessWidget {
               scrollDirection: .horizontal,
               child: SizedBox(
                 height: 80,
-                child: entry.preview,
+                child: PatternPreviewImage(bytes: entry.previewBytes),
               ),
             ),
             const SizedBox(
