@@ -15,8 +15,13 @@ All the library dependencies and board config is contained in the platformio.ini
 
 Each environment sets `OPP_KIT`, which picks the matching defaults in [config.h](./src/config.h). From the command line, `pio run -e kit_3_0_0_25px` builds a single environment.
 
-# Note for self: Export a compiled firmware to web-based firmware flashy tool.
-1. Hit the -> arrow button on the bottom bar to compile and upload the firmware to your PCB.
-1. copy .pio/build/<environment>/firmware.bin to opp_firmware folder in the mitchlol.github.io project, replacing the old one.
-1. update the manifest.json in that same folder with the current date to have some minimal tracking.
+# Releasing to the web based firmware flasher
+Run the "Release Firmware" workflow from the Actions tab and give it a version, for example `3.1.0`.
 
+It builds the three kit environments and publishes them to the `web` branch, which GitHub Pages serves at https://mitchlol.github.io/Open-Pixel-Poi/firmware/. Each release gets its own folder, so older versions stay available:
+
+- `firmware/index.json` lists every release and its kits, newest first. The flasher page reads it to build its buttons.
+- `firmware/<version>/<kit>/manifest.json` is the full install. It erases the chip and writes the default patterns.
+- `firmware/<version>/<kit>/manifest-update.json` is the update. It leaves the filesystem alone and asks before erasing, so patterns and settings survive when "Erase device" is left unchecked.
+
+Releasing an existing version again replaces it.
