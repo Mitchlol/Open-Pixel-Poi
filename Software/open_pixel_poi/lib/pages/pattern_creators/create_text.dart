@@ -118,7 +118,7 @@ class _CreateTextState extends State<CreateTextPage> {
 }
 
 class _TextAndColorInputs extends StatelessWidget {
-  static const _titleStyle = TextStyle(fontSize: 24, color: Colors.blue);
+  TextStyle _titleStyle(BuildContext context) => TextStyle(fontSize: 24, color: Theme.of(context).colorScheme.primary);
 
   final int textHeight;
   final RgbValue textColor;
@@ -145,7 +145,7 @@ class _TextAndColorInputs extends StatelessWidget {
     return ListView(
       children: [
         ListTile(
-          title: const Text("Text Size:", style: _titleStyle),
+          title: Text("Text Size:", style: _titleStyle(context)),
           subtitle: DropdownButton<int>(
             isExpanded: true,
             style: Theme.of(context).textTheme.headlineSmall,
@@ -161,7 +161,7 @@ class _TextAndColorInputs extends StatelessWidget {
           ),
         ),
         ListTile(
-          title: const Text("Text:", style: _titleStyle),
+          title: Text("Text:", style: _titleStyle(context)),
           subtitle: TextField(
             decoration: const InputDecoration(
               border: OutlineInputBorder(),

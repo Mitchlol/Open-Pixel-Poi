@@ -34,9 +34,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
       child: ListTile(
         title: Text(
           "${widget.title}: $value",
-          style: const TextStyle(
-            color: Colors.blue,
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
         subtitle: Row(
           children: [

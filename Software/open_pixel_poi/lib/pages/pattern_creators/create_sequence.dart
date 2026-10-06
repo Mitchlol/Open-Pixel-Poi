@@ -138,11 +138,11 @@ class _SequenceActionList extends StatelessWidget {
     return Column(
       children: [
         if (segments.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(16.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Text(
               "Add a segment to start creating a sequence, or upload a blank sequence to clear your Poi.",
-              style: TextStyle(fontSize: 24, color: Colors.blue),
+              style: TextStyle(fontSize: 24, color: Theme.of(context).colorScheme.primary),
             ),
           ),
         Expanded(
@@ -208,11 +208,11 @@ class _SequenceActionCard extends StatelessWidget {
               children: [
                 Text(
                   "Action: $number",
-                  style: const TextStyle(fontSize: 24, color: Colors.blue),
+                  style: TextStyle(fontSize: 24, color: Theme.of(context).colorScheme.primary),
                 ),
                 IconButton(
                   onPressed: onRemoved,
-                  icon: const Icon(Icons.close, color: Colors.blue),
+                  icon: Icon(Icons.close, color: Theme.of(context).colorScheme.primary),
                 ),
               ],
             ),

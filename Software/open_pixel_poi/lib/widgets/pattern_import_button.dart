@@ -25,9 +25,9 @@ class PatternImportButton extends StatelessWidget {
           messenger.showSnackBar(SnackBar(content: Text("$error")));
         }
       },
-      icon: const Icon(
+      icon: Icon(
         Icons.add_photo_alternate_outlined,
-        color: Colors.blue,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }

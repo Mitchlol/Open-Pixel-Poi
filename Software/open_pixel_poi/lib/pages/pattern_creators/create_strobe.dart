@@ -180,7 +180,7 @@ class _StrobeSegmentCard extends StatelessWidget {
           ListTile(
             title: Text(
               "Strobe Segment: $number",
-              style: const TextStyle(fontSize: 24, color: Colors.blue),
+              style: TextStyle(fontSize: 24, color: Theme.of(context).colorScheme.primary),
             ),
           ),
           LabeledSlider(

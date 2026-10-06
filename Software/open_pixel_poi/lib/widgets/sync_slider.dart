@@ -55,9 +55,7 @@ class _SyncSliderState extends State<SyncSlider> {
       child: ListTile(
         title: Text(
           widget.title,
-          style: const TextStyle(
-            color: Colors.blue,
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
         subtitle: Slider(
           value: temp,
