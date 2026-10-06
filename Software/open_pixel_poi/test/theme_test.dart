@@ -40,7 +40,7 @@ void main() {
     final theme = await pumpWithBrightness(tester, Brightness.light);
 
     expect(theme.brightness, Brightness.light);
-    expect(theme.colorScheme.primary, Colors.blue);
+    expect(theme.useMaterial3, isTrue);
   });
 
   testWidgets('uses the dark theme when the device is in dark mode', (
@@ -49,7 +49,7 @@ void main() {
     final theme = await pumpWithBrightness(tester, Brightness.dark);
 
     expect(theme.brightness, Brightness.dark);
-    expect(theme.colorScheme.primary, Colors.blue.shade200);
+    expect(theme.useMaterial3, isTrue);
   });
 
   testWidgets('switches theme when the device setting changes', (tester) async {

@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
 
-final ThemeData lightTheme = _buildTheme(
-  ColorScheme.fromSwatch(primarySwatch: Colors.blue),
-);
+final ThemeData lightTheme = _buildTheme(Brightness.light);
 
-final ThemeData darkTheme = _buildTheme(
-  ColorScheme.dark(
-    primary: Colors.blue.shade200,
-    secondary: Colors.blue.shade200,
-  ),
-);
+final ThemeData darkTheme = _buildTheme(Brightness.dark);
 
-ThemeData _buildTheme(ColorScheme colorScheme) {
+ThemeData _buildTheme(Brightness brightness) {
   return ThemeData(
-    useMaterial3: false,
-    colorScheme: colorScheme,
-    tabBarTheme: TabBarThemeData(
-      labelColor: colorScheme.primary,
-      unselectedLabelColor: colorScheme.primary,
-      indicatorColor: colorScheme.primary,
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: brightness,
     ),
   );
 }

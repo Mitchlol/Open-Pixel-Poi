@@ -43,7 +43,7 @@ class _LabeledButtonSelectState extends State<LabeledButtonSelect> {
               Expanded(
                 child: SizedBox(
                   height: _heightFor(step),
-                  child: ElevatedButton(
+                  child: FilledButton(
                     onPressed: () {
                       setState(() {
                         value = (value + step).clamp(widget.min, widget.max);
