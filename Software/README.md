@@ -35,8 +35,10 @@ App use may require a poi [firmware update](https://mitchlol.github.io/#openpixe
 Download the APK from the assets of a release.
 
 ## Windows Releases
-- [Open Pixel Poi v2.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v2.0.0.zip)
-- [Open Pixel Poi v1.0.0](https://github.com/Mitchlol/Open-Pixel-Poi/raw/refs/heads/main/Software/open_pixel_poi_windows_v1.0.0.zip)
+- [Latest release](https://github.com/Mitchlol/Open-Pixel-Poi/releases/latest)
+- [All releases](https://github.com/Mitchlol/Open-Pixel-Poi/releases)
+
+Download the Windows zip from the assets of a release.
 
 ## Web Releases
 > [!TIP]
