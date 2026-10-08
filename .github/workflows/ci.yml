@@ -47,4 +47,9 @@ jobs:
       - name: Install PlatformIO
         run: pip install platformio
       - name: Build firmware
-        run: pio run
+        run: >
+          pio run
+          -e blank_canvas
+          -e kit_2_2_1_20px
+          -e kit_3_0_0_25px
+          -e kit_3_0_0_55px
