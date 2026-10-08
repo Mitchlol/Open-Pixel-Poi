@@ -30,9 +30,7 @@ class _LabeledSliderState extends State<LabeledSlider> {
       child: ListTile(
         title: Text(
           "${widget.title}: $value",
-          style: const TextStyle(
-            color: Colors.blue,
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
         subtitle: Slider(
           value: value.toDouble(),

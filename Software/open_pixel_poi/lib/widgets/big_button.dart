@@ -25,7 +25,7 @@ class BigButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: height,
-      child: ElevatedButton(
+      child: FilledButton(
         onPressed: onPressed,
         onLongPress: onLongPress,
         child:

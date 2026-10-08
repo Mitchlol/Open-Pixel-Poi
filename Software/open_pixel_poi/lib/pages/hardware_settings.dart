@@ -208,7 +208,7 @@ class _SettingsInstructionsCard extends StatelessWidget {
           "2) Saving a setting will overwrite the current value on all connected Poi.\n"
           "3) Settings marked with the 🔄 symbol require a reboot of the Poi to take effect. You can batch save multiple settings before a single reboot to activate them all.\n"
           "4) Setting the wrong \"Hardware Version\" can permanently damage your Poi circuit board.",
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: TextStyle(fontSize: 20),
         ),
       ],
     );
@@ -339,9 +339,9 @@ class _SettingsCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
-                color: Colors.blue,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             ...children,

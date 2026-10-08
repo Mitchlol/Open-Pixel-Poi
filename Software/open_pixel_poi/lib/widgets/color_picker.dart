@@ -34,9 +34,7 @@ class _ColorPickerState extends State<ColorPicker> {
     return ListTile(
       title: Text(
         widget.title,
-        style: const TextStyle(
-          color: Colors.blue,
-        ),
+        style: TextStyle(color: Theme.of(context).colorScheme.primary),
       ),
       subtitle: Column(
         children: [
@@ -70,7 +68,7 @@ class _ColorPickerState extends State<ColorPicker> {
               green.toInt(),
               blue.toInt(),
             ),
-            border: Border.all(color: Colors.black),
+            border: Border.all(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       ),

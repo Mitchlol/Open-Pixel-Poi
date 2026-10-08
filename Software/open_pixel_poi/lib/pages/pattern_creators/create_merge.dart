@@ -213,17 +213,17 @@ class _ImageLayersAndBlendMode extends StatelessWidget {
           defaultIndex: 1,
           tooFewImagesMessage: _tooFewImagesMessage,
         ),
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
           child: Text(
             "Blend Mode",
-            style: TextStyle(fontSize: 20, color: Colors.blue),
+            style: TextStyle(fontSize: 20, color: Theme.of(context).colorScheme.primary),
           ),
         ),
         ListTile(
           subtitle: DropdownButton<String>(
             isExpanded: true,
-            icon: const Icon(Icons.arrow_downward, color: Colors.blue),
+            icon: Icon(Icons.arrow_downward, color: Theme.of(context).colorScheme.primary),
             value: blendMode,
             items: [
               for (final mode in blendModes) DropdownMenuItem<String>(value: mode, child: Text(mode)),

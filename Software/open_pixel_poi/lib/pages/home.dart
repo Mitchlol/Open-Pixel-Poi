@@ -14,11 +14,6 @@ import './create.dart';
 import 'hardware_settings.dart';
 
 const _buttonTextStyle = TextStyle(fontSize: 24, fontWeight: .bold);
-const _cardTitleStyle = TextStyle(
-  color: Colors.blue,
-  fontSize: 24,
-  fontWeight: .bold,
-);
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -82,10 +77,10 @@ class _TransmittingOverlay extends StatelessWidget {
         }
         return Container(
           color: Colors.black38,
-          child: const Center(
+          child: Center(
             child: ColoredBox(
-              color: Colors.white,
-              child: StatusMessage(
+              color: Theme.of(context).cardColor,
+              child: const StatusMessage(
                 title: "Transmitting Pattern...",
                 showProgress: true,
               ),
@@ -123,28 +118,16 @@ class _QuickControlTabsState extends State<_QuickControlTabs> {
             },
             tabs: const [
               Tab(
-                icon: Icon(
-                  Icons.blur_linear,
-                  color: Colors.blue,
-                ),
+                icon: Icon(Icons.blur_linear),
               ),
               Tab(
-                icon: Icon(
-                  Icons.attractions,
-                  color: Colors.blue,
-                ),
+                icon: Icon(Icons.attractions),
               ),
               Tab(
-                icon: Icon(
-                  Icons.brightness_6,
-                  color: Colors.blue,
-                ),
+                icon: Icon(Icons.brightness_6),
               ),
               Tab(
-                icon: Icon(
-                  Icons.sixty_fps_select_rounded,
-                  color: Colors.blue,
-                ),
+                icon: Icon(Icons.sixty_fps_select_rounded),
               ),
             ],
           ),
@@ -174,7 +157,7 @@ class _PoiCommandButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return FilledButton(
       onPressed: () {
         for (final poi in Provider.of<Model>(
           context,
@@ -221,7 +204,7 @@ class _NumberedOptionsCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListTile(
-          title: Text(title, style: _cardTitleStyle),
+          title: _CardTitle(title),
           subtitle: Column(
             children: [
               for (final options in const [
@@ -257,7 +240,7 @@ class _PatternBankAndSlotCard extends StatelessWidget {
         child: Column(
           children: [
             ListTile(
-              title: const Text("Pattern Bank", style: _cardTitleStyle),
+              title: const _CardTitle("Pattern Bank"),
               subtitle: _SpacedButtonRow(
                 buttons: [
                   for (final bank in const [0, 1, 2])
@@ -273,7 +256,7 @@ class _PatternBankAndSlotCard extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: const Text("Pattern Slot", style: _cardTitleStyle),
+              title: const _CardTitle("Pattern Slot"),
               subtitle: Column(
                 children: [
                   _SpacedButtonRow(
@@ -456,7 +439,7 @@ class _StoredPatternsHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: .spaceBetween,
       children: [
-        const Text('Patterns', style: _cardTitleStyle),
+        const _CardTitle('Patterns'),
         Row(
           children: [
             IconButton(
@@ -467,7 +450,7 @@ class _StoredPatternsHeader extends StatelessWidget {
                 );
                 onPatternAdded();
               },
-              icon: const Icon(Icons.create_outlined, color: Colors.blue),
+              icon: Icon(Icons.create_outlined, color: Theme.of(context).colorScheme.primary),
             ),
             PatternImportButton(onPatternAdded),
           ],
@@ -562,6 +545,25 @@ class _EditPatternDialog extends StatelessWidget {
           child: const Text('Delete'),
         ),
       ],
+    );
+  }
+}
+
+/// Card heading in the theme's primary color.
+class _CardTitle extends StatelessWidget {
+  final String text;
+
+  const _CardTitle(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: 24,
+        fontWeight: .bold,
+      ),
     );
   }
 }
