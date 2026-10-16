@@ -1,0 +1,56 @@
+name: Build Web
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Software/open_pixel_poi/**'
+      - '!**.md'
+
+concurrency:
+  group: build-web
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Software/open_pixel_poi
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.3'
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Deploy to web branch
+        run: |
+          cd build/web
+          touch .nojekyll
+          git init -b web
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          lease=()
+          if git fetch --depth 1 origin web; then
+            if git cat-file -e FETCH_HEAD:firmware 2>/dev/null; then
+              git checkout FETCH_HEAD -- firmware
+            fi
+            lease=("--force-with-lease=web:$(git rev-parse FETCH_HEAD)")
+          fi
+          git add .
+          git commit -m "Update web build from ${GITHUB_SHA::7}"
+          git push "${lease[@]}" origin web
